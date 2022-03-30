@@ -1,11 +1,7 @@
 import base64
-import gevent
 import socket
-import json
-import time
 import struct
 import itertools
-import codecs
 from enumfields import ENUMFIELDS
 
 
