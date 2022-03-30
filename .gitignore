@@ -1,4 +1,6 @@
 /network_captures
 */node_modules
 
+*/__pycache__
+
 test.py
