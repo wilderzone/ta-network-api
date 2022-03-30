@@ -6,7 +6,7 @@ An open interface for fetching data from the Tribes: Ascend servers.
 
 
 Includes:
-- Fetching status data:
+- Fetching server status data:
   - Players online.
   - Servers online.
 - Fetching player rank and statistics.
