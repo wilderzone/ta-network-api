@@ -42,7 +42,6 @@ def connect(opts):
 
 		# Construct the login message
 		xor_hash = xor_password_hash(base64.b64decode(opts['hash']), salt)
-		print(len(xor_hash))
 		message = bytes.fromhex('b9003a000b00560060000000') + xor_hash + bytes.fromhex('94040c00') + bytes.fromhex(opts['user'].encode('utf-8').hex()) + bytes.fromhex('7106432800007206000000007306017706c3ee58437606d13f00007406de1000007506811b0000340400000000000000009e04610b04010000000000000000')
 		s.send(message)
 
@@ -52,7 +51,6 @@ def connect(opts):
 
 		read_buffer()
 		decode_unpacked_buffer()
-		print(data['decoded'])
 
 		# data['buffer'] += unpack_bytes(s.recv(10485760))
 		# data['buffer'] += unpack_bytes(s.recv(10485760))
@@ -62,7 +60,7 @@ def connect(opts):
 		# s.send(bytes.fromhex('1600d5000200280202000000e90000002b0000002d000000'))
 		# s.send(bytes.fromhex('1600d5000200280202000000e9000000260000002c000000'))
 
-		return 'Done.'
+		return data['decoded']
 
 
 def unpack_bytes(hex_buffer):
@@ -89,7 +87,6 @@ def read_buffer():
 		enum = peek(data['buffer'], 2)
 		enum = enum.upper()
 		if enum in ENUMFIELDS:
-			print(enum)
 			if ENUMFIELDS[enum]['length'] == 'Sized':
 				r = read(data['buffer'], 2 + 2)
 				if r is not None:
@@ -129,7 +126,8 @@ def read_buffer():
 def decode_unpacked_buffer():
 	for enumfield in data['unpacked']:
 		if 'Unknown Field' in enumfield:
-			data['decoded']['unknowns'].append(enumfield.split(': ')[1])
+			# data['decoded']['unknowns'].append(enumfield.split(': ')[1])
+			data['decoded']['unknowns'] = []
 		elif enumfield != 'Undef Field':
 			data['decoded'][enumfield.split(': ')[0]] = enumfield.split(': ')[1]
 	data['buffer'] = ''
