@@ -101,7 +101,7 @@ def read_buffer():
 							if ENUMFIELDS[enum]['type'] == 'String':
 								output.append(name + ': ' + decode_utf8_bytes(r[0]))
 							elif ENUMFIELDS[enum]['type'] == 'Integer':
-								output.append(name + ': ' + str(int(r[0][:-4], 16)))
+								output.append(name + ': ' + str(int(r[0][8:] + r[0][4:8], 16)))
 						else:
 							output.append(name + ': ' + r[0])
 				else:
@@ -118,7 +118,7 @@ def read_buffer():
 						if ENUMFIELDS[enum]['type'] == 'String':
 							output.append(name + ': ' + decode_utf8_bytes(r[0][4:]))
 						elif ENUMFIELDS[enum]['type'] == 'Integer':
-							output.append(name + ': ' + str(int(r[0][4:-4], 16)))
+							output.append(name + ': ' + str(int(r[0][8:] + r[0][4:8], 16)))
 					else:
 						output.append(name + ': ' + r[0][4:])
 				i += ENUMFIELDS[enum]['length'] + 2
