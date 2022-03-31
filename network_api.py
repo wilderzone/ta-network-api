@@ -48,12 +48,11 @@ def connect(opts):
 		# Receive account data
 		data['buffer'] += unpack_bytes(s.recv(1440))
 		data['buffer'] += unpack_bytes(s.recv(12))
+		# data['buffer'] += unpack_bytes(s.recv(10485760))
+		# data['buffer'] += unpack_bytes(s.recv(10485760))
 
 		read_buffer()
 		decode_unpacked_buffer()
-
-		# data['buffer'] += unpack_bytes(s.recv(10485760))
-		# data['buffer'] += unpack_bytes(s.recv(10485760))
 
 		# Request the server list
 		# s.send(bytes.fromhex('1600d5000200280202000000e90000002d0000002e000000'))
@@ -98,8 +97,11 @@ def read_buffer():
 						name = ENUMFIELDS[enum]['name']
 						if name == False:
 							name = 'Unknown Field'
-						if 'type' in ENUMFIELDS[enum] and ENUMFIELDS[enum]['type'] == 'String':
-							output.append(name + ': ' + decode_utf8_bytes(r[0]))
+						if 'type' in ENUMFIELDS[enum]:
+							if ENUMFIELDS[enum]['type'] == 'String':
+								output.append(name + ': ' + decode_utf8_bytes(r[0]))
+							elif ENUMFIELDS[enum]['type'] == 'Integer':
+								output.append(name + ': ' + str(int(r[0][:-4], 16)))
 						else:
 							output.append(name + ': ' + r[0])
 				else:
@@ -112,7 +114,13 @@ def read_buffer():
 					name = ENUMFIELDS[enum]['name']
 					if name == False:
 						name = 'Unknown Field'
-					output.append(name + ': ' + r[0][4:])
+					if 'type' in ENUMFIELDS[enum]:
+						if ENUMFIELDS[enum]['type'] == 'String':
+							output.append(name + ': ' + decode_utf8_bytes(r[0][4:]))
+						elif ENUMFIELDS[enum]['type'] == 'Integer':
+							output.append(name + ': ' + str(int(r[0][4:-4], 16)))
+					else:
+						output.append(name + ': ' + r[0][4:])
 				i += ENUMFIELDS[enum]['length'] + 2
 		else:
 			r = read(data['buffer'], 2)
@@ -129,7 +137,11 @@ def decode_unpacked_buffer():
 			# data['decoded']['unknowns'].append(enumfield.split(': ')[1])
 			data['decoded']['unknowns'] = []
 		elif enumfield != 'Undef Field':
-			data['decoded'][enumfield.split(': ')[0]] = enumfield.split(': ')[1]
+			if enumfield.split(': ')[0] in data['decoded']:
+				if enumfield.split(': ')[1] not in data['decoded'][enumfield.split(': ')[0]]:
+					data['decoded'][enumfield.split(': ')[0]].append(enumfield.split(': ')[1])
+			else:
+				data['decoded'][enumfield.split(': ')[0]] = [enumfield.split(': ')[1]]
 	data['buffer'] = ''
 
 def decode_utf8_bytes(buffer):
