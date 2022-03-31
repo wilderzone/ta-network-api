@@ -98,10 +98,7 @@ def read_buffer():
 						if name == False:
 							name = 'Unknown Field'
 						if 'type' in ENUMFIELDS[enum]:
-							if ENUMFIELDS[enum]['type'] == 'String':
-								output.append(name + ': ' + decode_utf8_bytes(r[0]))
-							elif ENUMFIELDS[enum]['type'] == 'Integer':
-								output.append(name + ': ' + str(int(r[0][8:] + r[0][4:8], 16)))
+							output.append(name + ': ' + decode_type(r[0], ENUMFIELDS[enum]['type']))
 						else:
 							output.append(name + ': ' + r[0])
 				else:
@@ -115,10 +112,7 @@ def read_buffer():
 					if name == False:
 						name = 'Unknown Field'
 					if 'type' in ENUMFIELDS[enum]:
-						if ENUMFIELDS[enum]['type'] == 'String':
-							output.append(name + ': ' + decode_utf8_bytes(r[0][4:]))
-						elif ENUMFIELDS[enum]['type'] == 'Integer':
-							output.append(name + ': ' + str(int(r[0][8:] + r[0][4:8], 16)))
+						output.append(name + ': ' + decode_type(r[0][4:], ENUMFIELDS[enum]['type']))
 					else:
 						output.append(name + ': ' + r[0][4:])
 				i += ENUMFIELDS[enum]['length'] + 2
@@ -144,6 +138,7 @@ def decode_unpacked_buffer():
 				data['decoded'][enumfield.split(': ')[0]] = [enumfield.split(': ')[1]]
 	data['buffer'] = ''
 
+
 def decode_utf8_bytes(buffer):
 	utf8_bytes = ''
 	i = 0
@@ -151,6 +146,14 @@ def decode_utf8_bytes(buffer):
 		utf8_bytes += buffer[i + 2:i + 4] + buffer[i:i + 2]
 		i += 4
 	return bytes.fromhex(utf8_bytes).decode('utf-8')
+
+
+def decode_type(data, type):
+	if type == 'String':
+		return decode_utf8_bytes(data)
+	elif type == 'Integer':
+		return str(int(data[4:] + data[:4], 16))
+
 
 def peek(buffer, length):
 	if(len(buffer) >= length * 2):
