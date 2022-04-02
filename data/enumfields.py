@@ -81,7 +81,7 @@ ENUMFIELDS = {
 	'02A3': {'length': 4, 'name': False},
 	'02AB': {'length': 4, 'name': 'Purchase Type (1de=server, 1fc=boosters, 200=name, 221=tag)'},
 	'02AC': {'length': 4, 'name': False},
-	'02B2': {'length': 4, 'name': 'Map ID'},
+	'02B2': {'length': 4, 'type': 'MapID', 'name': 'Map ID'},
 	'02B3': {'length': 4, 'name': False},
 	'02B5': {'length': 4, 'name': False},
 	'02B7': {'length': 4, 'name': False},
