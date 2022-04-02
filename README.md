@@ -5,12 +5,13 @@ An open interface for fetching data from the Tribes: Ascend servers.
 ###
 
 
-Includes:
-- Fetching server status data:
+Includes:  
+- [x] Fetching basic player data (clan tag, XP, Gold, etc).
+- [ ] Fetching server status data:
   - Players online.
   - Servers online.
-- Fetching player rank and statistics.
-- A web interface for controlling game servers.
+- [ ] Fetching player rank and statistics.
+- [ ] A web interface for controlling game servers.
 
 ### Demo
 
