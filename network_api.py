@@ -29,7 +29,7 @@ def connect(opts):
 		# Request a login portal
 		s.send(bytes.fromhex('1000bc0102009e04610b040189040c000000'))
 
-		# Server version
+		# Receive server version
 		data['buffer'] += functions.Buffer.UnpackBytes(s.recv(24))
 		data['unpacked'] += functions.Buffer.ReadBuffer(data['buffer'])
 		DecodeUnpackedBuffer()
