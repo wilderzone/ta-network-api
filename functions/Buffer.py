@@ -32,7 +32,7 @@ def UnpackBytes(hex_buffer):
 			try:
 				unpacked = str(
 					hex(
-						struct.unpack('<H', hex_buffer[i:i + 2])[0] # [0] returns the integer value of the byte pair.
+						struct.unpack('>H', hex_buffer[i:i + 2])[0] # [0] returns the integer value of the byte pair.
 					)[2:]                                           # Hex returns the byte representation (but not b'') of the integer prepended by '0x', so we strip that off the front with [2:].
 				)                                                   # Ensure that this all returns a string.
 				# Zero-pad to ensure that the unpacked byte pair is signed 2's complement.
@@ -41,24 +41,35 @@ def UnpackBytes(hex_buffer):
 			except struct.error: # This can occur if struct.unpack was passed a length other than exactly 2 bytes.
 				print('struct.unpack failed on: ' + hex_buffer[i:i + 2])
 		i += 2
+	return output.upper()
+
+
+def InvertEndianness(buffer):
+	output = ''
+	buffer_length = len(buffer) / 2 # The buffer is formatted as string-bytes ('ABCD'), so the actual length in bytes is half the string length.
+	i = 0
+	while i < buffer_length:
+		output += buffer[i + Bytes(1):i + Bytes(2)]
+		output += buffer[i + Bytes(0):i + Bytes(1)]
+		i += Bytes(2)
 	return output
 
 
 def ReadBuffer(buffer):
-	l = len(buffer) / 2 # The buffer is formatted as string-bytes ('ABCD'), so the actual length in bytes is half the string length.
+	buffer_length = len(buffer) / 2 # The buffer is formatted as string-bytes ('ABCD'), so the actual length in bytes is half the string length.
 	output = []
 	i = 0
-	while i < l:
+	while i < buffer_length:
 		# Peek at the enumerator of the current field.
 		enum = Peek(buffer, 2)
-		enum = enum.upper()
+		enum = InvertEndianness(enum)
 		# Process the enumerated data if we have a reference for the enumerator.
 		if enum in ENUMFIELDS:
 			if ENUMFIELDS[enum]['length'] == 'Sized':
 				r = Read(buffer, 2 + 2) # Read the size of the data field. (2-byte enumerator + 2-byte size indicator).
 				if r is not None:
 					buffer = r[1]
-					sized_length = struct.unpack('>H', bytes.fromhex(r[0][Bytes(2):]))[0] # The size indicator is a big-endian encoded integer representing the number of bytes in the data field. We use struct.unpack to convert this from string-bytes ('000C') to an integer (12).
+					sized_length = struct.unpack('<H', bytes.fromhex(r[0][Bytes(2):]))[0] # The size indicator is a little-endian encoded integer representing the number of bytes in the data field. We use struct.unpack to convert this from string-bytes ('000C') to an integer (12).
 					r = Read(buffer, sized_length)
 					if r is not None:
 						buffer = r[1]

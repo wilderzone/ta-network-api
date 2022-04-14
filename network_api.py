@@ -29,8 +29,11 @@ def connect(opts):
 		# Request a login portal
 		s.send(bytes.fromhex('1000bc0102009e04610b040189040c000000'))
 
-		# Receive server version
-		data['buffer'] += functions.Buffer.UnpackBytes(s.recv(24))
+		# Server version
+		try:
+			data['buffer'] += functions.Buffer.UnpackBytes(s.recv(24))
+		except socket.timeout:
+			return 'Login server is offline.'
 		data['unpacked'] += functions.Buffer.ReadBuffer(data['buffer'])
 		DecodeUnpackedBuffer()
 
