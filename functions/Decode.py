@@ -31,3 +31,8 @@ def DecodeByType(buffer, type):
 		return str(int(Buffer.InvertEndianness(buffer[Buffer.Bytes(2):]) + Buffer.InvertEndianness(buffer[:Buffer.Bytes(2)]), 16))	#    |<---->|     These byte pairs must be swapped before they can be read as a normal integer.
 	elif type == 'MapID':
 		return MAP_NAMES_AND_TYPES.get(str(int(buffer[Buffer.Bytes(2):] + buffer[:Buffer.Bytes(2)], 16)), buffer)[0]
+	elif type == 'IP':
+		ub = buffer[:Buffer.Bytes(2)] # First two bytes are unknown.
+		port = str(int(buffer[Buffer.Bytes(2):Buffer.Bytes(4)], 16)) # The next two bytes represent the port number as a big-endian integer.
+		ip = str(int(buffer[Buffer.Bytes(4):Buffer.Bytes(5)], 16)) + '.' + str(int(buffer[Buffer.Bytes(5):Buffer.Bytes(6)], 16)) + '.' + str(int(buffer[Buffer.Bytes(6):Buffer.Bytes(7)], 16)) + '.' + str(int(buffer[Buffer.Bytes(7):Buffer.Bytes(8)], 16)) # Each following byte is one integer in the IP address.
+		return '(' + ub + ') ' + ip + ':' + port
