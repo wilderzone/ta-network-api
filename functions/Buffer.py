@@ -55,50 +55,60 @@ def InvertEndianness(buffer):
 	return output
 
 
-def ReadBuffer(buffer):
+def ReadBuffer(buffer, delimiter):
 	buffer_length = len(buffer) / 2 # The buffer is formatted as string-bytes ('ABCD'), so the actual length in bytes is half the string length.
-	output = []
+	output = [[], 0] # Output contains the processed data, and the number of bytes processed.
 	i = 0
 	while i < buffer_length:
 		# Peek at the enumerator of the current field.
 		enum = Peek(buffer, 2)
 		enum = InvertEndianness(enum)
-		# Process the enumerated data if we have a reference for the enumerator.
-		if enum in ENUMFIELDS:
-			if ENUMFIELDS[enum]['length'] == 'Sized':
-				r = Read(buffer, 2 + 2) # Read the size of the data field. (2-byte enumerator + 2-byte size indicator).
-				if r is not None:
-					buffer = r[1]
-					sized_length = struct.unpack('<H', bytes.fromhex(r[0][Bytes(2):]))[0] # The size indicator is a little-endian encoded integer representing the number of bytes in the data field. We use struct.unpack to convert this from string-bytes ('000C') to an integer (12).
-					r = Read(buffer, sized_length)
+		# Check if we've reached the specified delimiter.
+		if enum != delimiter:
+			# Process the enumerated data if we have a reference for the enumerator.
+			if enum in ENUMFIELDS:
+				if ENUMFIELDS[enum]['length'] == 'Sized':
+					r = Read(buffer, 2 + 2) # Read the size of the data field. (2-byte enumerator + 2-byte size indicator).
+					output[1] += 4
+					if r is not None:
+						buffer = r[1]
+						sized_length = struct.unpack('<H', bytes.fromhex(r[0][Bytes(2):]))[0] # The size indicator is a little-endian encoded integer representing the number of bytes in the data field. We use struct.unpack to convert this from string-bytes ('000C') to an integer (12).
+						r = Read(buffer, sized_length)
+						output[1] += sized_length
+						if r is not None:
+							buffer = r[1]
+							name = ENUMFIELDS[enum]['name']
+							if name == False:
+								name = 'Unknown Field'
+							if 'type' in ENUMFIELDS[enum]:
+								output[0].append(name + ': ' + Decode.DecodeByType(r[0], ENUMFIELDS[enum]['type']))
+							else:
+								output[0].append(name + ': ' + r[0])
+					else:
+						sized_length = 0
+					i += sized_length + 4
+				elif ENUMFIELDS[enum]['length'] == 'ArrayOfEnumBlockArrays':
+					Decode.DecodeEnumBlockArray()
+				else:
+					r = Read(buffer, ENUMFIELDS[enum]['length'] + 2)
+					output[1] += ENUMFIELDS[enum]['length'] + 2
 					if r is not None:
 						buffer = r[1]
 						name = ENUMFIELDS[enum]['name']
 						if name == False:
 							name = 'Unknown Field'
 						if 'type' in ENUMFIELDS[enum]:
-							output.append(name + ': ' + Decode.DecodeByType(r[0], ENUMFIELDS[enum]['type']))
+							output[0].append(name + ': ' + Decode.DecodeByType(r[0][4:], ENUMFIELDS[enum]['type']))
 						else:
-							output.append(name + ': ' + r[0])
-				else:
-					sized_length = 0
-				i += sized_length + 4
+							output[0].append(name + ': ' + r[0][4:])
+					i += ENUMFIELDS[enum]['length'] + 2
 			else:
-				r = Read(buffer, ENUMFIELDS[enum]['length'] + 2)
+				r = Read(buffer, 2)
+				output[1] += 2
 				if r is not None:
 					buffer = r[1]
-					name = ENUMFIELDS[enum]['name']
-					if name == False:
-						name = 'Unknown Field'
-					if 'type' in ENUMFIELDS[enum]:
-						output.append(name + ': ' + Decode.DecodeByType(r[0][4:], ENUMFIELDS[enum]['type']))
-					else:
-						output.append(name + ': ' + r[0][4:])
-				i += ENUMFIELDS[enum]['length'] + 2
+					output[0].append('Undef Field')
+				i += 2
 		else:
-			r = Read(buffer, Bytes(1))
-			if r is not None:
-				buffer = r[1]
-				output.append('Undef Field')
-			i += 2
+			break
 	return output

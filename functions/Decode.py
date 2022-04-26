@@ -36,3 +36,83 @@ def DecodeByType(buffer, type):
 		port = str(int(buffer[Buffer.Bytes(2):Buffer.Bytes(4)], 16)) # The next two bytes represent the port number as a big-endian integer.
 		ip = str(int(buffer[Buffer.Bytes(4):Buffer.Bytes(5)], 16)) + '.' + str(int(buffer[Buffer.Bytes(5):Buffer.Bytes(6)], 16)) + '.' + str(int(buffer[Buffer.Bytes(6):Buffer.Bytes(7)], 16)) + '.' + str(int(buffer[Buffer.Bytes(7):Buffer.Bytes(8)], 16)) # Each following byte is one integer in the IP address.
 		return '(' + ub + ') ' + ip + ':' + port
+
+
+def DecodeEnumBlockArray(buffer, type):
+	output = [[], 0]
+	if type == 'ServerList':
+		block_array_buffer = Buffer.Read(buffer, 6)
+		block_array_enum = block_array_buffer[0][:Buffer.Bytes(2)]
+		block_array_extra = block_array_buffer[0][Buffer.Bytes(2):Buffer.Bytes(4)]
+		delimiter = block_array_buffer[0][Buffer.Bytes(4):Buffer.Bytes(6)]
+		block_array_buffer = block_array_buffer[1]
+
+		while delimiter == '2000':
+			# Decode the data for each server.
+			new_server = {
+				'ID': '',
+				'Region': '',
+				'Password': False,
+				'PlayerNum': '',
+				'Name': '',
+				'MOTD': '',
+				'Map': '',
+				'IP': ''
+			}
+
+			data = Buffer.ReadBuffer(block_array_buffer, '2000')
+			block_length = data[1]
+			new_server = data[0]
+
+			output[0].append(new_server)
+			# Move to the next block.
+			block_array_buffer = Buffer.Read(block_array_buffer, block_length)[1]
+			delimiter = Buffer.Read(block_array_buffer, 2)[0]
+			block_array_buffer = Buffer.Read(block_array_buffer, 2)[1]
+	
+	return output
+
+
+
+# Server list enum block array format:
+
+# ENUM: 00E9
+# Followed by 2 bytes
+# Repeating:
+#	20 00
+#	[0385] -> 4 Bytes
+#	[06EE] -> 4 Bytes
+#	[02C7] -> 4 Bytes (Server ID)
+#	[0008] -> 8 Bytes
+#	[02FF] -> 4 Bytes
+#	[02ED] -> 4 Bytes
+#	[02D8] -> 4 Bytes
+#	[02EC] -> 4 Bytes
+#	[02D7] -> 4 Bytes
+#	[02AF] -> Sized
+#	[0013] -> Sized
+#	[00AA] -> Sized
+#	[01A6] -> Sized
+#	[06F1] -> 4 Bytes
+#	[0703] -> 1 Byte
+#	[0343] -> 4 Bytes
+#	[0344] -> 4 Bytes
+#	[0259] -> 4 Bytes
+#	[03FD] -> 4 Bytes
+#	[02B3] -> 4 Bytes
+#	[0448] -> 4 Bytes (Region ID)
+#	[02D6] -> 4 Bytes
+#	[06F5] -> 4 Bytes
+#	[0299] -> 4 Bytes
+#	[0298] -> 4 Bytes
+#	[06BF] -> 4 Bytes
+#	[069C] -> 1 Byte (Password Required)
+#	[069B] -> 1 Byte
+#	[0300] -> Sized (Server Name)
+#	[01A4] -> Sized (MOTD)
+#	[02B2] -> 4 Bytes (Map ID)
+#	[0246] -> 8 Bytes (Server Address)
+# End
+# [069F] -> 4 Bytes
+# [0347] -> 4 Bytes
+# 06 00 00 00 2B 00 00 00

@@ -34,13 +34,13 @@ def connect(opts):
 			data['buffer'] += functions.Buffer.UnpackBytes(s.recv(24))
 		except socket.timeout:
 			return 'Login server is offline.'
-		data['unpacked'] += functions.Buffer.ReadBuffer(data['buffer'])
+		data['unpacked'] += functions.Buffer.ReadBuffer(data['buffer'], False)[0]
 		DecodeUnpackedBuffer()
 
 		# Store the salt bytes returned by the server
 		salt = s.recv(44)
 		data['buffer'] += functions.Buffer.UnpackBytes(salt)
-		data['unpacked'] += functions.Buffer.ReadBuffer(data['buffer'])
+		data['unpacked'] += functions.Buffer.ReadBuffer(data['buffer'], False)[0]
 		DecodeUnpackedBuffer()
 		salt = salt[14:30]
 
@@ -71,8 +71,10 @@ def connect(opts):
 			except:
 				print('An unknown error occurred.')
 				break
+		
+		#print(data['buffer'])
 
-		data['unpacked'] += functions.Buffer.ReadBuffer(data['buffer'])
+		data['unpacked'] += functions.Buffer.ReadBuffer(data['buffer'], False)[0]
 		DecodeUnpackedBuffer()
 
 		# Request the server list
@@ -94,10 +96,13 @@ def connect(opts):
 				print('An unknown error occurred.')
 				break
 
-		data['unpacked'] += functions.Buffer.ReadBuffer(data['buffer'])
-		DecodeUnpackedBuffer()
+		data['decoded'] = {}
+		data['unpacked'] = []
+		# data['unpacked'] += functions.Buffer.ReadBuffer(data['buffer'], False)[0]
+		data['unpacked'] += functions.Decode.DecodeEnumBlockArray(data['buffer'][24:], 'ServerList')[0]
+		#DecodeUnpackedBuffer()
 
-		return data['decoded']
+		return data['unpacked']
 
 
 def DecodeUnpackedBuffer():
