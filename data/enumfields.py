@@ -28,6 +28,8 @@ ENUMFIELDS = {
 	'02B6': {'length': 'Sized', 'type': 'String', 'name': 'Map Name'},
 	'02E6': {'length': 'Sized', 'type': 'String', 'name': 'Message Text'},
 	'02FE': {'length': 'Sized', 'type': 'String', 'name': 'Sender Name/Clan Tag to Purchase'},
+	'0300': {'length': 'Sized', 'type': 'String', 'name': 'Map + Gamemode, Server or Region Name'},
+	'01A4': {'length': 'Sized', 'type': 'String', 'name': 'MOTD / Report Text'},
 	'0001': {'length': 1, 'name': False},
 	'006F': {'length': 1, 'name': False},
 	'01FA': {'length': 1, 'name': False},
