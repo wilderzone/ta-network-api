@@ -95,7 +95,7 @@ def DecodeEnumBlockArray(buffer, type):
 #	[01A6] -> Sized
 #	[06F1] -> 4 Bytes
 #	[0703] -> 1 Byte
-#	[0343] -> 4 Bytes
+#	[0343] -> 4 Bytes (Number of Players)
 #	[0344] -> 4 Bytes
 #	[0259] -> 4 Bytes
 #	[03FD] -> 4 Bytes
@@ -107,10 +107,15 @@ def DecodeEnumBlockArray(buffer, type):
 #	[0298] -> 4 Bytes
 #	[06BF] -> 4 Bytes
 #	[069C] -> 1 Byte (Password Required)
-#	[069B] -> 1 Byte
+#	[069B] -> 1 Byte (Always 0000)
 #	[0300] -> Sized (Server Name)
 #	[01A4] -> Sized (MOTD)
 #	[02B2] -> 4 Bytes (Map ID)
+
+# The following sometimes occurs.
+#	[02B5] -> 7e918900 4703 02000000 f402 d9040000 3500 0000 0000 9701 0000 0000
+#		[02F4] -> 4 Bytes (Remaining Time in Seconds)
+
 #	[0246] -> 8 Bytes (Server Address)
 # End
 # [069F] -> 4 Bytes
