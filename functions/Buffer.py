@@ -78,12 +78,13 @@ def ReadBuffer(buffer, delimiter):
 						if r is not None:
 							buffer = r[1]
 							name = ENUMFIELDS[enum]['name']
-							if name == False:
-								name = 'Unknown Field'
-							if 'type' in ENUMFIELDS[enum]:
-								output[0].append(name + ': ' + Decode.DecodeByType(r[0], ENUMFIELDS[enum]['type']))
-							else:
-								output[0].append(name + ': ' + r[0])
+							# if name == False:
+							#	name = 'Unknown Field'
+							if name != False:
+								if 'type' in ENUMFIELDS[enum]:
+									output[0].append(name + ': ' + Decode.DecodeByType(r[0], ENUMFIELDS[enum]['type']))
+								else:
+									output[0].append(name + ': ' + r[0])
 					else:
 						sized_length = 0
 					i += sized_length + 4
@@ -95,19 +96,20 @@ def ReadBuffer(buffer, delimiter):
 					if r is not None:
 						buffer = r[1]
 						name = ENUMFIELDS[enum]['name']
-						if name == False:
-							name = 'Unknown Field'
-						if 'type' in ENUMFIELDS[enum]:
-							output[0].append(name + ': ' + Decode.DecodeByType(r[0][4:], ENUMFIELDS[enum]['type']))
-						else:
-							output[0].append(name + ': ' + r[0][4:])
+						# if name == False:
+						#	name = 'Unknown Field'
+						if name != False:
+							if 'type' in ENUMFIELDS[enum]:
+								output[0].append(name + ': ' + Decode.DecodeByType(r[0][4:], ENUMFIELDS[enum]['type']))
+							else:
+								output[0].append(name + ': ' + r[0][4:])
 					i += ENUMFIELDS[enum]['length'] + 2
 			else:
 				r = Read(buffer, 2)
 				output[1] += 2
 				if r is not None:
 					buffer = r[1]
-					output[0].append('Undef Field')
+					# output[0].append('Undef Field')
 				i += 2
 		else:
 			break
