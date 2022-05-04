@@ -96,6 +96,46 @@ def connect(opts):
 				print('An unknown error occurred.')
 				break
 
+		#data['decoded'] = {}
+		#data['unpacked'] = []
+		data['unpacked'] += functions.Buffer.ReadBuffer(data['buffer'], False)[0]
+		#data['unpacked'] += functions.Decode.DecodeEnumBlockArray(data['buffer'][24:], 'ServerList')[0]
+		DecodeUnpackedBuffer()
+
+		return data['unpacked']
+
+
+def connect_2(opts):
+	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+		# Set socket options
+		s.settimeout(2.0)
+		s_keep_alive = s.getsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE)
+		if(s_keep_alive == 0):
+			s_keep_alive = s.setsockopt( socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+
+
+		# Establish a TCP connection with the server
+		s.connect((opts['login_server']['ip'], opts['login_server']['port']))
+
+		# Request the server list
+		# s.send(bytes.fromhex('1600d5000200280202000000e90000001700000015000000'))
+		# s.send(bytes.fromhex('1600d5000200280202000000e90000002d0000002e000000'))
+		s.send(bytes.fromhex('1600d5000200280202000000e90000002b0000002d000000'))
+		# s.send(bytes.fromhex('1600d5000200280202000000e9000000260000002c000000'))
+		# s.send(bytes.fromhex('1600d5000200280202000000e90000002b00000028000000'))
+
+		while True:
+			try:
+				data['buffer'] += functions.Buffer.UnpackBytes(s.recv(1440))
+
+			except socket.timeout:
+				print('Received server list.')
+				break
+
+			except:
+				print('An unknown error occurred.')
+				break
+
 		data['decoded'] = {}
 		data['unpacked'] = []
 		# data['unpacked'] += functions.Buffer.ReadBuffer(data['buffer'], False)[0]
