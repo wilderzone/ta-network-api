@@ -107,14 +107,17 @@ def DecodeEnumBlockArray(buffer, type):
 #	[0298] -> 4 Bytes
 #	[06BF] -> 4 Bytes
 #	[069C] -> 1 Byte (Password Required)
-#	[069B] -> 1 Byte (Always 0000)
+#	[069B] -> 1 Byte (Always 00 or 01)
 #	[0300] -> Sized (Server Name)
 #	[01A4] -> Sized (MOTD)
 #	[02B2] -> 4 Bytes (Map ID)
 
-# The following sometimes occurs.
+# The following is also included if the game is in progress.
 #	[02B5] -> 7e918900 4703 02000000 f402 d9040000 3500 0000 0000 9701 0000 0000
+#		[0347] -> 4 Bytes
 #		[02F4] -> 4 Bytes (Remaining Time in Seconds)
+#		[0035] -> 4 Bytes (Blood Eagle Score)
+#		[0197] -> 4 Bytes (Diamond Sword Score)
 
 #	[0246] -> 8 Bytes (Server Address)
 # End
