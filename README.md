@@ -2,6 +2,8 @@
 
 An open interface for fetching data from the Tribes: Ascend servers.
 
+Please see the [wiki](https://github.com/wilderzone/ta-network-api/wiki) for a detailed breakdown of TA's network protocol.
+
 ###
 
 
