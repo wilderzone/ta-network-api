@@ -1,4 +1,6 @@
 from . import Buffer
+import time
+import json
 from data.maps import MAP_NAMES_AND_TYPES
 
 
@@ -17,9 +19,9 @@ def DecodeUTF8Bytes(buffer):
 		else:
 			filtered_buffer += byte
 		i += Buffer.Bytes(1)
-	if len(error_bytes) > 0:
-		print("The following non-UTF-8 bytes weren't parsed: ")
-		print(error_bytes)
+	# if len(error_bytes) > 0:
+	# 	print("The following non-UTF-8 bytes weren't parsed: ")
+	# 	print(error_bytes)
 	return bytes.fromhex(filtered_buffer).decode('utf-8')
 
 
@@ -47,80 +49,37 @@ def DecodeEnumBlockArray(buffer, type):
 		delimiter = block_array_buffer[0][Buffer.Bytes(4):Buffer.Bytes(6)]
 		block_array_buffer = block_array_buffer[1]
 
-		while delimiter == '2000':
+		print(delimiter)
+		print(block_array_buffer[:512])
+
+		# while delimiter == '2000':
 			# Decode the data for each server.
-			new_server = {
-				'ID': '',
-				'Region': '',
-				'Password': False,
-				'PlayerNum': '',
-				'Name': '',
-				'MOTD': '',
-				'Map': '',
-				'IP': ''
-			}
+		new_server = {
+			'ID': '',
+			'Region': '',
+			'Password': False,
+			'PlayerNum': '',
+			'Name': '',
+			'MOTD': '',
+			'Map': '',
+			'IP': '',
+			'raw': ''
+		}
 
-			data = Buffer.ReadBuffer(block_array_buffer, '2000')
-			block_length = data[1]
-			new_server = data[0]
+		data = Buffer.ReadBuffer(block_array_buffer, '2000')
+		block_length = data[1]
+		new_server['raw'] = data[0]
+		print(json.dumps(new_server, indent=2))
 
-			output[0].append(new_server)
-			# Move to the next block.
-			block_array_buffer = Buffer.Read(block_array_buffer, block_length)[1]
-			delimiter = Buffer.Read(block_array_buffer, 2)[0]
-			block_array_buffer = Buffer.Read(block_array_buffer, 2)[1]
+		output[0].append(new_server)
+		output[1] += block_length
+		# Move to the next block.
+		block_array_buffer = Buffer.Read(block_array_buffer, block_length)[1]
+		r = Buffer.Read(block_array_buffer, 2)
+		delimiter = r[0]
+		block_array_buffer = r[1]
+		print(delimiter)
+
+			# time.sleep(1)
 	
 	return output
-
-
-
-# Server list enum block array format:
-
-# ENUM: 00E9
-# Followed by 2 bytes
-# Repeating:
-#	20 00
-#	[0385] -> 4 Bytes
-#	[06EE] -> 4 Bytes
-#	[02C7] -> 4 Bytes (Server ID)
-#	[0008] -> 8 Bytes
-#	[02FF] -> 4 Bytes
-#	[02ED] -> 4 Bytes
-#	[02D8] -> 4 Bytes
-#	[02EC] -> 4 Bytes
-#	[02D7] -> 4 Bytes
-#	[02AF] -> Sized
-#	[0013] -> Sized
-#	[00AA] -> Sized
-#	[01A6] -> Sized
-#	[06F1] -> 4 Bytes
-#	[0703] -> 1 Byte
-#	[0343] -> 4 Bytes (Number of Players)
-#	[0344] -> 4 Bytes
-#	[0259] -> 4 Bytes
-#	[03FD] -> 4 Bytes
-#	[02B3] -> 4 Bytes
-#	[0448] -> 4 Bytes (Region ID)
-#	[02D6] -> 4 Bytes
-#	[06F5] -> 4 Bytes
-#	[0299] -> 4 Bytes
-#	[0298] -> 4 Bytes
-#	[06BF] -> 4 Bytes
-#	[069C] -> 1 Byte (Password Required)
-#	[069B] -> 1 Byte (Always 00 or 01)
-#	[0300] -> Sized (Server Name)
-#	[01A4] -> Sized (MOTD)
-#	[02B2] -> 4 Bytes (Map ID)
-
-# The following is also included if the game is in progress.
-#	[02B5] -> 7e918900 4703 02000000 f402 d9040000 3500 0000 0000 9701 0000 0000
-#		[0347] -> 4 Bytes
-#		[02F4] -> 4 Bytes (Remaining Time in Seconds)
-#		[0035] -> 4 Bytes (Blood Eagle Score)
-#		[0197] -> 4 Bytes (Diamond Sword Score)
-
-#	[0246] -> 8 Bytes (Server Address)
-# End
-# [069F] -> 4 Bytes
-# [0347] -> 4 Bytes
-# 06 00 00 00 2B 00 00 00
