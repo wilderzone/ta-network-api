@@ -10,7 +10,8 @@ data = {
 	'unpacked': [],
 	'decoded': {
 		'unknowns': []
-	}
+	},
+	'json': {}
 }
 
 
