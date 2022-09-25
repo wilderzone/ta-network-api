@@ -1,8 +1,25 @@
-export interface Server {
+import { Player } from './Data'
+
+export interface LoginServer {
 	name: string,
 	ip: string,
 	port: number,
-	isLoginServer: boolean,
+	isLoginServer: true,
+	supportsGOTY: boolean,
+	supportsOOTB: boolean,
+	isSecure: boolean
+}
+
+export interface GameServer {
+	id: Uint8Array,
+	name: string,
+	motd: string,
+	password: boolean,
+	players: Player[],
+	ip: string,
+	region: Uint8Array,
+	map: Uint8Array,
+	isLoginServer: false,
 	supportsGOTY: boolean,
 	supportsOOTB: boolean,
 	isSecure: boolean
