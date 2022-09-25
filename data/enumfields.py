@@ -249,5 +249,6 @@ ENUMFIELDS = {
 	'04D4': {'length': 8, 'name': False},
 	'057E': {'length': 8, 'name': False},
 	'05E2': {'length': 8, 'name': False},
-	'05E4': {'length': 8, 'name': False}
+	'05E4': {'length': 8, 'name': False},
+	'00E9': {'length': 'ArrayOfEnumBlockArrays', 'type': 'ServerList', 'name': 'ServerList'}
 }
