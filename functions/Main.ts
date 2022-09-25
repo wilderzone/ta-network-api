@@ -1,4 +1,5 @@
-import { loginServers, LoginServer } from '../data';
+import { loginServers } from '../data';
+import { LoginServer } from '../interfaces';
 const net = require('net');
 
 export class LoginServerConnection {
