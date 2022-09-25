@@ -1,0 +1,19 @@
+{
+  "name": "ta-network-api",
+  "version": "0.1.0",
+  "description": "An open interface for fetching data from Tribes Ascend servers.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wilderzone/ta-network-api.git"
+  },
+  "author": "Giga",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wilderzone/ta-network-api/issues"
+  },
+  "homepage": "https://github.com/wilderzone/ta-network-api#readme",
+}
