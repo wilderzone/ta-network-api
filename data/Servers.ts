@@ -1,4 +1,4 @@
-import { Server } from '../interfaces';
+import { LoginServer } from '../interfaces';
 
 /**
  * All default login servers.
@@ -12,7 +12,7 @@ export const loginServers = {
 		supportsGOTY: false,
 		supportsOOTB: true,
 		isSecure: false
-	} as Server,
+	} as LoginServer,
 	community: {
 		name: 'Community Login Server',
 		ip: '18.197.240.229',
@@ -21,5 +21,5 @@ export const loginServers = {
 		supportsGOTY: true,
 		supportsOOTB: true,
 		isSecure: true
-	} as Server
+	} as LoginServer
 };
