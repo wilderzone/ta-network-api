@@ -89,7 +89,11 @@ def ReadBuffer(buffer, delimiter):
 						sized_length = 0
 					i += sized_length + 4
 				elif ENUMFIELDS[enum]['length'] == 'ArrayOfEnumBlockArrays':
-					Decode.DecodeEnumBlockArray()
+					r = Decode.DecodeEnumBlockArray(buffer, ENUMFIELDS[enum]['type'])
+					if r is not None:
+						buffer = Read(buffer, r[1])[1]
+						# output[0].append(r[0])
+					i += r[1]
 				else:
 					r = Read(buffer, ENUMFIELDS[enum]['length'] + 2)
 					output[1] += ENUMFIELDS[enum]['length'] + 2
@@ -114,3 +118,19 @@ def ReadBuffer(buffer, delimiter):
 		else:
 			break
 	return output
+
+
+def ParseBuffer(buffer):
+	output = {}
+
+	# Read the enumerator.
+	enum = Peek(buffer, 2)
+	enum = InvertEndianness(enum)
+
+	# Process the enumerated field if we have a reference for the enumerator.
+	if enum in ENUMFIELDS:
+		# Process the field based on its length property.
+
+		# ArrayOfEnumBlockArrays
+		if ENUMFIELDS[enum]['length'] == 'ArrayOfEnumBlockArrays':
+			Decode.DecodeEnumBlockArray()
