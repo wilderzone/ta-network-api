@@ -16,4 +16,7 @@
     "url": "https://github.com/wilderzone/ta-network-api/issues"
   },
   "homepage": "https://github.com/wilderzone/ta-network-api#readme",
+  "devDependencies": {
+    "@types/node": "^18.7.21"
+  }
 }

@@ -1,6 +1,6 @@
 import { loginServers } from '../data';
 import { LoginServer } from '../interfaces';
-const net = require('net');
+import * as net from 'net';
 
 export class LoginServerConnection {
 	isConnected = false;
