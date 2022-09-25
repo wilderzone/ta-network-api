@@ -23,28 +23,3 @@ export const loginServers = {
 		isSecure: true
 	} as Server
 };
-
-export class LoginServer {
-	name = '';
-	ip = '';
-	port = 9000;
-	isLoginServer = true;
-	supportsGOTY = false;
-	supportsOOTB = false;
-	isSecure = false;
-
-	constructor (
-		name: string,
-		address: string,
-		supportsGOTY: boolean,
-		supportsOOTB: boolean,
-		isSecure: boolean
-	) {
-		this.name = name;
-		this.ip = address.split(':')[0];
-		this.port = address.split(':')[1] ? parseInt(address.split(':')[1]) : 9000;
-		this.supportsGOTY = supportsGOTY;
-		this.supportsOOTB = supportsOOTB;
-		this.isSecure = isSecure;
-	}
-}
