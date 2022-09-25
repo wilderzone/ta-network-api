@@ -1,3 +1,11 @@
+export interface Player {
+	id: Uint8Array,
+	username: string,
+	playername: string,
+	clanTag: string,
+	rank: number
+}
+
 export interface HiRezAccount {
 	version: Uint8Array
 	salt: Uint8Array,
