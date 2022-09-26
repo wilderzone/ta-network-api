@@ -5,5 +5,6 @@ export interface Credentials {
 
 export interface HashedCredentials {
 	username: string,
-	passwordHash: string
+	passwordHash: Uint8Array,
+	salt: Uint8Array
 }
