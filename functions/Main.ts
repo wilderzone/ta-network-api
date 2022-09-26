@@ -12,6 +12,7 @@ export class LoginServerConnection {
 	_isConnected = false;
 	_serverKey = undefined as keyof typeof loginServers | undefined;
 	_serverInstance = {} as LoginServer;
+	_socket = {} as net.Socket;
 	_callbacks = {
 		connect: [],
 		disconnect: [],
@@ -42,7 +43,11 @@ export class LoginServerConnection {
 	}
 
 	async connect () {
-		// net.connect()
+		this._socket = net.connect(
+			this._serverInstance.port,
+			this._serverInstance.ip,
+			() => { this._callbacks.connect.forEach((callback) => { callback(); }) }
+		)
 
 		this._isConnected = true;
 	}
