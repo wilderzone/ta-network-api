@@ -28,7 +28,7 @@ function compileMessage (chunks: (string | number[] | Uint8Array)[]): Uint8Array
 			} else {
 				console.warn('Chunk processed incorrectly. Message may be malformed.');
 			}
-		} else if (typeof chunk === 'object' && length in chunk) {
+		} else if (typeof chunk === 'object' && chunk.length > 0) {
 			result.push(...Array.from(chunk));
 		} else {
 			console.warn('Chunk not processed. Message may be malformed.');
