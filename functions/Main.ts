@@ -1,5 +1,5 @@
 import { loginServers } from '../data';
-import { LoginServer } from '../interfaces';
+import { LoginServer, HiRezAccount } from '../interfaces';
 import * as net from 'net';
 
 export class LoginServerConnection {
@@ -27,12 +27,12 @@ export class LoginServerConnection {
 
 	async send () {}
 
-	get accountData () {
 		if (!this.isConnected) {
+	get accountData (): HiRezAccount {
 			throw new Error("Please connect to a login server first.");
 		}
 
-		let data = {};
+		let data = {} as HiRezAccount;
 
 		// Request account data from the connected login server.
 
