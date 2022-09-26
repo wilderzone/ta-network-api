@@ -25,7 +25,12 @@ export class LoginServerConnection {
 		this._isConnected = false;
 	}
 
-	async send () {}
+	async send () {
+		if (!this._isConnected) {
+			throw new Error("Please connect to a login server first.");
+		}
+	}
+
 	get isConnected () {
 		return this._isConnected;
 	}
