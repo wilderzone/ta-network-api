@@ -19,10 +19,11 @@ export class LoginServerConnection {
 	} as LoginServerConnectionCallbackMap
 
 	constructor (server: keyof typeof loginServers | LoginServer) {
-		if (typeof server === 'string') {
+		if (typeof server === 'string' && server in loginServers) {
 			this._serverKey = server;
+			this._serverInstance = loginServers[server]
 		} else {
-			this._serverInstance = server;
+			this._serverInstance = server as LoginServer;
 		}
 	}
 
