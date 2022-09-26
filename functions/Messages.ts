@@ -37,6 +37,14 @@ function compileMessage (chunks: (string | number[] | Uint8Array)[]): Uint8Array
 	return new Uint8Array(result);
 }
 
+export class GenericMessage {
+	buffer = {} as Uint8Array;
+
+	constructor (content: (string | number[] | Uint8Array)[]) {
+		this.buffer = compileMessage(content);
+	}
+}
+
 export class AuthenticationMessage {
 	buffer = undefined as Uint8Array | undefined;
 
