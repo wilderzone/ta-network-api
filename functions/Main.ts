@@ -3,7 +3,7 @@ import { LoginServer, HiRezAccount } from '../interfaces';
 import * as net from 'net';
 
 export class LoginServerConnection {
-	isConnected = false;
+	_isConnected = false;
 	_serverKey = undefined as keyof typeof loginServers | undefined;
 	_serverInstance = {} as LoginServer;
 
@@ -18,17 +18,20 @@ export class LoginServerConnection {
 	async connect () {
 		// net.connect()
 
-		this.isConnected = true;
+		this._isConnected = true;
 	}
 
 	async disconnect () {
-		this.isConnected = false;
+		this._isConnected = false;
 	}
 
 	async send () {}
+	get isConnected () {
+		return this._isConnected;
+	}
 
-		if (!this.isConnected) {
 	get accountData (): HiRezAccount {
+		if (!this._isConnected) {
 			throw new Error("Please connect to a login server first.");
 		}
 
