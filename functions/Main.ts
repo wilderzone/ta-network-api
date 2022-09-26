@@ -2,10 +2,21 @@ import { loginServers } from '../data';
 import { LoginServer, HiRezAccount } from '../interfaces';
 import * as net from 'net';
 
+interface LoginServerConnectionCallbackMap {
+	connect: Function[],
+	disconnect: Function[],
+	send: Function[]
+}
+
 export class LoginServerConnection {
 	_isConnected = false;
 	_serverKey = undefined as keyof typeof loginServers | undefined;
 	_serverInstance = {} as LoginServer;
+	_callbacks = {
+		connect: [],
+		disconnect: [],
+		send: []
+	} as LoginServerConnectionCallbackMap
 
 	constructor (server: keyof typeof loginServers | LoginServer) {
 		if (typeof server === 'string') {
@@ -13,6 +24,20 @@ export class LoginServerConnection {
 		} else {
 			this._serverInstance = server;
 		}
+	}
+
+	/**
+	 * Attach a callback function to any of the available connection events. (Multiple callbacks can be attached to a single event).
+	 * @param event
+	 * @param callback Callback function to attach to the event.
+	 * @returns `true` if the callback was successfully attached, `false` if not.
+	 */
+	on (event: keyof LoginServerConnectionCallbackMap, callback: Function): boolean {
+		if (event in this._callbacks) {
+			this._callbacks[event].push(callback);
+			return true;
+		}
+		return false;
 	}
 
 	async connect () {
