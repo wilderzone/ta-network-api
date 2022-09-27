@@ -56,6 +56,14 @@ export class Buffer {
 	}
 
 	/**
+	 * Add another buffer on to the end of the stored buffer. Similar to `Array.[prototype].push()`.
+	 * @param buffer The new buffer to append.
+	 */
+	append (buffer: Uint8Array) {
+		this._buffer = new Uint8Array([...this._buffer, ...buffer]);
+	}
+
+	/**
 	 * Inverts the endianness of the stored buffer.
 	 * @returns A copy of the now inverted buffer.
 	 */
