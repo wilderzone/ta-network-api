@@ -76,7 +76,7 @@ export class Buffer {
 			invertedBuffer[i] = this._buffer[i + 1];
 			invertedBuffer[i + 1] = this._buffer[i];
 		}
-		this._buffer = new Uint8Array([...invertedBuffer])
+		this._buffer = new Uint8Array([...invertedBuffer]);
 		return invertedBuffer;
 	}
 }
