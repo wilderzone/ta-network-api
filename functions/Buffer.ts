@@ -35,7 +35,7 @@ export class Buffer {
 	}
 
 	/**
-	 * Read the first [bytes] number of bytes of the stored buffer, removing those bytes from the buffer afterwards.
+	 * Read the first [bytes] number of bytes of the stored buffer, removing those bytes from the buffer in the process.
 	 * @param bytes The number of bytes to read into the buffer by.
 	 * @returns A new Uint8Array containing the read bytes.
 	 */
