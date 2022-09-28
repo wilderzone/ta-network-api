@@ -53,8 +53,13 @@ export class LoginServerConnection {
 		this._isConnected = true;
 	}
 
+	/**
+	 * Disconnect from the login server.
+	 */
 	async disconnect () {
+		this._socket.end();
 		this._isConnected = false;
+		this._callbacks.disconnect.forEach((callback) => { callback(); });
 	}
 
 	async send () {
