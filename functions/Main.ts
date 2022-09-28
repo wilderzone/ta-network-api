@@ -1,5 +1,6 @@
 import { loginServers } from '../data';
 import { LoginServer, HiRezAccount, HashedCredentials } from '../interfaces';
+import { GenericMessage, AuthenticationMessage } from './Messages';
 import * as net from 'net';
 
 interface LoginServerConnectionCallbackMap {
@@ -8,6 +9,12 @@ interface LoginServerConnectionCallbackMap {
 	send: Function[],
 	receive: Function[]
 }
+
+interface LoginServerConnectionMessage {
+	buffer: Uint8Array
+}
+
+type LoginServerConnectionMessagePresets = 'authenticate' | LoginServerConnectionMessage;
 
 export class LoginServerConnection {
 	_isConnected = false;
@@ -66,10 +73,24 @@ export class LoginServerConnection {
 		this._callbacks.disconnect.forEach((callback) => { callback(); });
 	}
 
-	async send () {
+	async send (message: LoginServerConnectionMessagePresets) {
 		if (!this._isConnected) {
 			throw new Error("Please connect to a login server first.");
 		}
+
+		const messagePresets = {
+			authenticate: () => {
+				if (!this._credentials) {
+					return;
+				}
+				const message = new AuthenticationMessage(this._credentials);
+				if (message.buffer) {
+					this._socket.write(message.buffer, 'hex', () => {
+						console.log('Auth message sent.');
+					});
+				}
+			}
+		};
 	}
 
 	get isConnected () {
