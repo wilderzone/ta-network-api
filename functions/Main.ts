@@ -1,9 +1,9 @@
+import * as net from 'net';
 import { loginServers } from '../data';
 import { LoginServer, HiRezAccount, HashedCredentials } from '../interfaces';
 import { GenericMessage, AuthenticationMessage } from './Messages';
 import { Buffer } from './Buffer';
 import { verifyPacketLength } from './Utils';
-import * as net from 'net';
 
 interface LoginServerConnectionCallbackMap {
 	connect: Function[],
