@@ -1,10 +1,10 @@
 interface EnumField {
-	length: number | 'Sized' | 'ArrayOfEnumBlockArrays',
+	length: number | 'Sized' | 'EnumBlockArray'| 'ArrayOfEnumBlockArrays',
 	type?: 'Integer' | 'IP' | 'MapID' | 'ServerList' | 'String',
 	name?: string | undefined
 }
 
-export const enumfields = {
+export const generalEnumfields = {
 	'03E3': {length: 16, name: 'Salt'},
 	'034A': {length: 'Sized', type: 'String', name: 'Player Name'},
 	'035B': {length: 'Sized', name: undefined},
@@ -59,7 +59,6 @@ export const enumfields = {
 	'0600': {length: 2, name: undefined},
 	'006E': {length: 3, name: undefined},
 	'0019': {length: 4, name: undefined},
-	'0035': {length: 4, name: 'Blood Eagle Score'},
 	'006D': {length: 4, name: undefined},
 	'0073': {length: 4, name: undefined},
 	'008B': {length: 4, name: undefined},
@@ -72,7 +71,6 @@ export const enumfields = {
 	'00C3': {length: 4, name: undefined},
 	'00C6': {length: 4, name: undefined},
 	'00D4': {length: 4, name: undefined},
-	'0197': {length: 4, name: 'Diamond Sword Score'},
 	'01A3': {length: 4, name: undefined},
 	'01C0': {length: 4, name: undefined},
 	'01C1': {length: 4, name: undefined},
@@ -256,5 +254,14 @@ export const enumfields = {
 	'057E': {length: 8, name: undefined},
 	'05E2': {length: 8, name: undefined},
 	'05E4': {length: 8, name: undefined},
+	'0197': {length: 'EnumBlockArray', name: undefined},
+	'01BC': {length: 'EnumBlockArray', name: undefined},
 	'00E9': {length: 'ArrayOfEnumBlockArrays', type: 'ServerList', name: 'ServerList'}
 } as { [key: string]: EnumField };
+
+export const serverListEnumfields = {
+	'0035': {length: 4, name: 'Blood Eagle Score'},
+	'0197': {length: 4, name: 'Diamond Sword Score'}
+} as { [key: string]: EnumField };
+
+export const versionEnumFields = {} as { [key: string]: EnumField };
