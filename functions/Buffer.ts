@@ -57,7 +57,7 @@ export class Buffer {
 
 	/**
 	 * Add another buffer on to the end of the stored buffer. Similar to `Array.[prototype].push()`.
-	 * @param buffer The new buffer to append.
+	 * @param buffer The new buffer to be appended.
 	 */
 	append (buffer: Uint8Array) {
 		this._buffer = new Uint8Array([...this._buffer, ...buffer]);
