@@ -17,12 +17,12 @@ export class LoginServerConnection {
 		connect: [],
 		disconnect: [],
 		send: []
-	} as LoginServerConnectionCallbackMap
+	} as LoginServerConnectionCallbackMap;
 
 	constructor (server: keyof typeof loginServers | LoginServer) {
 		if (typeof server === 'string' && server in loginServers) {
 			this._serverKey = server;
-			this._serverInstance = loginServers[server]
+			this._serverInstance = loginServers[server];
 		} else {
 			this._serverInstance = server as LoginServer;
 		}
@@ -48,6 +48,7 @@ export class LoginServerConnection {
 			this._serverInstance.ip,
 			() => { this._callbacks.connect.forEach((callback) => { callback(); }) }
 		)
+		);
 
 		this._isConnected = true;
 	}
