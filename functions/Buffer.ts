@@ -1,3 +1,6 @@
+import { generalEnumfields } from '../data';
+import { hexToString } from './Utils';
+
 export class Buffer {
 	_buffer = new Uint8Array;
 	_bytesReadSinceCreation = 0;
@@ -88,5 +91,60 @@ export class Buffer {
 
 		this._buffer = new Uint8Array([...invertedBuffer]);
 		return invertedBuffer;
+	}
+
+	/**
+	 * Recursively parse the stored buffer into an Enum Tree.
+	 * @returns An object of unknown shape (the Enum Tree).
+	 */
+	parse (): { [key: string]: any } {
+		console.log('[Buffer] Parsing...');
+		let output = {} as { [key: string]: any };
+		const bytesProcessed = recurse(output, this);
+		console.log('[Buffer] Bytes processed:', bytesProcessed);
+		console.log('[Buffer] Done parsing.');
+		return {...output};
+	}
+}
+
+function recurse (parent: { [key: string]: any }, buffer: Buffer): number {
+	let bytesProcessed = 0;
+	buffer.invertEndianness(2);
+	const enumerator = hexToString(buffer.read(2)).toUpperCase();
+	bytesProcessed += 2;
+
+	// Stop if we have reached the end of the buffer.
+	if (buffer.length <= 0) {
+		return bytesProcessed;
+	}
+
+	// Stop if the enumerator doesn't exist, since this likely indicates that we have lost track of our place in the buffer.
+	if (!(enumerator in generalEnumfields)) {
+		console.warn('Enumerator', enumerator, 'was not found.');
+		return bytesProcessed;
+	}
+
+	if (generalEnumfields[enumerator].length === 'EnumBlockArray' || generalEnumfields[enumerator].length === 'ArrayOfEnumBlockArrays') {
+		parent[enumerator] = {} as { [key: string]: any };
+		buffer.advance(2);
+		bytesProcessed += 2;
+		bytesProcessed += recurse(parent[enumerator], buffer);
+		return bytesProcessed;
+	} else if (generalEnumfields[enumerator].length === 'Sized') {
+		buffer.invertEndianness(2);
+		const length = parseInt(hexToString(buffer.read(2)), 16);
+		bytesProcessed += 2;
+		const data = buffer.read(length);
+		bytesProcessed += length;
+		parent[enumerator] = [...data];
+		bytesProcessed += recurse(parent, buffer);
+		return bytesProcessed;
+	} else {
+		const length = generalEnumfields[enumerator].length as number;
+		const data = buffer.read(length);
+		bytesProcessed += length;
+		parent[enumerator] = [...data];
+		bytesProcessed += recurse(parent, buffer);
+		return bytesProcessed;
 	}
 }
