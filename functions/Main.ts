@@ -1,6 +1,8 @@
 import { loginServers } from '../data';
 import { LoginServer, HiRezAccount, HashedCredentials } from '../interfaces';
 import { GenericMessage, AuthenticationMessage } from './Messages';
+import { Buffer } from './Buffer';
+import { verifyPacketLength } from './Utils';
 import * as net from 'net';
 
 interface LoginServerConnectionCallbackMap {
@@ -53,15 +55,53 @@ export class LoginServerConnection {
 		return false;
 	}
 
+	/**
+	 * Establish a live connection to the Login Server.
+	 */
 	async connect () {
+		console.log('Connecting to login server on', this._serverInstance.ip, '...');
+
 		this._socket = net.connect(
 			this._serverInstance.port,
-			this._serverInstance.ip,
-			() => { this._callbacks.connect.forEach((callback) => { callback(); }) }
-		)
+			this._serverInstance.ip
 		);
 
-		this._isConnected = true;
+		// this._socket.setEncoding('hex'); // Using the 'hex' encoding will cause the socket to produce a buffer containing nibbles.
+		this._socket.setKeepAlive(false, 3000);
+		this._socket.setTimeout(5000);
+
+		// Set up event listeners.
+		this._socket.on('connect', () => {
+			console.log('Connected.');
+			this._isConnected = true;
+			this._callbacks.connect.forEach((callback) => { callback(); });
+		});
+
+		this._socket.on('timeout', () => {
+			console.warn('Socket connection timed-out.');
+			this._socket.end();
+			this._isConnected = false;
+			this._callbacks.disconnect.forEach((callback) => { callback(); });
+		});
+
+		this._socket.on('data', (data) => {
+			console.log('Data:', data);
+			const array = Uint8Array.from(data);
+			if (!verifyPacketLength(array)) {
+				console.warn('Length of received data is invalid. Packet may be malformed.');
+				return;
+			}
+			const decoder = new Buffer(array);
+			decoder.advance(2);
+			console.log('Decoded:', decoder.parse());
+			this._callbacks.receive.forEach((callback) => { callback(); });
+		});
+
+		// Start connection sequence.
+		const initialMessage = new GenericMessage(['1000bc0102009e04610b040189040c000000']);
+		this._socket.write(initialMessage.buffer, 'hex', () => {
+			console.log('Initial message sent.');
+		});
 	}
 
 	/**
