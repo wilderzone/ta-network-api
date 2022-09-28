@@ -1,4 +1,5 @@
 import { generalEnumfields } from '../data';
+import { EnumTree } from '../interfaces';
 import { hexToString } from './Utils';
 
 export class Buffer {
@@ -95,19 +96,19 @@ export class Buffer {
 
 	/**
 	 * Recursively parse the stored buffer into an Enum Tree.
-	 * @returns An object of unknown shape (the Enum Tree).
+	 * @returns An Enum Tree.
 	 */
-	parse (): { [key: string]: any } {
+	parse (): EnumTree {
 		console.log('[Buffer] Parsing...');
-		let output = {} as { [key: string]: any };
+		let output = {} as EnumTree;
 		const bytesProcessed = recurse(output, this);
 		console.log('[Buffer] Bytes processed:', bytesProcessed);
 		console.log('[Buffer] Done parsing.');
-		return {...output};
+		return {...output} as EnumTree;
 	}
 }
 
-function recurse (parent: { [key: string]: any }, buffer: Buffer): number {
+function recurse (parent: EnumTree, buffer: Buffer): number {
 	let bytesProcessed = 0;
 	buffer.invertEndianness(2);
 	const enumerator = hexToString(buffer.read(2)).toUpperCase();
@@ -125,7 +126,7 @@ function recurse (parent: { [key: string]: any }, buffer: Buffer): number {
 	}
 
 	if (generalEnumfields[enumerator].length === 'EnumBlockArray' || generalEnumfields[enumerator].length === 'ArrayOfEnumBlockArrays') {
-		parent[enumerator] = {} as { [key: string]: any };
+		parent[enumerator] = {} as EnumTree;
 		buffer.advance(2);
 		bytesProcessed += 2;
 		bytesProcessed += recurse(parent[enumerator], buffer);
