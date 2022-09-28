@@ -5,7 +5,8 @@ import * as net from 'net';
 interface LoginServerConnectionCallbackMap {
 	connect: Function[],
 	disconnect: Function[],
-	send: Function[]
+	send: Function[],
+	receive: Function[]
 }
 
 export class LoginServerConnection {
@@ -16,7 +17,8 @@ export class LoginServerConnection {
 	_callbacks = {
 		connect: [],
 		disconnect: [],
-		send: []
+		send: [],
+		receive: []
 	} as LoginServerConnectionCallbackMap;
 
 	constructor (server: keyof typeof loginServers | LoginServer) {
