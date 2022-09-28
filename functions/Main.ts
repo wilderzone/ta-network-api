@@ -1,5 +1,5 @@
 import { loginServers } from '../data';
-import { LoginServer, HiRezAccount } from '../interfaces';
+import { LoginServer, HiRezAccount, HashedCredentials } from '../interfaces';
 import * as net from 'net';
 
 interface LoginServerConnectionCallbackMap {
@@ -13,6 +13,7 @@ export class LoginServerConnection {
 	_isConnected = false;
 	_serverKey = undefined as keyof typeof loginServers | undefined;
 	_serverInstance = {} as LoginServer;
+	_credentials = {} as HashedCredentials | undefined;
 	_socket = {} as net.Socket;
 	_callbacks = {
 		connect: [],
@@ -21,13 +22,14 @@ export class LoginServerConnection {
 		receive: []
 	} as LoginServerConnectionCallbackMap;
 
-	constructor (server: keyof typeof loginServers | LoginServer) {
+	constructor (server: keyof typeof loginServers | LoginServer, credentials: HashedCredentials) {
 		if (typeof server === 'string' && server in loginServers) {
 			this._serverKey = server;
 			this._serverInstance = loginServers[server];
 		} else {
 			this._serverInstance = server as LoginServer;
 		}
+		this._credentials = credentials;
 	}
 
 	/**
