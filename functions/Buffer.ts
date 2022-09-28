@@ -68,7 +68,7 @@ export class Buffer {
 
 	/**
 	 * Inverts the endianness of the stored buffer.
-	 * @param bytes The number of bytes to invert (must be even).
+	 * @param bytes The number of bytes to invert (optional, but must be even).
 	 * @returns A copy of the now inverted buffer.
 	 */
 	invertEndianness (bytes?: number): Uint8Array {
