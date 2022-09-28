@@ -31,3 +31,17 @@ export function invertEndianness (buffer: Uint8Array): Uint8Array {
 	}
 	return invertedBuffer;
 }
+
+/**
+ * Verify that the length of a given network packet is correct (as per the packet's `length` byte).
+ * @param packet A network packet, as received.
+ * @returns `true` if the length of the packet is correct, `false` if not.
+ */
+export function verifyPacketLength (packet: Uint8Array): boolean {
+	const length = parseInt(hexToString(new Uint8Array([packet[1], packet[0]])), 16);
+	console.log('[verifyPacketLength] length:', length, `(${length + 2})`);
+	if (packet.length === length + 2) {
+		return true;
+	}
+	return false;
+}
