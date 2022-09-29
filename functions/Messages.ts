@@ -31,7 +31,7 @@ export class GenericMessage {
 }
 
 export class AuthenticationMessage {
-	buffer = undefined as Uint8Array | undefined;
+	buffer = {} as Uint8Array;
 
 	constructor (credentials: HashedCredentials) {
 		this.buffer = compileMessage([
