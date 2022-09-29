@@ -156,8 +156,8 @@ export const generalEnumfields = {
 	'0457': {length: 4, name: undefined},
 	'0458': {length: 4, name: undefined},
 	'0472': {length: 4, name: undefined},
-	'0489': {length: 4, name: undefined},
-	'049E': {length: 4, type: 'Version', name: 'Version Number'},
+	'0489': {length: 4, type: 'Integer', name: undefined},
+	'049E': {length: 4, type: 'Version', name: 'Version'},
 	'04A5': {length: 4, name: undefined},
 	'04A6': {length: 4, name: undefined},
 	'04A7': {length: 4, name: undefined},
@@ -209,7 +209,7 @@ export const generalEnumfields = {
 	'0660': {length: 4, name: undefined},
 	'0661': {length: 4, name: undefined},
 	'0663': {length: 4, name: undefined},
-	'0664': {length: 4, name: undefined},
+	'0664': {length: 4, type: 'Version', name: 'Version'}, // Auth version?
 	'066A': {length: 4, name: undefined},
 	'0671': {length: 4, name: undefined},
 	'0672': {length: 4, name: undefined},
@@ -254,8 +254,9 @@ export const generalEnumfields = {
 	'057E': {length: 8, name: undefined},
 	'05E2': {length: 8, name: undefined},
 	'05E4': {length: 8, name: undefined},
-	'0197': {length: 'EnumBlockArray', name: undefined},
-	'01BC': {length: 'EnumBlockArray', name: undefined},
+	'003A': {length: 'EnumBlockArray', name: 'Auth Info Confirmation'},
+	'0197': {length: 'EnumBlockArray', name: 'Auth Info'},
+	'01BC': {length: 'EnumBlockArray', name: 'Server Info'},
 	'00E9': {length: 'ArrayOfEnumBlockArrays', type: 'ServerList', name: 'ServerList'}
 } as { [key: string]: EnumField };
 
