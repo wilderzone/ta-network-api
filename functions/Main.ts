@@ -3,6 +3,7 @@ import { loginServers } from '../data';
 import { LoginServer, HiRezAccount, HashedCredentials } from '../interfaces';
 import { GenericMessage, AuthenticationMessage } from './Messages';
 import { Buffer } from './Buffer';
+import { Decoder } from './Decoder';
 import { verifyPacketLength } from './Utils';
 
 interface LoginServerConnectionCallbackMap {
@@ -91,9 +92,33 @@ export class LoginServerConnection {
 				console.warn('Length of received data is invalid. Packet may be malformed.');
 				return;
 			}
-			const decoder = new Buffer(array);
-			decoder.advance(2);
-			console.log('Decoded:', decoder.parse());
+			const buffer = new Buffer(array);
+			buffer.advance(2);
+			const enumTree = buffer.parse();
+			console.log('Parsed:', enumTree);
+
+			const decoder = new Decoder(enumTree);
+			const decodedData = decoder.decode();
+			console.log('Decoded:', decodedData);
+
+			if ('Auth Info' in decodedData && this._credentials) {
+				// Acknowledge the server's auth info.
+				const ackMessage = new GenericMessage(['12003a0001009e04610b04010000000000000000']);
+				this._socket.write(ackMessage.buffer, 'hex', () => {
+					console.log('Acknowledgement message sent.');
+				});
+			}
+
+			if ('Auth Info Confirmation' in decodedData && this._credentials) {
+				this._credentials.salt = new Uint8Array(decodedData['Auth Info Confirmation']['Salt']);
+				const authMessage = new AuthenticationMessage({...this._credentials})
+				console.log('Sending auth message...');
+				console.log(authMessage);
+				this._socket.write(authMessage.buffer, 'hex', () => {
+					console.log('Auth message sent.');
+				});
+			}
+
 			this._callbacks.receive.forEach((callback) => { callback(); });
 		});
 
