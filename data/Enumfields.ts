@@ -1,6 +1,6 @@
 interface EnumField {
 	length: number | 'Sized' | 'EnumBlockArray'| 'ArrayOfEnumBlockArrays',
-	type?: 'Integer' | 'IP' | 'MapID' | 'ServerList' | 'String',
+	type?: 'Integer' | 'IP' | 'MapID' | 'ServerList' | 'String' | 'Version',
 	name?: string | undefined
 }
 
@@ -157,7 +157,7 @@ export const generalEnumfields = {
 	'0458': {length: 4, name: undefined},
 	'0472': {length: 4, name: undefined},
 	'0489': {length: 4, name: undefined},
-	'049E': {length: 4, name: 'Version Number'},
+	'049E': {length: 4, type: 'Version', name: 'Version Number'},
 	'04A5': {length: 4, name: undefined},
 	'04A6': {length: 4, name: undefined},
 	'04A7': {length: 4, name: undefined},
