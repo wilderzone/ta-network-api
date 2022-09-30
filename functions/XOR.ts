@@ -26,7 +26,7 @@ function zipLongest(iterables: Uint8Array[], fillValue = 0): Uint8Array[] {
  * @param salt 
  * @returns The XOR'ed value. Suitable for Login Server authentication.
  */
-export function xorPasswordHash (passwordHash: Uint8Array, salt: Uint8Array): Uint8Array {
+export function xorPasswordHash (passwordHash: string, salt: Uint8Array): Uint8Array {
 	// Split the salt into groups of 4 bits (nibbles).
 	let saltNibbles = [] as number[];
 	salt.forEach((value) => {
@@ -81,7 +81,7 @@ export function xorPasswordHash (passwordHash: Uint8Array, salt: Uint8Array): Ui
 	]);
 
 	// Execute the XOR pattern on the password hash.
-	const zip = zipLongest([passwordHash, pattern], 0);
+	const zip = zipLongest([Uint8Array.from(Buffer.from(passwordHash, 'base64')), pattern], 0);
 	const processedPasswordHash = new Uint8Array(zip.length);
 
 	zip.forEach((zippedBlock, index) => {

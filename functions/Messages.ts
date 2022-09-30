@@ -36,7 +36,7 @@ export class AuthenticationMessage {
 	constructor (credentials: HashedCredentials) {
 		this.buffer = compileMessage([
 			'b9003a000b00560060000000',
-			xorPasswordHash(new Uint8Array(textToHexInt(credentials.passwordHash)), credentials.salt),
+			xorPasswordHash(credentials.passwordHash, credentials.salt),
 			'94040c00',
 			textToHexInt(credentials.username),
 			'7106432800007206000000007306017706c3ee58437606d13f00007406de1000007506811b0000340400000000000000009e04610b04010000000000000000'
