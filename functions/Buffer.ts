@@ -68,6 +68,14 @@ export class Buffer {
 	}
 
 	/**
+	 * Clears the contents of the stored buffer.
+	 */
+	clear () {
+		this._buffer = new Uint8Array;
+		this._bytesReadSinceCreation = 0;
+	}
+
+	/**
 	 * Inverts the endianness of the stored buffer.
 	 * @param bytes The number of bytes to invert (optional, but must be even).
 	 * @returns A copy of the now inverted buffer.
