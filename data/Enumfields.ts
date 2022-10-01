@@ -36,6 +36,7 @@ export const generalEnumfields = {
 	'02FE': {length: 'Sized', type: 'String', name: 'Sender Name/Clan Tag to Purchase'},
 	'0300': {length: 'Sized', type: 'String', name: 'Map + Gamemode, Server or Region Name'},
 	'01A4': {length: 'Sized', type: 'String', name: 'MOTD / Report Text'},
+	'0000': {length: 0, name: undefined},
 	'0001': {length: 1, name: undefined},
 	'006F': {length: 1, name: undefined},
 	'01FA': {length: 1, name: undefined},
