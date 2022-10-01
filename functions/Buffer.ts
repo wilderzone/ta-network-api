@@ -68,6 +68,14 @@ export class Buffer {
 	}
 
 	/**
+	 * Clones the contents of the stored buffer.
+	 * @returns The cloned buffer.
+	 */
+	clone (): Uint8Array {
+		return Uint8Array.from(this._buffer);
+	}
+
+	/**
 	 * Clears the contents of the stored buffer.
 	 */
 	clear () {
