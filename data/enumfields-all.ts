@@ -1,4 +1,4 @@
-const ENUMFIELDS = {
+const allEnumfields = {
 	'03E3': {length: 16, name: 'Salt'},
 	'0014': {length: 'EnumBlockArray', name: 'Class Menu Content'},
 	'0033': {length: 'EnumBlockArray', name: undefined},
@@ -307,7 +307,7 @@ const ENUMFIELDS = {
 	'057E': {length: 8, name: undefined},
 	'05E2': {length: 8, name: undefined},
 	'05E4': {length: 8, name: undefined}
-}
+};
 
 const duplicates = {
 	'0197': {length: 4, name: 'Diamond Sword Score'},
@@ -316,4 +316,4 @@ const duplicates = {
 	'006F': {length: 1, name: undefined},
 	'01BC': {length: 'Sized', name: undefined},
 	'01A4': {length: 'Sized', name: 'MOTD / Report Text'},
-}
+};
