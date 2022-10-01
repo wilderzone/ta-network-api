@@ -1,4 +1,4 @@
-MENU_OPTIONS = {
+export const menuOptions = {
 	'6A040000': 'CONTROL - Ski',
 	'6B040000': 'CONTROL - Jump',
 	'6C040000': 'CONTROL - Jetpack',
@@ -13,4 +13,4 @@ MENU_OPTIONS = {
 	'7D040000': 'CONTROL - Spot Target',
 	'81040000': 'CONTROL - Third-Person Cam',
 	'8F040000': 'CONTROL - Chat Console'
-}
+};
