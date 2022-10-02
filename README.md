@@ -7,7 +7,7 @@ Please see the [wiki](https://github.com/wilderzone/ta-network-api/wiki) for a d
 ###
 
 
-Includes:  
+API includes functionality for:  
 - [x] Fetching basic player data (clan tag, XP, Gold, etc).
 - [ ] Fetching server status data:
   - [ ] Players online.
@@ -17,27 +17,30 @@ Includes:
 
 ### Demo
 
-This project is still deep in development, so the API is not very accessible yet. However, to test the current functionality, create a new Python script containing something like:
+This project is still in development. To test the current functionality, create a new TypeScript file containing:
 
-```python
-import network_api
+```typescript
+import { LoginServerConnection } from './index';
 
-API_CONFIG = {
-	'login_server': {
-		'ip': '45.79.222.67',
-		'port': 9000
-	},
-	'credentials': {
-		'user': 'your_user_name',
-		'hash': 'your_password_hash'
-	}
-}
+let credentials = {
+	username: '<your-username>',
+	passwordHash: '<your-password-hash>',
+	salt: new Uint8Array()
+};
 
-print(
-	network_api.connect({
-		'login_server': API_CONFIG['login_server'],
-		'user': API_CONFIG['credentials']['user'],
-		'hash': API_CONFIG['credentials']['hash']
-	})
-)
+const connection = new LoginServerConnection('hirez', credentials);
+
+connection.connect();
 ```
+
+Install dependencies with:
+```
+npm install
+```
+
+Run with:
+```
+npx ts-node test.ts
+```
+
+The API will connect to the specified login server using your credentials, proucing a log of the resulting conversation in the terminal.
