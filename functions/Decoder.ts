@@ -11,6 +11,10 @@ export class Decoder {
 		this._tree = tree;
 	}
 
+	/**
+	 * Decodes a machine-readable Enum Tree.
+	 * @returns A human-readable Enum Tree.
+	 */
 	decode () {
 		console.log('[Decoder] Decoding tree...');
 		this._enumfieldsParsed = recurse(this._output, this._tree);
