@@ -63,7 +63,7 @@ function parseFieldValue (value: number[], type?: string): any {
 	// Version numbers are represented by 4 bytes in reverse order.
 	// The last two bytes represent the major and minor versions, and the first two bytes represent the patch version:
 	//      [ 61 0B 04 01 ]
-	// Patch ──┘──┘  │  └── Major
+	// Patch ──┴──┘  │  └── Major
 	//       Minor ──┘
 	if (type === 'Version') {
 		if (value.length !== 4) {
