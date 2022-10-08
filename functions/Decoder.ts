@@ -72,5 +72,19 @@ function parseFieldValue (value: number[], type?: string): any {
 		return `${value[3]}.${value[2]}.${parseInt(hexToString(new Uint8Array(value.slice(0, 2).reverse())), 16)}.0`;
 	}
 
+	// IP addresses are represented by 8 bytes:
+	//        [ 00 00 00 00 00 00 00 00 ]
+	// Unknown ──┴──┘  │  │  └──┴──┴──┴── IP
+	//          Port ──┘──┘
+	if (type === 'IP') {
+		const unknownBytes = hexToString(new Uint8Array(value.slice(0, 2))); // The first two bytes are unknown (possibly either a region ID or just placeholders).
+		const port = parseInt(hexToString(new Uint8Array(value.slice(2, 4))), 16); // The next two bytes represent the port number as a big-endian integer.
+		// Each following byte is one integer of the IPv4 address.
+		const ip1 = value[4];
+		const ip2 = value[5];
+		const ip3 = value[6];
+		const ip4 = value[7]; 
+		return `${ip1}.${ip2}.${ip3}.${ip4}:${port} (${unknownBytes})`;
+	}
 	return value;
 }
