@@ -46,11 +46,9 @@ function parseFieldValue (value: number[], type?: string): any {
 		return value;
 	}
 
-	// Integers are represented by 4 bytes, with the two high bytes on the right and the two low bytes one the left.
-	// These byte pairs must be swapped before they can be read as a normal integer:
-	//     <----
-	// [ 2A38  0159 ]  =>  [ 0159 2A38 ]
-	//      ---->
+	// Integers are represented by 4 bytes in reverse order.
+	// These bytes must be swapped before they can be read as a normal integer:
+	// [ 2A 38 59 01 ]  =>  [ 01 59 38 2A ]
 	if (type === 'Integer') {
 		if (value.length !== 4) {
 			return value;
