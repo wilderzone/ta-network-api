@@ -129,7 +129,7 @@ export const generalEnumfields = {
 	'0345': {length: 4, name: undefined},
 	'0346': {length: 4, name: undefined},
 	'0347': {length: 4, name: undefined},
-	'0348': {length: 4, name: 'Player ID'},
+	'0348': {length: 4, type: 'Integer', name: 'Player ID'},
 	'035A': {length: 4, name: 'Payment Amount'},
 	'0363': {length: 4, name: undefined},
 	'0369': {length: 4, name: 'Menu Option Identifier'},
