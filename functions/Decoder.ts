@@ -60,6 +60,15 @@ function parseFieldValue (value: number[], type?: string): any {
 		return parseInt(hexToString(new Uint8Array(value.reverse())), 16);
 	}
 
+	// Strings can be represented by any length of bytes.
+	// Each byte in the string represents one ASCII-encoded character.
+	// [ 54 72 69 62 65 73 ]
+	//    │  │  │  │  │  │
+	// "  T  r  i  b  e  s "
+	if (type === 'String') {
+		return value.map((v) => String.fromCharCode(v)).join('');
+	}
+
 	// Version numbers are represented by 4 bytes in reverse order.
 	// The last two bytes represent the major and minor versions, and the first two bytes represent the patch version:
 	//      [ 61 0B 04 01 ]
