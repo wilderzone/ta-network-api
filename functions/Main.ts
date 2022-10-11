@@ -182,8 +182,6 @@ export class LoginServerConnection {
 			console.log('Decoded:', decodedData);
 
 			console.log('End of stream data.');
-
-				}
 		}
 	}
 
