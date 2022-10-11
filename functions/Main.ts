@@ -25,6 +25,10 @@ export class LoginServerConnection {
 	_socket = {} as net.Socket;
 	_isReceivingStream = false;
 	_streamBuffer = new Buffer();
+	_timeToIdle = 3000;
+	_idleTimers = [] as number[];
+	_messageQueue = [] as LoginServerConnectionMessage[];
+	_messageId = 0;
 	_callbacks = {
 		connect: [],
 		disconnect: [],
@@ -68,13 +72,15 @@ export class LoginServerConnection {
 		);
 
 		// this._socket.setEncoding('hex'); // Using the 'hex' encoding will cause the socket to produce a buffer containing nibbles.
-		this._socket.setKeepAlive(false, 3000);
-		this._socket.setTimeout(5000);
+		this._socket.setKeepAlive(false, this._timeToIdle);
+		this._socket.setTimeout(6000);
 
 		// Set up event listeners.
 		this._socket.on('connect', () => {
 			console.log('Connected.');
 			this._isConnected = true;
+			this._idleTimers.forEach((timer) => { window.clearTimeout(timer); });
+			this._idleTimers.push(window.setTimeout(() => { this._idle(); }, this._timeToIdle));
 			this._callbacks.connect.forEach((callback) => { callback(); });
 		});
 
@@ -89,6 +95,9 @@ export class LoginServerConnection {
 			console.log('Data:', data);
 			const array = Uint8Array.from(data);
 			console.log('Data:', hexToString(array));
+			
+			this._idleTimers.forEach((timer) => { window.clearTimeout(timer); });
+			this._idleTimers.push(window.setTimeout(() => { this._idle(); }, this._timeToIdle));
 
 			// Process an existing packet stream.
 			if (this._isReceivingStream) {
@@ -147,8 +156,40 @@ export class LoginServerConnection {
 		if (!this._isConnected) {
 			throw new Error("Please connect to a login server first.");
 		}
+		// Add the requested message to the queue.
+		this._messageQueue.push(message);
+	}
+
+	async _sendNextMessageInQueue () {
+		const message = this._messageQueue.shift();
+		if (message) {
+			this._messageId++;
+			this._socket.write(message.buffer, 'hex', () => {
+				console.log(`Sent message ${this._messageId}.`);
+			});
+		}
+	}
+
+	_flushStreamBuffer () {
+		// Flush the stream buffer.
+		if (this._streamBuffer.length > 0) {
+			console.log('Flushing stream buffer...');
+			const enumTree = this._streamBuffer.parse();
+			console.log('Parsed:', enumTree);
+
+			const decoder = new Decoder(enumTree);
+			const decodedData = decoder.decode();
+			console.log('Decoded:', decodedData);
+
+			console.log('End of stream data.');
 
 				}
+	}
+
+	_idle () {
+		this._idleTimers.forEach((timer) => { window.clearTimeout(timer); });
+		this._flushStreamBuffer();
+		this._sendNextMessageInQueue();
 	}
 
 	get isConnected () {
