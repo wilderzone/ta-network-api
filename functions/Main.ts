@@ -184,6 +184,7 @@ export class LoginServerConnection {
 			console.log('End of stream data.');
 
 				}
+		}
 	}
 
 	_idle () {
