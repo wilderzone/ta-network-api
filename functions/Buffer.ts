@@ -29,7 +29,7 @@ export class Buffer {
 	}
 
 	/**
-	 * Have a peek at the first [bytes] number of bytes of the stored buffer without modifying the buffer.
+	 * Have a peek at the first `bytes` number of bytes of the stored buffer without modifying the buffer.
 	 * @param bytes The number of bytes to peek into the buffer by.
 	 * @returns A new Uint8Array containing the peeked bytes.
 	 */
@@ -39,7 +39,7 @@ export class Buffer {
 	}
 
 	/**
-	 * Read the first [bytes] number of bytes of the stored buffer, removing those bytes from the buffer in the process.
+	 * Read the first `bytes` number of bytes of the stored buffer, removing those bytes from the buffer in the process.
 	 * @param bytes The number of bytes to read into the buffer by.
 	 * @returns A new Uint8Array containing the read bytes.
 	 */
@@ -51,7 +51,7 @@ export class Buffer {
 	}
 
 	/**
-	 * Remove the first [bytes] number of bytes from the stored buffer, "advancing" the position of the buffer.
+	 * Remove the first `bytes` number of bytes from the stored buffer, "advancing" the position of the buffer.
 	 * @param bytes The number of bytes to advance the buffer by.
 	 */
 	advance (bytes: number) {
