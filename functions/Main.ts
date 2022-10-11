@@ -44,7 +44,7 @@ export class LoginServerConnection {
 
 	/**
 	 * Attach a callback function to any of the available connection events. (Multiple callbacks can be attached to a single event).
-	 * @param event
+	 * @param event The event to listen for. (Eg: `connect`, `receive`, etc).
 	 * @param callback Callback function to attach to the event.
 	 * @returns `true` if the callback was successfully attached, `false` if not.
 	 */
