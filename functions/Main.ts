@@ -4,7 +4,7 @@ import { LoginServer, HiRezAccount, HashedCredentials } from '../interfaces';
 import { GenericMessage, AuthenticationMessage } from './Messages';
 import { Buffer } from './Buffer';
 import { Decoder } from './Decoder';
-import { verifyPacketLength } from './Utils';
+import { hexToString, verifyPacketLength } from './Utils';
 
 interface LoginServerConnectionCallbackMap {
 	connect: Function[],
@@ -23,6 +23,8 @@ export class LoginServerConnection {
 	_serverInstance = {} as LoginServer;
 	_credentials = {} as HashedCredentials | undefined;
 	_socket = {} as net.Socket;
+	_isReceivingStream = false;
+	_streamBuffer = new Buffer();
 	_callbacks = {
 		connect: [],
 		disconnect: [],
@@ -86,38 +88,43 @@ export class LoginServerConnection {
 		this._socket.on('data', (data) => {
 			console.log('Data:', data);
 			const array = Uint8Array.from(data);
-			if (!verifyPacketLength(array)) {
-				console.warn('Length of received data is invalid. Packet may be malformed.');
-				return;
+			console.log('Data:', hexToString(array));
+
+			// Process an existing packet stream.
+			if (this._isReceivingStream) {
+				console.log('Received stream packet.')
+				// Append all received packets to the same Buffer.
+				this._streamBuffer.append(array);
+				// TODO: Figure out a definitive way to detect when a stream has ended.
 			}
-			const buffer = new Buffer(array);
-			buffer.advance(2);
-			const enumTree = buffer.parse();
-			console.log('Parsed:', enumTree);
-
-			const decoder = new Decoder(enumTree);
-			const decodedData = decoder.decode();
-			console.log('Decoded:', decodedData);
-
-			if ('Auth Info' in decodedData && this._credentials) {
-				// Acknowledge the server's auth info.
-				const ackMessage = new GenericMessage(['12003a0001009e04610b04010000000000000000']);
-				this._socket.write(ackMessage.buffer, 'hex', () => {
-					console.log('Acknowledgement message sent.');
-				});
+			
+			// Detect the start of a packet stream.
+			else if (array[0] === 0 && array[1] === 0) { // data[00 00 ...] Indicates the start of a packet stream.
+				this._isReceivingStream = true;
+				console.log('Packet stream started.');
+				this._streamBuffer.clear();
+				this._streamBuffer.append(array);
+				this._streamBuffer.advance(2);
 			}
 
-			if ('Auth Info Confirmation' in decodedData && this._credentials) {
-				this._credentials.salt = new Uint8Array(decodedData['Auth Info Confirmation']['Salt']);
-				const authMessage = new AuthenticationMessage({...this._credentials})
-				console.log('Sending auth message...');
-				console.log(authMessage);
-				this._socket.write(authMessage.buffer, 'hex', () => {
-					console.log('Auth message sent.');
-				});
-			}
+			// Process a single packet.
+			else {
+				if (!verifyPacketLength(array)) {
+					console.warn('Length of received data is invalid. Packet may be malformed.');
+					return;
+				}
+				const buffer = new Buffer(array);
+				buffer.advance(2);
+				const enumTree = buffer.parse();
+				console.log('Parsed:', enumTree);
 
-			this._callbacks.receive.forEach((callback) => { callback(); });
+				const decoder = new Decoder(enumTree);
+				const decodedData = decoder.decode();
+				console.log('Decoded:', decodedData);
+
+
+				this._callbacks.receive.forEach((callback) => { callback(); });
+			}
 		});
 
 		// Start connection sequence.
