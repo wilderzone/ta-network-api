@@ -21,7 +21,8 @@ export const generalEnumfields = {
 	'0013': {length: 'Sized', name: undefined},
 	'0082': {length: 'Sized', name: undefined},
 	'00A2': {length: 'Sized', name: undefined},
-	'00A3': {length: 'Sized', name: undefined},
+	// '00A3': {length: 'Sized', name: undefined}, // The length of this field may be incorrect, needs verification.
+	'00A3': {length: 6, name: undefined},
 	'00AA': {length: 'Sized', name: undefined},
 	'00AB': {length: 'Sized', name: undefined},
 	'01A6': {length: 'Sized', name: undefined},
