@@ -1,5 +1,5 @@
-import { generalEnumfields } from '../data';
-import { EnumTree } from '../interfaces';
+import { generalEnumfields, Maps } from '../data';
+import { EnumTree, Map } from '../interfaces';
 import { hexToString, invertEndianness } from './Utils';
 
 export class Decoder {
@@ -101,5 +101,22 @@ function parseFieldValue (value: number[], type?: string): any {
 		const ip4 = value[7]; 
 		return `${ip1}.${ip2}.${ip3}.${ip4}:${port} (${unknownBytes})`;
 	}
+
+	// Map IDs are represented by 4 bytes in reverse order.
+	if (type === 'MapID') {
+		if (value.length !== 4) {
+			console.warn('Error decoding Map ID (', value, '). Enumfield may be incorrectly typed.');
+			return value;
+		}
+		const id = parseInt(hexToString(new Uint8Array(value.reverse())), 16);
+		let output = {} as Map;
+		Object.entries(Maps).forEach((map) => {
+			if (map[1].id === id) {
+				output = map[1];
+			}
+		});
+		return output;
+	}
+
 	return value;
 }
