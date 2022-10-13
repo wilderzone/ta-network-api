@@ -26,7 +26,7 @@ export class LoginServerConnection {
 	_isReceivingStream = false;
 	_streamBuffer = new Buffer();
 	_timeToIdle = 3000;
-	_idleTimers = [] as number[];
+	_idleTimers = [] as NodeJS.Timeout[];
 	_messageQueue = [] as LoginServerConnectionMessage[];
 	_messageId = 0;
 	_callbacks = {
@@ -79,8 +79,8 @@ export class LoginServerConnection {
 		this._socket.on('connect', () => {
 			console.log('Connected.');
 			this._isConnected = true;
-			this._idleTimers.forEach((timer) => { window.clearTimeout(timer); });
-			this._idleTimers.push(window.setTimeout(() => { this._idle(); }, this._timeToIdle));
+			this._idleTimers.forEach((timer) => { clearTimeout(timer); });
+			this._idleTimers.push(setTimeout(() => { this._idle(); }, this._timeToIdle));
 			this._callbacks.connect.forEach((callback) => { callback(); });
 		});
 
@@ -96,8 +96,8 @@ export class LoginServerConnection {
 			const array = Uint8Array.from(data);
 			console.log('Data:', hexToString(array));
 			
-			this._idleTimers.forEach((timer) => { window.clearTimeout(timer); });
-			this._idleTimers.push(window.setTimeout(() => { this._idle(); }, this._timeToIdle));
+			this._idleTimers.forEach((timer) => { clearTimeout(timer); });
+			this._idleTimers.push(setTimeout(() => { this._idle(); }, this._timeToIdle));
 
 			// Process an existing packet stream.
 			if (this._isReceivingStream) {
@@ -186,7 +186,7 @@ export class LoginServerConnection {
 	}
 
 	_idle () {
-		this._idleTimers.forEach((timer) => { window.clearTimeout(timer); });
+		this._idleTimers.forEach((timer) => { clearTimeout(timer); });
 		this._flushStreamBuffer();
 		this._sendNextMessageInQueue();
 	}
