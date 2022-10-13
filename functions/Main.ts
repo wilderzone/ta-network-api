@@ -98,7 +98,6 @@ export class LoginServerConnection {
 		this._socket.on('data', (data) => {
 			console.log('Data:', data);
 			const array = Uint8Array.from(data);
-			console.log('Data:', hexToString(array));
 			
 			this._idleTimers.forEach((timer) => { clearTimeout(timer); });
 			this._idleTimers.push(setTimeout(() => { this._idle(); }, this._timeToIdle));
