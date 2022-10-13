@@ -139,7 +139,7 @@ export class LoginServerConnection {
 		// Start connection sequence.
 		const initialMessage = new GenericMessage(['1000bc0102009e04610b040189040c000000']);
 		this._socket.write(initialMessage.buffer, 'hex', () => {
-			console.log('Initial message sent.');
+			console.log('Connection request sent.');
 		});
 	}
 
