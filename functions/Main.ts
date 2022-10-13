@@ -134,8 +134,13 @@ export class LoginServerConnection {
 				const decodedData = decoder.decode();
 				console.log('[Main] Decoded:', decodedData);
 
+				if (this._authProgress.initial && this._authProgress.confirmation) {
+					this._callbacks.receive.forEach((callback) => { callback(); });
+					return;
+				}
+
 				// If the connection hasn't yet been authenticated, attempt to authenticate.
-				if (!this._authProgress.initial && 'Auth Info' in decodedData && this._credentials) {
+				if ('Auth Info' in decodedData && this._credentials) {
 					// Acknowledge the server's auth info.
 					const ackMessage = new GenericMessage(['12003a0001009e04610b04010000000000000000']);
 					this._socket.write(ackMessage.buffer, 'hex', () => {
@@ -144,7 +149,7 @@ export class LoginServerConnection {
 					});
 				}
 
-				if (!this._authProgress.confirmation && 'Auth Info Confirmation' in decodedData && this._credentials) {
+				if ('Auth Info Confirmation' in decodedData && this._credentials) {
 					this._credentials.salt = new Uint8Array(decodedData['Auth Info Confirmation']['Salt']);
 					const authMessage = new AuthenticationMessage({...this._credentials})
 					console.log('[AUTH] Sending credentials...');
@@ -154,8 +159,6 @@ export class LoginServerConnection {
 						console.log('[AUTH] Credentials sent.');
 					});
 				}
-
-				this._callbacks.receive.forEach((callback) => { callback(); });
 			}
 		});
 
