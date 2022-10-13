@@ -1,6 +1,7 @@
 import { generalEnumfields } from '../data';
 import { EnumTree } from '../interfaces';
 import { hexToString } from './Utils';
+const { performance } = require('perf_hooks');
 
 export class Buffer {
 	_buffer = new Uint8Array;
@@ -117,9 +118,11 @@ export class Buffer {
 	parse (): EnumTree {
 		console.log('[Buffer] Parsing...');
 		let output = {} as EnumTree;
+		const startTime = performance.now();
 		const bytesProcessed = branch(output, this);
+		const endTime = performance.now();
 		console.log('[Buffer] Bytes processed:', bytesProcessed);
-		console.log('[Buffer] Done parsing.');
+		console.log('[Buffer] Done parsing in', endTime - startTime, 'milliseconds.');
 		return { ...output } as EnumTree;
 	}
 }
