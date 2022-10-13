@@ -177,12 +177,27 @@ export class LoginServerConnection {
 		this._callbacks.disconnect.forEach((callback) => { callback(); });
 	}
 
+	/**
+	 * Immediately send a message to the connected server, bypassing the message queue.
+	 * @param message The message to send.
+	 */
 	async send (message: LoginServerConnectionMessage) {
 		if (!this._isConnected) {
 			throw new Error("Please connect to a login server first.");
 		}
 		// Add the requested message to the queue.
 		this._messageQueue.push(message);
+	}
+
+	/**
+	 * Add a message to the message queue so that it can be automatically sent when the connection next becomes idle.
+	 * @param message The message to add to the queue.
+	 */
+	async queue (message: LoginServerConnectionMessage) {
+		// Add the requested message to the queue.
+		if (message) {
+			this._messageQueue.push(message);
+		}
 	}
 
 	async _sendNextMessageInQueue () {
