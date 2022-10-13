@@ -77,8 +77,8 @@ export class LoginServerConnection {
 		);
 
 		// this._socket.setEncoding('hex'); // Using the 'hex' encoding will cause the socket to produce a buffer containing nibbles.
-		this._socket.setKeepAlive(false, this._timeToIdle);
-		this._socket.setTimeout(6000);
+		this._socket.setKeepAlive(true, this._timeToIdle);
+		this._socket.setTimeout(40000);
 
 		// Set up event listeners.
 		this._socket.on('connect', () => {
