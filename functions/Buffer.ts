@@ -118,11 +118,9 @@ export class Buffer {
 	parse (): EnumTree {
 		console.log('[Buffer] Parsing...');
 		let output = {} as EnumTree;
-		const startTime = performance.now();
 		const bytesProcessed = branch(output, this);
-		const endTime = performance.now();
 		console.log('[Buffer] Bytes processed:', bytesProcessed);
-		console.log('[Buffer] Done parsing in', endTime - startTime, 'milliseconds.');
+		console.log('[Buffer] Done parsing.');
 		return { ...output } as EnumTree;
 	}
 }
@@ -170,7 +168,7 @@ function branch (parent: EnumTree, buffer: Buffer, length = 1): number {
 			buffer.invertEndianness(2);
 			const fieldLength = parseInt(hexToString(buffer.read(2)), 16);
 			bytesProcessed += 2;
-			console.log('ArrayOfEnumBlockArrays encountered was:', enumerator, '. With length:', fieldLength);
+			console.log('[Buffer] ArrayOfEnumBlockArrays encountered was:', enumerator, '. With length:', fieldLength);
 			let arraysProcessed = 0;
 			while (arraysProcessed < fieldLength) { // TODO: This loop does not check for buffer errors.
 				buffer.invertEndianness(2);
@@ -189,7 +187,7 @@ function branch (parent: EnumTree, buffer: Buffer, length = 1): number {
 			buffer.invertEndianness(2);
 			const arrayLength = parseInt(hexToString(buffer.read(2)), 16);
 			bytesProcessed += 2;
-			console.log('EnumBlockArray encountered was:', enumerator, '. With length:', arrayLength);
+			console.log('[Buffer] EnumBlockArray encountered was:', enumerator, '. With length:', arrayLength);
 			bytesProcessed += branch(parent[enumerator], buffer, arrayLength);
 		}
 
