@@ -22,6 +22,10 @@ export class LoginServerConnection {
 	_serverKey = undefined as keyof typeof loginServers | undefined;
 	_serverInstance = {} as LoginServer;
 	_credentials = {} as HashedCredentials | undefined;
+	_authProgress = {
+		initial: false,
+		confirmation: false
+	};
 	_socket = {} as net.Socket;
 	_isReceivingStream = false;
 	_streamBuffer = new Buffer();
@@ -86,8 +90,7 @@ export class LoginServerConnection {
 
 		this._socket.on('timeout', () => {
 			console.warn('Socket connection timed-out.');
-			this._socket.end();
-			this._isConnected = false;
+			this.disconnect();
 			this._callbacks.disconnect.forEach((callback) => { callback(); });
 		});
 
@@ -131,6 +134,26 @@ export class LoginServerConnection {
 				const decodedData = decoder.decode();
 				console.log('Decoded:', decodedData);
 
+				// If the connection hasn't yet been authenticated, attempt to authenticate.
+				if (!this._authProgress.initial && 'Auth Info' in decodedData && this._credentials) {
+					// Acknowledge the server's auth info.
+					const ackMessage = new GenericMessage(['12003a0001009e04610b04010000000000000000']);
+					this._socket.write(ackMessage.buffer, 'hex', () => {
+						this._authProgress.initial = true;
+						console.log('[AUTH] Acknowledgement message sent.');
+					});
+				}
+
+				if (!this._authProgress.confirmation && 'Auth Info Confirmation' in decodedData && this._credentials) {
+					this._credentials.salt = new Uint8Array(decodedData['Auth Info Confirmation']['Salt']);
+					const authMessage = new AuthenticationMessage({...this._credentials})
+					console.log('[AUTH] Sending credentials...');
+					console.log(authMessage);
+					this._socket.write(authMessage.buffer, 'hex', () => {
+						this._authProgress.confirmation = true;
+						console.log('[AUTH] Credentials sent.');
+					});
+				}
 
 				this._callbacks.receive.forEach((callback) => { callback(); });
 			}
@@ -149,6 +172,8 @@ export class LoginServerConnection {
 	async disconnect () {
 		this._socket.end();
 		this._isConnected = false;
+		this._authProgress.initial = false;
+		this._authProgress.confirmation = false;
 		this._callbacks.disconnect.forEach((callback) => { callback(); });
 	}
 
