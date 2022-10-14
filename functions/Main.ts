@@ -5,7 +5,6 @@ import { GenericMessage, AuthenticationMessage } from './Messages';
 import { Buffer } from './Buffer';
 import { Decoder } from './Decoder';
 import { hexToString, verifyPacketLength } from './Utils';
-const fs = require('fs');
 
 interface LoginServerConnectionCallbackMap {
 	connect: Function[],
@@ -135,7 +134,7 @@ export class LoginServerConnection {
 				console.log('[Main] Decoded:', decodedData);
 
 				if (this._authProgress.initial && this._authProgress.confirmation) {
-					this._callbacks.receive.forEach((callback) => { callback(); });
+					this._callbacks.receive.forEach((callback) => { callback(decodedData); });
 					return;
 				}
 
@@ -226,13 +225,7 @@ export class LoginServerConnection {
 
 			console.log('[Main] End of stream data.');
 
-			fs.writeFile("dumps/output.json", JSON.stringify(decodedData, null, 4), 'utf8', function (err: any) {
-				if (err) {
-					console.log("An error occured while writing JSON Object to File.");
-					return console.log(err);
-				}
-				console.log("[Main] JSON file has been saved.");
-			});
+			this._callbacks.receive.forEach((callback) => { callback(decodedData); });
 		}
 	}
 
