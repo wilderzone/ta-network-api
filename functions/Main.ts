@@ -185,7 +185,7 @@ export class LoginServerConnection {
 	 */
 	async send (message: LoginServerConnectionMessage) {
 		if (!this._isConnected) {
-			throw new Error("Please connect to a login server first.");
+			throw new Error('Please connect to a login server first.');
 		}
 		// Add the requested message to the queue.
 		this._messageQueue.push(message);
@@ -242,7 +242,7 @@ export class LoginServerConnection {
 
 	get accountData (): HiRezAccount {
 		if (!this._isConnected) {
-			throw new Error("Please connect to a login server first.");
+			throw new Error('Please connect to a login server first.');
 		}
 
 		let data = {} as HiRezAccount;
