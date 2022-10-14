@@ -238,6 +238,7 @@ export class LoginServerConnection {
 
 	_idle () {
 		this._idleTimers.forEach((timer) => { clearTimeout(timer); });
+		this._isReceivingStream = false;
 		this._flushStreamBuffer();
 		this._sendNextMessageInQueue();
 	}
