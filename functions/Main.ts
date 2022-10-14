@@ -4,7 +4,7 @@ import { LoginServer, HiRezAccount, HashedCredentials } from '../interfaces';
 import { GenericMessage, AuthenticationMessage } from './Messages';
 import { Buffer } from './Buffer';
 import { Decoder } from './Decoder';
-import { hexToString, verifyPacketLength } from './Utils';
+import { verifyPacketLength } from './Utils';
 
 interface LoginServerConnectionCallbackMap {
 	connect: Function[],
