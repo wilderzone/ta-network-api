@@ -55,7 +55,7 @@ export const generalEnumfields = {
 	'0673': {length: 1, name: undefined},
 	'069B': {length: 1, type: 'Boolean', name: undefined},
 	'069C': {length: 1, type: 'Boolean', name: 'Password Required'},
-	'0703': {length: 1, name: undefined},
+	'0703': {length: 1, type: 'Boolean', name: 'Official Rules'},
 	'0307': {length: 2, name: undefined},
 	'053D': {length: 2, name: 'Ping Time'},
 	'0600': {length: 2, name: undefined},
