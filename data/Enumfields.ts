@@ -1,6 +1,6 @@
 interface EnumField {
 	length: number | 'Sized' | 'EnumBlockArray'| 'ArrayOfEnumBlockArrays',
-	type?: 'Integer' | 'IP' | 'MapID' | 'ServerList' | 'String' | 'Version',
+	type?: 'Boolean' | 'Integer' | 'IP' | 'MapID' | 'ServerList' | 'String' | 'Version',
 	name?: string | undefined
 }
 
@@ -53,8 +53,8 @@ export const generalEnumfields = {
 	'0601': {length: 1, name: undefined},
 	'063C': {length: 1, name: undefined},
 	'0673': {length: 1, name: undefined},
-	'069B': {length: 1, name: undefined},
-	'069C': {length: 1, name: 'Password Required'},
+	'069B': {length: 1, type: 'Boolean', name: undefined},
+	'069C': {length: 1, type: 'Boolean', name: 'Password Required'},
 	'0703': {length: 1, name: undefined},
 	'0307': {length: 2, name: undefined},
 	'053D': {length: 2, name: 'Ping Time'},
@@ -109,7 +109,7 @@ export const generalEnumfields = {
 	'02B7': {length: 4, name: undefined},
 	'02BE': {length: 4, name: undefined},
 	'02C4': {length: 4, name: 'Match ID?'},
-	'02C7': {length: 4, name: 'Server ID'},
+	'02C7': {length: 4, type: 'Integer', name: 'Server ID'},
 	'02D6': {length: 4, name: undefined},
 	'02D7': {length: 4, name: undefined},
 	'02D8': {length: 4, name: undefined},
