@@ -32,12 +32,25 @@ function recurse (parent: EnumTree, tree: EnumTree): number {
 	let fieldsProcessed = 0;
 
 	Object.entries(tree).forEach(([enumerator, value]) => {
-		const newKey = generalEnumfields[enumerator].name ?? enumerator;
-		if (value && typeof value === 'object' && !Array.isArray(value)) {
+		const newKey = generalEnumfields[enumerator]?.name ?? enumerator;
+		// If the value is an ArrayOfEnumBlockArrays.
+		if (Array.isArray(value) && value.length && typeof value[0] === 'object' && !Array.isArray(value[0])) {
+			parent[newKey] = [] as { [key: string]: any }[];
+			value.forEach((block: { [key: string]: any }, index) => {
+				parent[newKey][index] = {} as { [key: string]: any };
+				fieldsProcessed += recurse(parent[newKey][index], block);
+			});
+		}
+		
+		// If the value is an EnumBlockArray.
+		else if (value && typeof value === 'object' && !Array.isArray(value)) {
 			parent[newKey] = {} as { [key: string]: any };
 			fieldsProcessed += recurse(parent[newKey], value);
-		} else {
-			parent[newKey] = parseFieldValue(value as number[], generalEnumfields[enumerator].type);
+		}
+		
+		// If the value is a primative.
+		else {
+			parent[newKey] = parseFieldValue(value as number[], generalEnumfields[enumerator]?.type);
 		}
 		fieldsProcessed++;
 	});
