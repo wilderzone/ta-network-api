@@ -50,6 +50,15 @@ function parseFieldValue (value: number[], type?: string): any {
 		return value;
 	}
 
+	// Booleans are represented by a single byte, [ 00 ] = false, [ 01 ] = true.
+	if (type === 'Boolean') {
+		if (value.length !== 1) {
+			console.warn('Error decoding boolean (', value, '). Enumfield may be incorrectly typed.');
+			return value;
+		}
+		return value[0] === 1;
+	}
+
 	// Integers are represented by 4 bytes in reverse order.
 	// These bytes must be swapped before they can be read as a normal integer:
 	// [ 2A 38 59 01 ]  =>  [ 01 59 38 2A ]
