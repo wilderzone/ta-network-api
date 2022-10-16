@@ -110,7 +110,7 @@ export const generalEnumfields = {
 	'02BE': {length: 4, name: undefined},
 	'02C4': {length: 4, name: 'Match ID?'},
 	'02C7': {length: 4, type: 'Integer', name: 'Server ID'},
-	'02D6': {length: 4, name: undefined},
+	'02D6': {length: 4, type: 'Integer', name: 'Max Number of Players'},
 	'02D7': {length: 4, name: undefined},
 	'02D8': {length: 4, name: undefined},
 	'02DC': {length: 4, name: undefined},
