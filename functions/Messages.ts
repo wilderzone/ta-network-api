@@ -43,3 +43,11 @@ export class AuthenticationMessage {
 		]);
 	}
 }
+
+export class ServerListMessage {
+	buffer = {} as Uint8Array;
+
+	constructor () {
+		this.buffer = compileMessage(['1600d5000200280202000000e90000002b0000002d000000']);
+	}
+}
