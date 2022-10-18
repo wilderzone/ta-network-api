@@ -1,3 +1,5 @@
+import { Region } from '../interfaces';
+
 export const Regions = {
 	'1': {
 		name: 'North America',
@@ -11,4 +13,4 @@ export const Regions = {
 		name: 'Oceania / Australia',
 		shortName: 'AUS'
 	}
-};
+} as { [key: string]: Region };
