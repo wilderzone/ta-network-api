@@ -18,6 +18,9 @@ export class Buffer {
 		return this._buffer.length;
 	}
 
+	/**
+	 * Boolean indicating whether the length of the stored buffer is even (`true`) or odd (`false`).
+	 */
 	get lengthIsEven (): boolean {
 		return this._buffer.length % 2 === 0;
 	}
