@@ -66,7 +66,7 @@ function parseFieldValue (value: number[], type?: string): any {
 	// Booleans are represented by a single byte, [ 00 ] = false, [ 01 ] = true.
 	if (type === 'Boolean') {
 		if (value.length !== 1) {
-			console.warn('Error decoding boolean (', value, '). Enumfield may be incorrectly typed.');
+			console.warn('[Decoder] Error decoding boolean (', value, '). Enumfield may be incorrectly typed.');
 			return value;
 		}
 		return value[0] === 1;
@@ -77,7 +77,7 @@ function parseFieldValue (value: number[], type?: string): any {
 	// [ 2A 38 59 01 ]  =>  [ 01 59 38 2A ]
 	if (type === 'Integer') {
 		if (value.length !== 4) {
-			console.warn('Error decoding integer (', value, '). Enumfield may be incorrectly typed.');
+			console.warn('[Decoder] Error decoding integer (', value, '). Enumfield may be incorrectly typed.');
 			return value;
 		}
 		return parseInt(hexToString(new Uint8Array(value.reverse())), 16);
@@ -99,7 +99,7 @@ function parseFieldValue (value: number[], type?: string): any {
 	//       Minor ──┘
 	if (type === 'Version') {
 		if (value.length !== 4) {
-			console.warn('Error decoding version (', value, '). Enumfield may be incorrectly typed.');
+			console.warn('[Decoder] Error decoding version (', value, '). Enumfield may be incorrectly typed.');
 			return value;
 		}
 		return `${value[3]}.${value[2]}.${parseInt(hexToString(new Uint8Array(value.slice(0, 2).reverse())), 16)}.0`;
@@ -111,7 +111,7 @@ function parseFieldValue (value: number[], type?: string): any {
 	//          Port ──┘──┘
 	if (type === 'IP') {
 		if (value.length !== 8) {
-			console.warn('Error decoding IP address (', value, '). Enumfield may be incorrectly typed.');
+			console.warn('[Decoder] Error decoding IP address (', value, '). Enumfield may be incorrectly typed.');
 			return value;
 		}
 		const unknownBytes = hexToString(new Uint8Array(value.slice(0, 2))); // The first two bytes are unknown (possibly either a region ID or just placeholders).
@@ -127,7 +127,7 @@ function parseFieldValue (value: number[], type?: string): any {
 	// Map IDs are represented by 4 byte integers.
 	if (type === 'MapID') {
 		if (value.length !== 4) {
-			console.warn('Error decoding Map ID (', value, '). Enumfield may be incorrectly typed.');
+			console.warn('[Decoder] Error decoding Map ID (', value, '). Enumfield may be incorrectly typed.');
 			return value;
 		}
 		const id = parseInt(hexToString(new Uint8Array(value.reverse())), 16); // Decode ID as integer.
@@ -143,7 +143,7 @@ function parseFieldValue (value: number[], type?: string): any {
 	// Region IDs are represented by 4 byte integers.
 	if (type === 'Region') {
 		if (value.length !== 4) {
-			console.warn('Error decoding Region (', value, '). Enumfield may be incorrectly typed.');
+			console.warn('[Decoder] Error decoding Region (', value, '). Enumfield may be incorrectly typed.');
 			return value;
 		}
 		const id = parseInt(hexToString(new Uint8Array(value.reverse())), 16); // Decode ID as integer.
