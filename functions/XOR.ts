@@ -1,3 +1,5 @@
+import { hexToString } from './Utils';
+
 /**
  * An iterator that aggregates elements from each of the iterables. If the iterables are of uneven length, missing values are filled-in with `fillValue`. Iteration continues until the longest iterable is exhausted.
  * 
@@ -98,3 +100,24 @@ export function xorPasswordHash (passwordHash: string, salt: Uint8Array): Uint8A
 
 	return processedPasswordHash;
 }
+
+/**
+ * A substitute for the game's built-in `DecryptPassword` function.
+ * @param password An encrypted password string, as found in `TribesUser.ini`.
+ * @returns 
+ */
+export function DecryptPassword (password: string) {
+	const stringArray = password.match(/.{3}/g);
+	if (!stringArray) {
+		return;
+	}
+	const integerArray = stringArray.map((value) => parseInt(value));
+	const byteArray = new Uint8Array(integerArray);
+	const byteString = hexToString(byteArray);
+	return byteString;
+}
+
+/**
+ * A substitute for the game's built-in `EncryptPassword` function.
+ */
+export function EncryptPassword () {}
