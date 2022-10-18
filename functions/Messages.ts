@@ -1,6 +1,6 @@
 import { HashedCredentials } from '../interfaces';
 import { stringToHexInt, textToHexInt } from './Utils';
-import { xorPasswordHash } from './XOR';
+import { xorPasswordHash } from './Password';
 
 
 function compileMessage (chunks: (string | number[] | Uint8Array)[]): Uint8Array {
