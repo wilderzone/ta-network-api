@@ -162,7 +162,7 @@ function branch (parent: EnumTree, buffer: Buffer, length = 1): number {
 
 		// Prune the branch if the enumerator doesn't exist, since this likely indicates that we have lost track of our place in the buffer.
 		if (!(enumerator in generalEnumfields)) {
-			console.warn('Enumerator', enumerator, 'was not found.');
+			console.warn('[Buffer] Enumerator', enumerator, 'was not found.');
 			return bytesProcessed;
 		}
 
