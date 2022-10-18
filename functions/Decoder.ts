@@ -1,6 +1,6 @@
-import { generalEnumfields, Maps } from '../data';
+import { generalEnumfields, Maps, Regions } from '../data';
 import { EnumTree, Map } from '../interfaces';
-import { hexToString, invertEndianness } from './Utils';
+import { hexToString } from './Utils';
 
 export class Decoder {
 	_tree = {} as EnumTree;
@@ -124,13 +124,13 @@ function parseFieldValue (value: number[], type?: string): any {
 		return `${ip1}.${ip2}.${ip3}.${ip4}:${port} (${unknownBytes})`;
 	}
 
-	// Map IDs are represented by 4 bytes in reverse order.
+	// Map IDs are represented by 4 byte integers.
 	if (type === 'MapID') {
 		if (value.length !== 4) {
 			console.warn('Error decoding Map ID (', value, '). Enumfield may be incorrectly typed.');
 			return value;
 		}
-		const id = parseInt(hexToString(new Uint8Array(value.reverse())), 16);
+		const id = parseInt(hexToString(new Uint8Array(value.reverse())), 16); // Decode ID as integer.
 		let output = {} as Map;
 		Object.entries(Maps).forEach((map) => {
 			if (map[1].id === id) {
@@ -138,6 +138,19 @@ function parseFieldValue (value: number[], type?: string): any {
 			}
 		});
 		return output;
+	}
+
+	// Region IDs are represented by 4 byte integers.
+	if (type === 'Region') {
+		if (value.length !== 4) {
+			console.warn('Error decoding Region (', value, '). Enumfield may be incorrectly typed.');
+			return value;
+		}
+		const id = parseInt(hexToString(new Uint8Array(value.reverse())), 16); // Decode ID as integer.
+		if (id in Regions) {
+			return Regions[id.toString()];
+		}
+		return id;
 	}
 
 	return value;
