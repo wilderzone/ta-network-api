@@ -68,7 +68,7 @@ export class LoginServerConnection {
 	 * Establish a live connection to the Login Server.
 	 */
 	async connect () {
-		console.log('[Main] Connecting to login server on', this._serverInstance.ip, '...');
+		console.log('[LSC] Connecting to login server on', this._serverInstance.ip, '...');
 
 		this._socket = net.connect(
 			this._serverInstance.port,
@@ -81,7 +81,7 @@ export class LoginServerConnection {
 
 		// Set up event listeners.
 		this._socket.on('connect', () => {
-			console.log('[Main] Connected.');
+			console.log('[LSC] Connected.');
 			this._isConnected = true;
 			this._idleTimers.forEach((timer) => { clearTimeout(timer); });
 			this._idleTimers.push(setTimeout(() => { this._idle(); }, this._timeToIdle));
@@ -95,7 +95,7 @@ export class LoginServerConnection {
 		});
 
 		this._socket.on('data', (data) => {
-			console.log('[Main] Data:', data);
+			console.log('[LSC] Data:', data);
 			const array = Uint8Array.from(data);
 			
 			this._idleTimers.forEach((timer) => { clearTimeout(timer); });
@@ -103,7 +103,7 @@ export class LoginServerConnection {
 
 			// Process an existing packet stream.
 			if (this._isReceivingStream) {
-				console.log('[Main] Received stream packet.')
+				console.log('[LSC] Received stream packet.')
 				// Append all received packets to the same Buffer.
 				this._streamBuffer.append(array);
 				// TODO: Figure out a definitive way to detect when a stream has ended.
@@ -112,7 +112,7 @@ export class LoginServerConnection {
 			// Detect the start of a packet stream.
 			else if (array[0] === 0 && array[1] === 0) { // data[00 00 ...] Indicates the start of a packet stream.
 				this._isReceivingStream = true;
-				console.log('[Main] Packet stream started.');
+				console.log('[LSC] Packet stream started.');
 				this._streamBuffer.clear();
 				this._streamBuffer.append(array);
 				this._streamBuffer.advance(2);
@@ -127,11 +127,11 @@ export class LoginServerConnection {
 				const buffer = new Buffer(array);
 				buffer.advance(2);
 				const enumTree = buffer.parse();
-				console.log('[Main] Parsed:', enumTree);
+				console.log('[LSC] Parsed:', enumTree);
 
 				const decoder = new Decoder(enumTree);
 				const decodedData = decoder.decode();
-				console.log('[Main] Decoded:', decodedData);
+				console.log('[LSC] Decoded:', decodedData);
 
 				if (this._authProgress.initial && this._authProgress.confirmation) {
 					this._callbacks.receive.forEach((callback) => { callback(decodedData); });
@@ -164,7 +164,7 @@ export class LoginServerConnection {
 		// Start connection sequence.
 		const initialMessage = new GenericMessage(['1000bc0102009e04610b040189040c000000']);
 		this._socket.write(initialMessage.buffer, 'hex', () => {
-			console.log('[Main] Connection request sent.');
+			console.log('[LSC] Connection request sent.');
 		});
 	}
 
@@ -207,7 +207,7 @@ export class LoginServerConnection {
 		if (message) {
 			this._messageId++;
 			this._socket.write(message.buffer, 'hex', () => {
-				console.log(`[Main] Sent message ${this._messageId}.`);
+				console.log(`[LSC] Sent message ${this._messageId}.`);
 			});
 		}
 	}
@@ -215,15 +215,15 @@ export class LoginServerConnection {
 	_flushStreamBuffer () {
 		// Flush the stream buffer.
 		if (this._streamBuffer.length > 0) {
-			console.log('[Main] Flushing stream buffer...');
+			console.log('[LSC] Flushing stream buffer...');
 			const enumTree = this._streamBuffer.parse();
-			console.log('[Main] Parsed:', enumTree);
+			console.log('[LSC] Parsed:', enumTree);
 
 			const decoder = new Decoder(enumTree);
 			const decodedData = decoder.decode();
-			console.log('[Main] Decoded:', decodedData);
+			console.log('[LSC] Decoded:', decodedData);
 
-			console.log('[Main] End of stream data.');
+			console.log('[LSC] End of stream data.');
 
 			this._callbacks.receive.forEach((callback) => { callback(decodedData); });
 		}
