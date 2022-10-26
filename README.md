@@ -18,9 +18,9 @@ API includes functionality for:
 
 ### Installation
 
-Install dependencies with:
+Install TA Network API into your project with:
 ```
-npm install
+npm install ta-network-api
 ```
 
 
