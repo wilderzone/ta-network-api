@@ -22,8 +22,14 @@ export class Decoder {
 		return this._output;
 	}
 
-	static decodeFieldValue (value: number[], type?: string) {
-		return parseFieldValue(value, type);
+	/**
+	 * Decode the binary content of an enumfield as an expected field type.
+	 * @param value The content of the enumfield.
+	 * @param type The type of enumfield to attempt to decode as.
+	 * @returns The decoded value. (Or the original value if decoding was not possible).
+	 */
+	static decodeFieldValue (value: Uint8Array, type: string) {
+		return parseFieldValue([...value], type);
 	}
 }
 
