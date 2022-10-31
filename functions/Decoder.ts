@@ -1,5 +1,5 @@
-import { generalEnumfields, Maps, Regions } from '../data';
-import { EnumTree, Map } from '../interfaces';
+import { generalEnumfields, Items, Maps, Regions } from '../data';
+import { EnumTree, Item, Map } from '../interfaces';
 import { hexToString } from './Utils';
 
 export class Decoder {
@@ -122,6 +122,20 @@ function parseFieldValue (value: number[], type?: string): any {
 		const ip3 = value[6];
 		const ip4 = value[7]; 
 		return `${ip1}.${ip2}.${ip3}.${ip4}:${port} (${unknownBytes})`;
+	}
+
+	// Item IDs are represented by 4 byte integers.
+	if (type === 'ItemID') {
+		if (value.length !== 4) {
+			console.warn('[Decoder] Error decoding Item ID (', value, '). Enumfield may be incorrectly typed.');
+			return value;
+		}
+		const id = parseInt(hexToString(new Uint8Array(value.reverse())), 16).toString(); // Decode ID as integer.
+		let output = {} as Item;
+		if (id in Items) {
+			output = Items[id];
+		}
+		return output;
 	}
 
 	// Map IDs are represented by 4 byte integers.

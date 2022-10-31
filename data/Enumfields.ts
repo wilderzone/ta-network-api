@@ -1,6 +1,6 @@
 interface EnumField {
 	length: number | 'Sized' | 'EnumBlockArray'| 'ArrayOfEnumBlockArrays',
-	type?: 'Boolean' | 'Integer' | 'IP' | 'MapID' | 'ServerList' | 'String' | 'Version' | 'Region',
+	type?: 'Boolean' | 'Integer' | 'IP' | 'ItemID' | 'MapID' | 'ServerList' | 'String' | 'Version' | 'Region',
 	name?: string | undefined
 }
 
@@ -94,7 +94,7 @@ export const generalEnumfields = {
 	'025E': {length: 4, name: undefined},
 	'025F': {length: 4, name: undefined},
 	'0263': {length: 4, type: 'Integer', name: 'Purchase Index'},
-	'026D': {length: 4, type: 'Integer', name: 'Item ID'},
+	'026D': {length: 4, type: 'ItemID', name: 'Item ID'},
 	'0272': {length: 4, name: undefined},
 	'0273': {length: 4, type: 'Integer', name: undefined},
 	'0296': {length: 4, type: 'Integer', name: 'Player Rank'},
