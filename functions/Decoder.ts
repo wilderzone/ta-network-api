@@ -129,11 +129,10 @@ function parseFieldValue (value: number[], type?: string): any {
 			return value;
 		}
 		const id = parseInt(hexToString(new Uint8Array(value.reverse())), 16).toString(); // Decode ID as integer.
-		let output = {} as Item;
 		if (id in Items) {
-			output = Items[id];
+			return Items[id];
 		}
-		return output;
+		return parseInt(id);
 	}
 
 	// Map IDs are represented by 4 byte integers.
@@ -144,13 +143,13 @@ function parseFieldValue (value: number[], type?: string): any {
 			return value;
 		}
 		const id = parseInt(hexToString(new Uint8Array(value.reverse())), 16); // Decode ID as integer.
-		let output = {} as Map;
+		let output = undefined as Map | undefined;
 		Object.entries(Maps).forEach((map) => {
 			if (map[1].id === id) {
 				output = map[1];
 			}
 		});
-		return output;
+		return output ?? id;
 	}
 
 	// Region IDs are represented by 4 byte integers.
@@ -164,7 +163,7 @@ function parseFieldValue (value: number[], type?: string): any {
 		if (id in Regions) {
 			return Regions[id];
 		}
-		return id;
+		return parseInt(id);
 	}
 
 	return value;
