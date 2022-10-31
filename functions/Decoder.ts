@@ -117,10 +117,7 @@ function parseFieldValue (value: number[], type?: string): any {
 		const unknownBytes = hexToString(new Uint8Array(value.slice(0, 2))); // The first two bytes are unknown (possibly either a region ID or just placeholders).
 		const port = parseInt(hexToString(new Uint8Array(value.slice(2, 4))), 16); // The next two bytes represent the port number as a big-endian integer.
 		// Each following byte is one integer of the IPv4 address.
-		const ip1 = value[4];
-		const ip2 = value[5];
-		const ip3 = value[6];
-		const ip4 = value[7]; 
+		const [ip1, ip2, ip3, ip4] = value.splice(4, 4);
 		return `${ip1}.${ip2}.${ip3}.${ip4}:${port} (${unknownBytes})`;
 	}
 
@@ -163,9 +160,9 @@ function parseFieldValue (value: number[], type?: string): any {
 			console.warn('[Decoder] Error decoding Region (', value, '). Enumfield may be incorrectly typed.');
 			return value;
 		}
-		const id = parseInt(hexToString(new Uint8Array(value.reverse())), 16); // Decode ID as integer.
+		const id = parseInt(hexToString(new Uint8Array(value.reverse())), 16).toString(); // Decode ID as integer.
 		if (id in Regions) {
-			return Regions[id.toString()];
+			return Regions[id];
 		}
 		return id;
 	}
