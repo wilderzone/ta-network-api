@@ -166,8 +166,8 @@ function branch (parent: EnumTree, buffer: Buffer, length = 1): number {
 			return bytesProcessed;
 		}
 
-		// ArrayOfEnumBlockArrays.
-		// ENUM + fieldLength --> [ { branch() x arrayLength } x fieldLength ]
+		// Process as an ArrayOfEnumBlockArrays.
+		// ENUM + fieldLength --> [ { branch() × arrayLength } × fieldLength ]
 		if (generalEnumfields[enumerator].length === 'ArrayOfEnumBlockArrays') {
 			parent[enumerator] = [] as EnumTree[];
 			buffer.invertEndianness(2);
@@ -185,8 +185,8 @@ function branch (parent: EnumTree, buffer: Buffer, length = 1): number {
 			}
 		}
 
-		// EnumBlockArray.
-		// ENUM + arrayLength --> { branch() x arrayLength }
+		// Process as an EnumBlockArray.
+		// ENUM + arrayLength --> { branch() × arrayLength }
 		else if (generalEnumfields[enumerator].length === 'EnumBlockArray') {
 			parent[enumerator] = {} as EnumTree;
 			buffer.invertEndianness(2);
@@ -196,8 +196,8 @@ function branch (parent: EnumTree, buffer: Buffer, length = 1): number {
 			bytesProcessed += branch(parent[enumerator], buffer, arrayLength);
 		}
 
-		// Sized.
-		// ENUM + fieldLength --> [ 00 x fieldLength ]
+		// Process as a Sized field.
+		// ENUM + fieldLength --> [ 00 × fieldLength ]
 		else if (generalEnumfields[enumerator].length === 'Sized') {
 			buffer.invertEndianness(2);
 			const fieldLength = parseInt(hexToString(buffer.read(2)), 16);
@@ -207,8 +207,8 @@ function branch (parent: EnumTree, buffer: Buffer, length = 1): number {
 			parent[enumerator] = [...data];
 		}
 
-		// Generic.
-		// ENUM --> [ 00 x fieldLength ]
+		// Process as a Generic.
+		// ENUM --> [ 00 × fieldLength ]
 		else {
 			const fieldLength = generalEnumfields[enumerator].length as number;
 			const data = buffer.read(fieldLength);
