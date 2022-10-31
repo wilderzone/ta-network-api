@@ -21,6 +21,10 @@ export class Decoder {
 		console.log('[Decoder] Parsed', this._enumfieldsParsed, 'enumfields.');
 		return this._output;
 	}
+
+	static decodeFieldValue (value: number[], type?: string) {
+		return parseFieldValue(value, type);
+	}
 }
 
 function recurse (parent: EnumTree, tree: EnumTree): number {
