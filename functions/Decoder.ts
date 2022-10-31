@@ -125,6 +125,7 @@ function parseFieldValue (value: number[], type?: string): any {
 	}
 
 	// Item IDs are represented by 4 byte integers.
+	// A map of item IDs to item data is available in the `data` module.
 	if (type === 'ItemID') {
 		if (value.length !== 4) {
 			console.warn('[Decoder] Error decoding Item ID (', value, '). Enumfield may be incorrectly typed.');
@@ -139,6 +140,7 @@ function parseFieldValue (value: number[], type?: string): any {
 	}
 
 	// Map IDs are represented by 4 byte integers.
+	// A map of map IDs to map data is available in the `data` module.
 	if (type === 'MapID') {
 		if (value.length !== 4) {
 			console.warn('[Decoder] Error decoding Map ID (', value, '). Enumfield may be incorrectly typed.');
@@ -155,6 +157,7 @@ function parseFieldValue (value: number[], type?: string): any {
 	}
 
 	// Region IDs are represented by 4 byte integers.
+	// A map of region IDs to region data is available in the `data` module.
 	if (type === 'Region') {
 		if (value.length !== 4) {
 			console.warn('[Decoder] Error decoding Region (', value, '). Enumfield may be incorrectly typed.');
