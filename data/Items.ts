@@ -1,3 +1,5 @@
+import { Item } from '../interfaces';
+
 export const Items = {
 	// Light Impact Weapons.
 	'7422': {
@@ -491,5 +493,5 @@ export const Items = {
 		type: 'skin',
 		category: undefined
 	}
-};
+} as { [key: string]: Item };
 
