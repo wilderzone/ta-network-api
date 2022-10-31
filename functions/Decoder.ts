@@ -1,5 +1,5 @@
 import { generalEnumfields, Items, Maps, Regions } from '../data';
-import { EnumTree, Item, Map } from '../interfaces';
+import { EnumTree, Map } from '../interfaces';
 import { hexToString } from './Utils';
 
 export class Decoder {
