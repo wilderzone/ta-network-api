@@ -238,35 +238,35 @@ export const Items = {
 		key: 'Soldier_Primary_Spinfusor',
 		name: 'Spinfusor',
 		class: 'medium',
-		type: 'waepon',
+		type: 'weapon',
 		category: 'impact'
 	},
 	'7461': {
 		key: 'Technician_Primary_Thumper',
 		name: 'Thumper',
 		class: 'medium',
-		type: 'waepon',
+		type: 'weapon',
 		category: 'impact'
 	},
 	'8417': {
 		key: 'Soldier_Secondary_ThumperD_MKD',
 		name: 'Thumper Mk D',
 		class: 'medium',
-		type: 'waepon',
+		type: 'weapon',
 		category: 'impact'
 	},
 	'8257': {
 		key: 'Soldier_Primary_Twinfusor',
 		name: 'Twinfusor',
 		class: 'medium',
-		type: 'waepon',
+		type: 'weapon',
 		category: 'impact'
 	},
 	'8697': {
 		key: 'Soldier_Primary_Spinfusor_100X',
 		name: 'Medium Blinksfusor',
 		class: 'medium',
-		type: 'waepon',
+		type: 'weapon',
 		category: 'impact'
 	},
 	// Medium Timed Weapons.
@@ -274,14 +274,14 @@ export const Items = {
 		key: 'Raider_Primary_ArxBuster',
 		name: 'Arx Buster',
 		class: 'medium',
-		type: 'waepon',
+		type: 'weapon',
 		category: 'timed'
 	},
 	'7416': {
 		key: 'Raider_Primary_GrenadeLauncher',
 		name: 'Grenade Launcher',
 		class: 'medium',
-		type: 'waepon',
+		type: 'weapon',
 		category: 'timed'
 	},
 	// Medium Speciality Weapons.
@@ -289,21 +289,21 @@ export const Items = {
 		key: 'Technician_Secondary_RepairToolSD',
 		name: 'Advanced Repair Tool',
 		class: 'medium',
-		type: 'waepon',
+		type: 'weapon',
 		category: 'speciality'
 	},
 	'8765': {
 		key: 'Medium_ElfProjector',
 		name: 'Elf Projector',
 		class: 'medium',
-		type: 'waepon',
+		type: 'weapon',
 		category: 'speciality'
 	},
 	'8768': {
 		key: 'Soldier_Primary_Honorfusor',
 		name: 'Honorfusor',
 		class: 'medium',
-		type: 'waepon',
+		type: 'weapon',
 		category: 'speciality'
 	},
 	// Medium Bullet Weapons.
@@ -311,42 +311,42 @@ export const Items = {
 		key: 'Soldier_Primary_AssaultRifle',
 		name: 'Assault Rifle',
 		class: 'medium',
-		type: 'waepon',
+		type: 'weapon',
 		category: 'bullet'
 	},
 	'7441': {
 		key: 'Raider_Secondary_NJ4SMG',
 		name: 'NJ4 SMG',
 		class: 'medium',
-		type: 'waepon',
+		type: 'weapon',
 		category: 'bullet'
 	},
 	'8249': {
 		key: 'Raider_Secondary_NJ5SMG',
 		name: 'NJ5 SMG',
 		class: 'medium',
-		type: 'waepon',
+		type: 'weapon',
 		category: 'bullet'
 	},
 	'8251': {
 		key: 'Raider_Primary_PlasmaGun',
 		name: 'Plasma Gun',
 		class: 'medium',
-		type: 'waepon',
+		type: 'weapon',
 		category: 'bullet'
 	},
 	'7394': {
 		key: 'Medium_Sidearm_NovaBlaster',
 		name: 'Nova Blaster',
 		class: 'medium',
-		type: 'waepon',
+		type: 'weapon',
 		category: 'bullet'
 	},
 	'7388': {
 		key: 'Soldier_Secondary_Eagle',
 		name: 'Eagle',
 		class: 'medium',
-		type: 'waepon',
+		type: 'weapon',
 		category: 'bullet'
 	},
 	// Medium Short-Range Weapons.
@@ -354,14 +354,14 @@ export const Items = {
 		key: 'Technician_Secondary_SawedOff',
 		name: 'Sawed-Off Shotgun',
 		class: 'medium',
-		type: 'waepon',
+		type: 'weapon',
 		category: 'short_range'
 	},
 	'8699': {
 		key: 'Technician_Primary_TC24',
 		name: 'TC24',
 		class: 'medium',
-		type: 'waepon',
+		type: 'weapon',
 		category: 'short_range'
 	},
 	// Medium Belt Items.
