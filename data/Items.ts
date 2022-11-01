@@ -492,6 +492,210 @@ export const Items = {
 		class: 'medium',
 		type: 'skin',
 		category: undefined
-	}
+	},
+	// Heavy Impact Weapons.
+	'7448': {
+		key: 'Brute_Primary_HeavySpinfusor',
+		name: 'Heavy Spinfusor',
+		class: 'heavy',
+		type: 'weapon',
+		category: 'impact'
+	},
+	'8414': {
+		key: 'Brute_Primary_HeavySpinfusor_MKD',
+		name: 'Heavy Spinfusor Mk D',
+		class: 'heavy',
+		type: 'weapon',
+		category: 'impact'
+	},
+	'7452': {
+		key: 'Doombringer_Primary_HeavyBoltLauncher',
+		name: 'Heavy Bolt Launcher',
+		class: 'heavy',
+		type: 'weapon',
+		category: 'impact'
+	},
+	'8656': {
+		key: 'Juggernaut_Secondary_HeavyTwinfusor',
+		name: 'Heavy Twinfusor',
+		class: 'heavy',
+		type: 'weapon',
+		category: 'impact'
+	},
+	// Heavy Timed Weapons.
+	'7393': {
+		key: 'Juggernaut_Primary_FusionMortar',
+		name: 'Fusion Mortar',
+		class: 'heavy',
+		type: 'weapon',
+		category: 'timed'
+	},
+	'7457': {
+		key: 'Juggernaut_Primary_MIRVLauncher',
+		name: 'MIRV Launcher',
+		class: 'heavy',
+		type: 'weapon',
+		category: 'timed'
+	},
+	// Heavy Speciality Weapons.
+	'7398': {
+		key: 'Doombringer_Secondary_SaberLauncher',
+		name: 'Saber Launcher',
+		class: 'heavy',
+		type: 'weapon',
+		category: 'speciality'
+	},
+	'8357': {
+		key: 'Brute_Primary_SpikeLauncher',
+		name: 'Gladiator',
+		class: 'heavy',
+		type: 'weapon',
+		category: 'speciality'
+	},
+	// Heavy Bullet Weapons.
+	'7386': {
+		key: 'Doombringer_Primary_ChainGun',
+		name: 'Chain Gun',
+		class: 'heavy',
+		type: 'weapon',
+		category: 'bullet'
+	},
+	'7458': {
+		key: 'Juggernaut_Secondary_X1LMG',
+		name: 'X1 LMG',
+		class: 'heavy',
+		type: 'weapon',
+		category: 'bullet'
+	},
+	'8250': {
+		key: 'Brute_Secondary_PlasmaCannon',
+		name: 'Plasma Cannon',
+		class: 'heavy',
+		type: 'weapon',
+		category: 'bullet'
+	},
+	'8403': {
+		key: 'Heavy_Sidearm_NovaBlaster_MKD',
+		name: 'Nova Blaster Mk D',
+		class: 'heavy',
+		type: 'weapon',
+		category: 'bullet'
+	},
+	'7431': {
+		key: 'Brute_Secondary_NovaColt',
+		name: 'Nova Colt',
+		class: 'heavy',
+		type: 'weapon',
+		category: 'bullet'
+	},
+	// Heavy Short-Range Weapons.
+	'7449': {
+		key: 'Brute_Secondary_AutoShotgun',
+		name: 'Automatic Shotgun',
+		class: 'heavy',
+		type: 'weapon',
+		category: 'short_range'
+	},
+	'8766': {
+		key: 'Elf_FlakCannon',
+		name: 'Flak Cannon',
+		class: 'heavy',
+		type: 'weapon',
+		category: 'short_range'
+	},
+	// Heavy Belt Items.
+	'7390': {
+		key: 'Doombringer_Belt_FragGrenade',
+		name: 'Frag Grenade',
+		class: 'heavy',
+		type: 'belt',
+		category: undefined
+	},
+	'7428': {
+		key: 'Brute_Belt_FractalGrenade',
+		name: 'Fractal Grenade',
+		class: 'heavy',
+		type: 'belt',
+		category: undefined
+	},
+	'7392': {
+		key: 'Doombringer_Belt_Mine',
+		name: 'Mine',
+		class: 'heavy',
+		type: 'belt',
+		category: undefined
+	},
+	// Heavy Packs.
+	'7826': {
+		key: 'Brute_Pack_HeavyShield',
+		name: 'Heavy Shield Pack',
+		class: 'heavy',
+		type: 'pack',
+		category: undefined
+	},
+	'7411': {
+		key: 'Doombringer_Pack_ForceField',
+		name: 'Force Field',
+		class: 'heavy',
+		type: 'pack',
+		category: undefined
+	},
+	'8255': {
+		key: 'Brute_Pack_SurvivalPack',
+		name: 'Survival Pack',
+		class: 'heavy',
+		type: 'pack',
+		category: undefined
+	},
+	'7830': {
+		key: 'Brute_Pack_MinorEnergy',
+		name: 'Minor Energy Pack',
+		class: 'heavy',
+		type: 'pack',
+		category: undefined
+	},
+	// Heavy Skins.
+	'8331': {
+		key: 'Skin_JUG',
+		name: 'Juggernaut',
+		class: 'heavy',
+		type: 'skin',
+		category: undefined
+	},
+	'8333': {
+		key: 'Skin_BRT',
+		name: 'Brute',
+		class: 'heavy',
+		type: 'skin',
+		category: undefined
+	},
+	'8332': {
+		key: 'Skin_DMB',
+		name: 'Doombringer',
+		class: 'heavy',
+		type: 'skin',
+		category: undefined
+	},
+	'8745': {
+		key: 'Skin_JUG_Mercenary',
+		name: 'Juggernaut Mercenary',
+		class: 'heavy',
+		type: 'skin',
+		category: undefined
+	},
+	'8663': {
+		key: 'Skin_BRT_Mercenary',
+		name: 'Brute Mercenary',
+		class: 'heavy',
+		type: 'skin',
+		category: undefined
+	},
+	'8744': {
+		key: 'Skin_DMB_Mercenary',
+		name: 'Doombringer Mercenary',
+		class: 'heavy',
+		type: 'skin',
+		category: undefined
+	},
 } as { [key: string]: Item };
 
