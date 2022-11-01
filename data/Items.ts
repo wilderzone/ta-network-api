@@ -845,5 +845,167 @@ export const Items = {
 		type: 'perk',
 		category: 'B'
 	},
+	// Voice Packs.
+	'8666': {
+		key: 'Voice_Light',
+		name: 'Light',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8667': {
+		key: 'Voice_Medium',
+		name: 'Medium',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8668': {
+		key: 'Voice_Heavy',
+		name: 'Heavy',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8669': {
+		key: 'Voice_Dark',
+		name: 'Voice_Dark',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8670': {
+		key: 'Voice_Fem1',
+		name: 'Voice_Fem1',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8671': {
+		key: 'Voice_Fem2',
+		name: 'Voice_Fem2',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8695': {
+		key: 'Voice_Aus',
+		name: 'Disker Dundee',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8712': {
+		key: 'Voice_T2_Fem01',
+		name: 'Voice_T2_Fem01',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8714': {
+		key: 'Voice_T2_Fem02',
+		name: 'Voice_T2_Fem02',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8715': {
+		key: 'Voice_T2_Fem03',
+		name: 'Voice_T2_Fem03',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8716': {
+		key: 'Voice_T2_Fem04',
+		name: 'Voice_T2_Fem04',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8717': {
+		key: 'Voice_T2_Fem05',
+		name: 'Voice_T2_Fem05',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8719': {
+		key: 'Voice_T2_Male01',
+		name: 'Voice_T2_Male01',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8720': {
+		key: 'Voice_T2_Male02',
+		name: 'Voice_T2_Male02',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8721': {
+		key: 'Voice_T2_Male03',
+		name: 'Voice_T2_Male03',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8722': {
+		key: 'Voice_T2_Male04',
+		name: 'Voice_T2_Male04',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8723': {
+		key: 'Voice_T2_Male05',
+		name: 'Voice_T2_Male05',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8724': {
+		key: 'Voice_T2_Derm01',
+		name: 'Voice_T2_Derm01',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8725': {
+		key: 'Voice_T2_Derm02',
+		name: 'Voice_T2_Derm02',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8726': {
+		key: 'Voice_T2_Derm03',
+		name: 'Voice_T2_Derm03',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8747': {
+		key: 'Voice_Total_Biscuit',
+		name: 'Total Biscuit',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8749': {
+		key: 'Voice_Stowaway',
+		name: 'Voice_Stowaway',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	},
+	'8750': {
+		key: 'Voice_Basement_Champion',
+		name: 'Voice_Basement_Champion',
+		class: undefined,
+		type: 'voice',
+		category: undefined
+	}
 } as { [key: string]: Item };
 
