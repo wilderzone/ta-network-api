@@ -10,7 +10,10 @@
     "type": "git",
     "url": "git+https://github.com/wilderzone/ta-network-api.git"
   },
-  "author": "Giga",
+  "author": {
+    "name": "Giga",
+    "url": "https://wilderzone.live/"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/wilderzone/ta-network-api/issues"
