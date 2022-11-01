@@ -697,5 +697,153 @@ export const Items = {
 		type: 'skin',
 		category: undefined
 	},
+	// Perks.
+	'8162': {
+		key: 'Perk_Safe_Fall',
+		name: 'Safe Fall',
+		class: undefined,
+		type: 'perk',
+		category: 'A'
+	},
+	'8163': {
+		key: 'Perk_Safety_Third',
+		name: 'Safety Third',
+		class: undefined,
+		type: 'perk',
+		category: 'A'
+	},
+	'7916': {
+		key: 'Perk_Reach',
+		name: 'Reach',
+		class: undefined,
+		type: 'perk',
+		category: 'A'
+	},
+	'8169': {
+		key: 'Perk_Wheel_Deal',
+		name: 'Wheel Deal',
+		class: undefined,
+		type: 'perk',
+		category: 'A'
+	},
+	'8153': {
+		key: 'Perk_Bounty_Hunter',
+		name: 'Bounty Hunter',
+		class: undefined,
+		type: 'perk',
+		category: 'A'
+	},
+	'8156': {
+		key: 'Perk_Close_Combat',
+		name: 'Close Combat',
+		class: undefined,
+		type: 'perk',
+		category: 'A'
+	},
+	'8164': {
+		key: 'Perk_Stealthy',
+		name: 'Stealthy',
+		class: undefined,
+		type: 'perk',
+		category: 'A'
+	},
+	'8165': {
+		key: 'Perk_Super_Capacitor',
+		name: 'Super Capacitor',
+		class: undefined,
+		type: 'perk',
+		category: 'A'
+	},
+	'8158': {
+		key: 'Perk_Looter',
+		name: 'Looter',
+		class: undefined,
+		type: 'perk',
+		category: 'A'
+	},
+	'8232': {
+		key: 'Perk_Rage',
+		name: 'Rage',
+		class: undefined,
+		type: 'perk',
+		category: 'A'
+	},
+	'8167': {
+		key: 'Perk_Survivalist',
+		name: 'Survivalist',
+		class: undefined,
+		type: 'perk',
+		category: 'B'
+	},
+	'7917': {
+		key: 'Perk_Egocentric',
+		name: 'Egocentric',
+		class: undefined,
+		type: 'perk',
+		category: 'B'
+	},
+	'8159': {
+		key: 'Perk_Pilot',
+		name: 'Pilot',
+		class: undefined,
+		type: 'perk',
+		category: 'B'
+	},
+	'8166': {
+		key: 'Perk_Super_Heavy',
+		name: 'Super Heavy',
+		class: undefined,
+		type: 'perk',
+		category: 'B'
+	},
+	'8168': {
+		key: 'Perk_Ultra_Capacitor',
+		name: 'Ultra Capacitor',
+		class: undefined,
+		type: 'perk',
+		category: 'B'
+	},
+	'8161': {
+		key: 'Perk_Quickdraw',
+		name: 'Quickdraw',
+		class: undefined,
+		type: 'perk',
+		category: 'B'
+	},
+	'8170': {
+		key: 'Perk_Mechanic',
+		name: 'Mechanic',
+		class: undefined,
+		type: 'perk',
+		category: 'B'
+	},
+	'8157': {
+		key: 'Perk_Determination',
+		name: 'Determination',
+		class: undefined,
+		type: 'perk',
+		category: 'B'
+	},
+	'8160': {
+		key: 'Perk_Potential_Energy',
+		name: 'Potential Energy',
+		class: undefined,
+		type: 'perk',
+		category: 'B'
+	},
+	'8231': {
+		key: 'Perk_Sonic_Punch',
+		name: 'Sonic Punch',
+		class: undefined,
+		type: 'perk',
+		category: 'B'
+	},
+	'8646': {
+		key: 'Perk_Lightweight',
+		name: 'Lightweight',
+		class: undefined,
+		type: 'perk',
+		category: 'B'
+	},
 } as { [key: string]: Item };
 
