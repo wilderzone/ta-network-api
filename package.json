@@ -10,6 +10,16 @@
     "type": "git",
     "url": "git+https://github.com/wilderzone/ta-network-api.git"
   },
+  "keywords": [
+    "tribes",
+    "ascend",
+    "TA",
+    "game",
+    "login-server",
+    "typescript",
+    "ts",
+    "node"
+  ],
   "author": {
     "name": "Giga",
     "url": "https://wilderzone.live/"
