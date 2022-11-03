@@ -1,4 +1,4 @@
-# TA Network API
+# <img src="./logo.svg" style="width: 3em;"> TA Network API
 
 An open interface for fetching data from the Tribes: Ascend servers.
 
