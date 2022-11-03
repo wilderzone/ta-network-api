@@ -1,6 +1,7 @@
 /network_captures
 /node_modules
 */node_modules
+/dist
 
 */__pycache__
 
