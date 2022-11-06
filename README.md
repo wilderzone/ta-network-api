@@ -69,9 +69,24 @@ Events include:
 ### Messages
 
 The API comes with some handy presets for sending data to the logon server:
-- GenericMessage
 - AuthMessage
+  ```typescript
+  const message = new AuthMessage();
+  ```
 - ServerListMessage
+  ```typescript
+  const message = new ServerListMessage();
+  ```
+
+Or you can also use the `GenericMessage` class to send raw data:
+```typescript
+// This class accepts an array of number arrays, Uint8Arrays, byte-like strings, or any combination of the three.
+const message = new GenericMessage([
+	[1, 23, 8, 74],			// number[]
+	new Uint8Array([1, 23, 8, 74]),	// Uint8Array
+	'0117084a'			// Byte-like string
+]);
+```
 
 
 ### Examples
