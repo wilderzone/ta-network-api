@@ -12,8 +12,7 @@ API includes functionality for:
 - [x] Fetching server status data:
   - [x] Players online.
   - [x] Servers online.
-- [ ] Fetching player rank and statistics.
-- [ ] A web interface for controlling game servers.
+- [ ] _(Coming soon)_ Fetching player statistics (midairs, caps, accolades, etc).
 
 
 ### Installation
@@ -65,6 +64,14 @@ Events include:
 - `disconnect`: Fired after the connection with the server has closed.
 - `send`:
 - `receive`: Fired whenever the connection receives some data from the server. The data received (in the form of an EnumTree) is passed to any callbacks registered to this listener.
+
+
+### Messages
+
+The API comes with some handy presets for sending data to the logon server:
+- GenericMessage
+- AuthMessage
+- ServerListMessage
 
 
 ### Examples
