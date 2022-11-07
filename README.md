@@ -81,6 +81,10 @@ The API comes with some handy presets for sending data to the logon server:
   ```typescript
   const message = new ServerListMessage();
   ```
+- WatchNowMessage
+  ```typescript
+  const message = new WatchNowMessage();
+  ```
 
 Or you can also use the `GenericMessage` class to send raw data:
 ```typescript
