@@ -7,7 +7,7 @@ Please see the [wiki](https://github.com/wilderzone/ta-network-api/wiki) for a d
 ###
 
 
-API includes functionality for:  
+API includes functionality for:
 - [x] Fetching basic player data (clan tag, XP, Gold, etc).
 - [x] Fetching server status data:
   - [x] Players online.
@@ -32,13 +32,22 @@ import { LoginServerConnection } from 'ta-network-api';
 
 Create a new connection instance with:
 ```typescript
+// Your login credentials:
 let credentials = {
 	username: '<your-username>',
 	passwordHash: '<your-password-hash>',
 	salt: new Uint8Array()
 };
 
-const connection = new LoginServerConnection('hirez', credentials);
+// Optional options:
+let options = {
+	authenticate: true,		// Tells the connection to attempt to automatically authenticate.
+	decoder: {				// These options are passed through to the data Decoder.
+		clean: true			// Tells the Decoder to produce a clean output.
+	}
+};
+
+const connection = new LoginServerConnection('hirez', credentials, options);
 ```
 
 Initiate the connection with the login server with:
@@ -55,7 +64,7 @@ You can use the `on(event, callback)` method to register an event listener with 
 
 ```typescript
 connection.on('receive', (data: EnumTree) => {
-	// Do something.
+	// Do something awesome.
 });
 ```
 
@@ -101,7 +110,7 @@ const message = new GenericMessage([
 
 Request a list of the top 30 online game servers and output the results to a JSON file:
 ```typescript
-import { LoginServerConnection, GenericMessage, EnumTree } from 'ta-network-api';
+import { LoginServerConnection, ServerListMessage, EnumTree } from 'ta-network-api';
 const fs = require('fs');
 
 let credentials = {
@@ -110,13 +119,25 @@ let credentials = {
 	salt: new Uint8Array()
 };
 
-const connection = new LoginServerConnection('hirez', credentials);
+let options = {
+	authenticate: true,
+	decoder: {
+		clean: true
+	}
+};
+
+const connection = new LoginServerConnection('hirez', credentials, options);
 
 connection.on('receive', (data: EnumTree) => {
-	const path = 'results/';
+	// Get the current date and time.
 	const date = new Date();
 	const time = new Date(date.getTime() - (date.getTimezoneOffset() * 60 * 1000)).toISOString().split(':').join('-').split('.').join('-').split('Z')[0];
+
+	// Name the output file.
+	const path = 'results/';
 	const fileName = `output-${time}.json`;
+
+	// Save the output file.
 	fs.writeFile(path + fileName, JSON.stringify(data, null, 4), 'utf8', function (err: any) {
 		if (err) {
 			console.log("An error occured while writing JSON Object to File.");
@@ -128,6 +149,5 @@ connection.on('receive', (data: EnumTree) => {
 
 connection.connect();
 
-connection.queue(new GenericMessage(['1600d5000200280202000000e90000002b0000002d000000']));
-
+connection.queue(new ServerListMessage());
 ```
