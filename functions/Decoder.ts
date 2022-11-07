@@ -2,13 +2,19 @@ import { generalEnumfields, Items, Maps, Regions, WatchNowSections } from '../da
 import { EnumTree, Map } from '../interfaces';
 import { hexToString } from './Utils';
 
+interface DecoderOptions {
+	clean?: boolean
+}
+
 export class Decoder {
 	_tree = {} as EnumTree;
 	_enumfieldsParsed = 0;
 	_output = {} as { [key: string]: any };
+	_options = {} as DecoderOptions;
 
-	constructor (tree: EnumTree) {
+	constructor (tree: EnumTree, options?: DecoderOptions) {
 		this._tree = tree;
+		this._options = options ?? {};
 	}
 
 	/**
@@ -17,7 +23,7 @@ export class Decoder {
 	 */
 	decode () {
 		console.log('[Decoder] Decoding tree...');
-		this._enumfieldsParsed = recurse(this._output, this._tree);
+		this._enumfieldsParsed = recurse(this._output, this._tree, this._options);
 		console.log('[Decoder] Parsed', this._enumfieldsParsed, 'enumfields.');
 		return this._output;
 	}
@@ -33,7 +39,7 @@ export class Decoder {
 	}
 }
 
-function recurse (parent: EnumTree, tree: EnumTree): number {
+function recurse (parent: EnumTree, tree: EnumTree, options: DecoderOptions): number {
 	// Stop if we have reached the end of the tree.
 	if (Object.keys(tree).length <= 0) {
 		return 0;
@@ -46,16 +52,32 @@ function recurse (parent: EnumTree, tree: EnumTree): number {
 		// If the value is an ArrayOfEnumBlockArrays.
 		if (Array.isArray(value) && value.length && typeof value[0] === 'object' && !Array.isArray(value[0])) {
 			parent[newKey] = [] as { [key: string]: any }[];
+			let indexOffset = 0;
 			value.forEach((block: { [key: string]: any }, index) => {
-				parent[newKey][index] = {} as { [key: string]: any };
-				fieldsProcessed += recurse(parent[newKey][index], block);
+				parent[newKey][index + indexOffset] = {} as { [key: string]: any };
+				fieldsProcessed += recurse(parent[newKey][index + indexOffset], block, options);
+
+				// Clean option: Delete the branch if it is empty.
+				if (options.clean && Object.entries(parent[newKey][index + indexOffset]).length <= 0) {
+					delete parent[newKey][index + indexOffset];
+					indexOffset -= 1;
+					// Prevent a possible null from remaining at the end of the branch.
+					if (index >= value.length - 1) {
+						parent[newKey].pop();
+					}
+				}
 			});
 		}
 
 		// If the value is an EnumBlockArray.
 		else if (value && typeof value === 'object' && !Array.isArray(value)) {
 			parent[newKey] = {} as { [key: string]: any };
-			fieldsProcessed += recurse(parent[newKey], value);
+			fieldsProcessed += recurse(parent[newKey], value, options);
+
+			// Clean option: Delete the branch if it is empty.
+			if (options.clean && Object.entries(parent[newKey]).length <= 0) {
+				delete parent[newKey];
+			}
 		}
 
 		// If the value is a primative.

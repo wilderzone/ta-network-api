@@ -19,6 +19,7 @@ interface LoginServerConnectionMessage {
 
 interface LoginServerConnectionOptions {
 	authenticate?: boolean,
+	cleanDecode?: boolean
 }
 
 export class LoginServerConnection {
@@ -135,7 +136,7 @@ export class LoginServerConnection {
 				const enumTree = buffer.parse();
 				console.log('[LSC] Parsed:', enumTree);
 
-				const decoder = new Decoder(enumTree);
+				const decoder = new Decoder(enumTree, { clean: this._options.cleanDecode });
 				const decodedData = decoder.decode();
 				console.log('[LSC] Decoded:', decodedData);
 
@@ -227,7 +228,7 @@ export class LoginServerConnection {
 			const enumTree = this._streamBuffer.parse();
 			console.log('[LSC] Parsed:', enumTree);
 
-			const decoder = new Decoder(enumTree);
+			const decoder = new Decoder(enumTree, { clean: this._options.cleanDecode });
 			const decodedData = decoder.decode();
 			console.log('[LSC] Decoded:', decodedData);
 
