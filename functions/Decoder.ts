@@ -2,7 +2,7 @@ import { generalEnumfields, Items, Maps, Regions, WatchNowSections } from '../da
 import { EnumTree, Map } from '../interfaces';
 import { hexToString } from './Utils';
 
-interface DecoderOptions {
+export interface DecoderOptions {
 	clean?: boolean
 }
 
