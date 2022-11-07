@@ -17,7 +17,12 @@ interface LoginServerConnectionMessage {
 	buffer: Uint8Array
 }
 
+interface LoginServerConnectionOptions {
+	authenticate?: boolean,
+}
+
 export class LoginServerConnection {
+	_options = {} as LoginServerConnectionOptions;
 	_isConnected = false;
 	_serverKey = undefined as keyof typeof loginServers | undefined;
 	_serverInstance = {} as LoginServer;
@@ -40,7 +45,7 @@ export class LoginServerConnection {
 		receive: []
 	} as LoginServerConnectionCallbackMap;
 
-	constructor (server: keyof typeof loginServers | LoginServer, credentials: HashedCredentials) {
+	constructor (server: keyof typeof loginServers | LoginServer, credentials: HashedCredentials, options?: LoginServerConnectionOptions) {
 		if (typeof server === 'string' && server in loginServers) {
 			this._serverKey = server;
 			this._serverInstance = loginServers[server];
@@ -48,6 +53,7 @@ export class LoginServerConnection {
 			this._serverInstance = server as LoginServer;
 		}
 		this._credentials = credentials;
+		this._options = options ?? {} as LoginServerConnectionOptions;
 	}
 
 	/**
@@ -97,7 +103,7 @@ export class LoginServerConnection {
 		this._socket.on('data', (data) => {
 			console.log('[LSC] Data:', data);
 			const array = Uint8Array.from(data);
-			
+
 			this._idleTimers.forEach((timer) => { clearTimeout(timer); });
 			this._idleTimers.push(setTimeout(() => { this._idle(); }, this._timeToIdle));
 
@@ -108,7 +114,7 @@ export class LoginServerConnection {
 				this._streamBuffer.append(array);
 				// TODO: Figure out a definitive way to detect when a stream has ended.
 			}
-			
+
 			// Detect the start of a packet stream.
 			else if (array[0] === 0 && array[1] === 0) { // data[00 00 ...] Indicates the start of a packet stream.
 				this._isReceivingStream = true;
@@ -133,30 +139,32 @@ export class LoginServerConnection {
 				const decodedData = decoder.decode();
 				console.log('[LSC] Decoded:', decodedData);
 
-				if (this._authProgress.initial && this._authProgress.confirmation) {
+				if (!this._options.authenticate || (this._authProgress.initial && this._authProgress.confirmation)) {
 					this._callbacks.receive.forEach((callback) => { callback(decodedData); });
 					return;
 				}
 
-				// If the connection hasn't yet been authenticated, attempt to authenticate.
-				if ('Auth Info' in decodedData && this._credentials) {
-					// Acknowledge the server's auth info.
-					const ackMessage = new GenericMessage(['12003a0001009e04610b04010000000000000000']);
-					this._socket.write(ackMessage.buffer, 'hex', () => {
-						this._authProgress.initial = true;
-						console.log('[AUTH] Acknowledgement message sent.');
-					});
-				}
+				if (this._options.authenticate) {
+					// If the connection hasn't yet been authenticated, attempt to authenticate.
+					if ('Auth Info' in decodedData && this._credentials) {
+						// Acknowledge the server's auth info.
+						const ackMessage = new GenericMessage(['12003a0001009e04610b04010000000000000000']);
+						this._socket.write(ackMessage.buffer, 'hex', () => {
+							this._authProgress.initial = true;
+							console.log('[AUTH] Acknowledgement message sent.');
+						});
+					}
 
-				if ('Auth Info Confirmation' in decodedData && this._credentials) {
-					this._credentials.salt = new Uint8Array(decodedData['Auth Info Confirmation']['Salt']);
-					const authMessage = new AuthenticationMessage({...this._credentials})
-					console.log('[AUTH] Sending credentials...');
-					console.log(authMessage);
-					this._socket.write(authMessage.buffer, 'hex', () => {
-						this._authProgress.confirmation = true;
-						console.log('[AUTH] Credentials sent.');
-					});
+					if ('Auth Info Confirmation' in decodedData && this._credentials) {
+						this._credentials.salt = new Uint8Array(decodedData['Auth Info Confirmation']['Salt']);
+						const authMessage = new AuthenticationMessage({...this._credentials})
+						console.log('[AUTH] Sending credentials...');
+						console.log(authMessage);
+						this._socket.write(authMessage.buffer, 'hex', () => {
+							this._authProgress.confirmation = true;
+							console.log('[AUTH] Credentials sent.');
+						});
+					}
 				}
 			}
 		});
