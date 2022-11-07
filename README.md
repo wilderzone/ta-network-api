@@ -71,7 +71,12 @@ Events include:
 The API comes with some handy presets for sending data to the logon server:
 - AuthMessage
   ```typescript
-  const message = new AuthMessage();
+  let credentials = {
+  	username: '<your-username>',
+  	passwordHash: '<your-password-hash>',
+  	salt: new Uint8Array(<your-session-salt>)
+  };
+  const message = new AuthMessage(credentials);
   ```
 - ServerListMessage
   ```typescript
