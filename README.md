@@ -62,7 +62,6 @@ connection.on('receive', (data: EnumTree) => {
 Events include:
 - `connect`: Fired after a stable connection with the server has been established.
 - `disconnect`: Fired after the connection with the server has closed.
-- `send`:
 - `receive`: Fired whenever the connection receives some data from the server. The data received (in the form of an EnumTree) is passed to any callbacks registered to this listener.
 
 
