@@ -1,6 +1,6 @@
 interface EnumField {
 	length: number | 'Sized' | 'EnumBlockArray'| 'ArrayOfEnumBlockArrays',
-	type?: 'Boolean' | 'Integer' | 'IP' | 'ItemID' | 'MapID' | 'ServerList' | 'String' | 'Version' | 'Region',
+	type?: 'Boolean' | 'Integer' | 'IP' | 'ItemID' | 'MapID' | 'ServerList' | 'String' | 'Version' | 'Region' | 'WatchNowSection',
 	name?: string | undefined
 }
 
@@ -14,7 +14,7 @@ export const generalEnumfields = {
 	'0468': {length: 'Sized', name: undefined},
 	'0494': {length: 'Sized', name: 'Login Name'},
 	'063B': {length: 'Sized', name: undefined},
-	'06B8': {length: 'Sized', name: undefined},
+	'06B8': {length: 'Sized', type: 'String', name: 'Link'}, // Video links for the watch-now menu.
 	'06DE': {length: 'Sized', type: 'String', name: 'Clan Tag'},
 	'06E9': {length: 'Sized', name: undefined},
 	'0705': {length: 'Sized', name: 'Player Name of Kicker'},
@@ -228,9 +228,9 @@ export const generalEnumfields = {
 	'069D': {length: 4, name: undefined},
 	'069E': {length: 4, name: undefined},
 	'069F': {length: 4, name: undefined},
-	'06B7': {length: 4, name: undefined},
-	'06B9': {length: 4, name: 'Watch-Now Section (1 = hirez news, 2 = twitch, 3 = training, 4 = community, 5 = ticker)'},
-	'06BA': {length: 4, name: '1 = featured, otherwise not featured'},
+	'06B7': {length: 4, type: 'Integer', name: undefined},
+	'06B9': {length: 4, type: 'WatchNowSection', name: 'Watch-Now Section'},
+	'06BA': {length: 4, type: 'Integer', name: '1 = featured, otherwise not featured'},
 	'06BD': {length: 4, name: undefined},
 	'06BF': {length: 4, type: 'Integer', name: 'Maximum Rank (alt)'},
 	'06C0': {length: 4, name: undefined},

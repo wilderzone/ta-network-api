@@ -3,3 +3,4 @@ export { Items } from './Items';
 export { Maps } from './Maps';
 export { Regions } from './Regions';
 export { loginServers } from './Servers';
+export { WatchNowSections } from './WatchNow';

@@ -1,4 +1,4 @@
-import { generalEnumfields, Items, Maps, Regions } from '../data';
+import { generalEnumfields, Items, Maps, Regions, WatchNowSections } from '../data';
 import { EnumTree, Map } from '../interfaces';
 import { hexToString } from './Utils';
 
@@ -172,6 +172,20 @@ function parseFieldValue (value: number[], type?: string): any {
 		const id = parseInt(hexToString(new Uint8Array(value.reverse())), 16).toString(); // Decode ID as integer.
 		if (id in Regions) {
 			return Regions[id];
+		}
+		return parseInt(id);
+	}
+
+	// Watch-now section IDs are represented by 4 byte integers.
+	// A map of section IDs to watch-now section data is available in the `data` module.
+	if (type === 'WatchNowSection') {
+		if (value.length !== 4) {
+			console.warn('[Decoder] Error decoding Watch-now Section (', value, '). Enumfield may be incorrectly typed.');
+			return value;
+		}
+		const id = parseInt(hexToString(new Uint8Array(value.reverse())), 16).toString(); // Decode ID as integer.
+		if (id in WatchNowSections) {
+			return WatchNowSections[id];
 		}
 		return parseInt(id);
 	}
