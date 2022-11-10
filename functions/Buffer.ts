@@ -93,25 +93,22 @@ export class Buffer {
 	 * @returns A copy of the now inverted buffer.
 	 */
 	invertEndianness (bytes?: number): Uint8Array {
+		// Prevent `bytes` from being odd.
 		if (bytes && bytes % 2 !== 0) {
 			bytes += 1;
 		}
+		// Pad the length of the buffer to make it even.
 		if (!bytes && !this.lengthIsEven) {
-			this._buffer = new Uint8Array([...this._buffer, 0]);
+			this.append(new Uint8Array([0]));
 		}
-		let invertedBuffer = new Uint8Array(this.length);
+		// Invert the endianness of the buffer.
 		for (let i = 0; i < (bytes ?? this.length); i += 2) {
-			invertedBuffer[i] = this._buffer[i + 1];
-			invertedBuffer[i + 1] = this._buffer[i];
+			const x = this._buffer[i];
+			const y = this._buffer[i + 1];
+			this._buffer[i] = y;
+			this._buffer[i + 1] = x;
 		}
-		if (bytes) {
-			for (let i = bytes; i < this.length; i++) {
-				invertedBuffer[i] = this._buffer[i];
-			}
-		}
-
-		this._buffer = new Uint8Array([...invertedBuffer]);
-		return invertedBuffer;
+		return this._buffer;
 	}
 
 	/**
