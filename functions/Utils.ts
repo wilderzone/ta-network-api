@@ -1,3 +1,5 @@
+import { Buffer } from './Buffer';
+
 export function hexToString (hex: Uint8Array): string {
 	return hex.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
 }
@@ -16,20 +18,14 @@ export function textToHexInt (string: string): number[] {
 }
 
 /**
- * Inverts the endianness of a Uint8Array buffer.
- * @param buffer The buffer to invert.
- * @returns The now inverted buffer.
+ * Inverts the endianness of a Uint8Array.
+ * @param array The array to invert.
+ * @returns The now inverted array.
  */
-export function invertEndianness (buffer: Uint8Array): Uint8Array {
-	if (buffer.length % 2 !== 0) {
-		buffer = new Uint8Array([...buffer, 0]);
-	}
-	let invertedBuffer = new Uint8Array(buffer.length);
-	for (let i = 0; i < buffer.length; i += 2) {
-		invertedBuffer[i] = buffer[i + 1];
-		invertedBuffer[i + 1] = buffer[i];
-	}
-	return invertedBuffer;
+export function invertEndianness (array: Uint8Array): Uint8Array {
+	let invertedArray = new Buffer(array);
+	invertedArray.invertEndianness();
+	return invertedArray.clone();
 }
 
 /**
