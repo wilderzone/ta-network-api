@@ -135,102 +135,105 @@ export class Buffer {
 		console.log('[Buffer] Parsing...');
 		let output = {} as EnumTree;
 		const startTime = performance.now();
-		const bytesProcessed = branch(output, this);
+		const bytesProcessed = this._branch(output);
 		console.log('[Buffer] Bytes processed:', bytesProcessed);
 		const endTime = performance.now();
 		console.log('[Buffer] Done parsing in', endTime - startTime, 'milliseconds.');
 		return { ...output } as EnumTree;
 	}
-}
 
-/**
- * Resursively parse buffer enumerators by field type to produce an Enum Tree.
- * @param parent The parent object (trunk) of the current branch.
- * @param buffer The buffer to parse.
- * @param length The length of the branch (number of enumerators to process, optional).
- * @returns The number of bytes processed by the branch.
- */
-function branch (parent: EnumTree, buffer: Buffer, length = 1): number {
-	// Initialise the branch.
-	let bytesProcessed = 0;
-	let fieldsProcessed = 0;
+	/**
+	 * Resursively parse buffer enumerators by field type to produce an Enum Tree.
+	 * @param parent The parent object (trunk) of the current branch.
+	 * @param length The length of the branch (number of enumerators to process, optional).
+	 * @returns The number of bytes processed by the branch.
+	 */
+	_branch (parent: EnumTree, length = 1): number {
+		// Initialise the branch.
+		let bytesProcessed = 0;
+		let fieldsProcessed = 0;
 
-	// Process enumfields for the length of the branch.
-	while (fieldsProcessed < length) {
-		buffer.invertEndianness(2);
-		let enumerator = hexToString(buffer.read(2)).toUpperCase();
-		bytesProcessed += 2;
-
-		// Skip over the enumerator if it is '0000'.
-		while (enumerator === '0000') {
-			buffer.invertEndianness(2);
-			enumerator = hexToString(buffer.read(2)).toUpperCase();
+		// Process enumfields for the length of the branch.
+		while (fieldsProcessed < length) {
+			this.invertEndianness(2);
+			let enumerator = hexToString(this.read(2)).toUpperCase();
 			bytesProcessed += 2;
-		}
 
-		// Prune the branch if we have reached the end of the buffer.
-		if (buffer.length <= 0) {
-			return bytesProcessed;
-		}
-
-		// Prune the branch if the enumerator doesn't exist, since this likely indicates that we have lost track of our place in the buffer.
-		if (!(enumerator in generalEnumfields)) {
-			console.warn('[Buffer] Enumerator', enumerator, 'was not found.');
-			return bytesProcessed;
-		}
-
-		// Process as an ArrayOfEnumBlockArrays.
-		// ENUM + fieldLength --> [ { branch() × arrayLength } × fieldLength ]
-		if (generalEnumfields[enumerator].length === 'ArrayOfEnumBlockArrays') {
-			parent[enumerator] = [] as EnumTree[];
-			buffer.invertEndianness(2);
-			const fieldLength = parseInt(hexToString(buffer.read(2)), 16);
-			bytesProcessed += 2;
-			console.log('[Buffer] ArrayOfEnumBlockArrays encountered was:', enumerator, '. With length:', fieldLength);
-			let arraysProcessed = 0;
-			while (arraysProcessed < fieldLength) { // TODO: This loop does not check for buffer errors.
-				buffer.invertEndianness(2);
-				const arrayLength = parseInt(hexToString(buffer.read(2)), 16);
+			// Skip over the enumerator if it is '0000'.
+			while (enumerator === '0000') {
+				this.invertEndianness(2);
+				enumerator = hexToString(this.read(2)).toUpperCase();
 				bytesProcessed += 2;
-				parent[enumerator][arraysProcessed] = {} as EnumTree;
-				bytesProcessed += branch(parent[enumerator][arraysProcessed], buffer, arrayLength);
-				arraysProcessed++;
 			}
+
+			// Prune the branch if we have reached the end of the buffer.
+			if (this.length <= 0) {
+				return bytesProcessed;
+			}
+
+			// Prune the branch if the enumerator doesn't exist, since this likely indicates that we have lost track of our place in the buffer.
+			if (!(enumerator in generalEnumfields)) {
+				console.warn('[Buffer] Enumerator', enumerator, 'was not found at byte #', this.bytesReadSinceCreation, '.');
+				console.log(hexToString(this.peek(64)).toUpperCase());
+				/* this.invertEndianness(2);
+				enumerator = hexToString(this.read(2)).toUpperCase();
+				bytesProcessed += 2; */
+				return bytesProcessed;
+			}
+
+			// Process as an ArrayOfEnumBlockArrays.
+			// ENUM + fieldLength --> [ { branch() × arrayLength } × fieldLength ]
+			if (generalEnumfields[enumerator].length === 'ArrayOfEnumBlockArrays') {
+				parent[enumerator] = [] as EnumTree[];
+				this.invertEndianness(2);
+				const fieldLength = parseInt(hexToString(this.read(2)), 16);
+				bytesProcessed += 2;
+				console.log('[Buffer] ArrayOfEnumBlockArrays encountered was:', enumerator, '. With length:', fieldLength);
+				let arraysProcessed = 0;
+				while (arraysProcessed < fieldLength) { // TODO: This loop does not check for buffer errors.
+					this.invertEndianness(2);
+					const arrayLength = parseInt(hexToString(this.read(2)), 16);
+					bytesProcessed += 2;
+					parent[enumerator][arraysProcessed] = {} as EnumTree;
+					bytesProcessed += this._branch(parent[enumerator][arraysProcessed], arrayLength);
+					arraysProcessed++;
+				}
+			}
+
+			// Process as an EnumBlockArray.
+			// ENUM + arrayLength --> { branch() × arrayLength }
+			else if (generalEnumfields[enumerator].length === 'EnumBlockArray') {
+				parent[enumerator] = {} as EnumTree;
+				this.invertEndianness(2);
+				const arrayLength = parseInt(hexToString(this.read(2)), 16);
+				bytesProcessed += 2;
+				console.log('[Buffer] EnumBlockArray encountered was:', enumerator, '. With length:', arrayLength);
+				bytesProcessed += this._branch(parent[enumerator], arrayLength);
+			}
+
+			// Process as a Sized field.
+			// ENUM + fieldLength --> [ 00 × fieldLength ]
+			else if (generalEnumfields[enumerator].length === 'Sized') {
+				this.invertEndianness(2);
+				const fieldLength = parseInt(hexToString(this.read(2)), 16);
+				bytesProcessed += 2;
+				const data = this.read(fieldLength);
+				bytesProcessed += fieldLength;
+				parent[enumerator] = [...data];
+			}
+
+			// Process as a Generic.
+			// ENUM --> [ 00 × fieldLength ]
+			else {
+				const fieldLength = generalEnumfields[enumerator].length as number;
+				const data = this.read(fieldLength);
+				bytesProcessed += fieldLength;
+				parent[enumerator] = [...data];
+			}
+
+			fieldsProcessed++;
 		}
 
-		// Process as an EnumBlockArray.
-		// ENUM + arrayLength --> { branch() × arrayLength }
-		else if (generalEnumfields[enumerator].length === 'EnumBlockArray') {
-			parent[enumerator] = {} as EnumTree;
-			buffer.invertEndianness(2);
-			const arrayLength = parseInt(hexToString(buffer.read(2)), 16);
-			bytesProcessed += 2;
-			console.log('[Buffer] EnumBlockArray encountered was:', enumerator, '. With length:', arrayLength);
-			bytesProcessed += branch(parent[enumerator], buffer, arrayLength);
-		}
-
-		// Process as a Sized field.
-		// ENUM + fieldLength --> [ 00 × fieldLength ]
-		else if (generalEnumfields[enumerator].length === 'Sized') {
-			buffer.invertEndianness(2);
-			const fieldLength = parseInt(hexToString(buffer.read(2)), 16);
-			bytesProcessed += 2;
-			const data = buffer.read(fieldLength);
-			bytesProcessed += fieldLength;
-			parent[enumerator] = [...data];
-		}
-
-		// Process as a Generic.
-		// ENUM --> [ 00 × fieldLength ]
-		else {
-			const fieldLength = generalEnumfields[enumerator].length as number;
-			const data = buffer.read(fieldLength);
-			bytesProcessed += fieldLength;
-			parent[enumerator] = [...data];
-		}
-
-		fieldsProcessed++;
+		return bytesProcessed;
 	}
-
-	return bytesProcessed;
 }
