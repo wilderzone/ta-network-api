@@ -6,6 +6,8 @@ const { performance } = require('perf_hooks');
 export class Buffer {
 	_buffer = new Uint8Array;
 	_bytesReadSinceCreation = 0;
+	_lastByteRead = undefined as Uint8Array | undefined;
+	_currentByteRead = undefined as Uint8Array | undefined;
 
 	constructor (buffer = new Uint8Array) {
 		this._buffer = buffer;
@@ -33,6 +35,18 @@ export class Buffer {
 	}
 
 	/**
+	 * The last byte that was read by the buffer.
+	 */
+	get lastByteRead (): Uint8Array | undefined {
+		return this._lastByteRead;
+	}
+
+	_updateLastReadByte (currentByte: Uint8Array) {
+		this._lastByteRead = this._currentByteRead;
+		this._currentByteRead = currentByte;
+	}
+
+	/**
 	 * Have a peek at the first `bytes` number of bytes of the stored buffer without modifying the buffer.
 	 * @param bytes The number of bytes to peek into the buffer by.
 	 * @returns A new Uint8Array containing the peeked bytes.
@@ -51,6 +65,7 @@ export class Buffer {
 		let readBytes = this._buffer.subarray(0, bytes);
 		this._buffer = this._buffer.subarray(bytes);
 		this._bytesReadSinceCreation += bytes;
+		this._updateLastReadByte(readBytes.subarray(readBytes.length - 2, readBytes.length));
 		return readBytes;
 	}
 
@@ -59,6 +74,7 @@ export class Buffer {
 	 * @param bytes The number of bytes to advance the buffer by.
 	 */
 	advance (bytes: number) {
+		this._updateLastReadByte(this._buffer.subarray(bytes - 2, bytes));
 		this._buffer = this._buffer.subarray(bytes);
 		this._bytesReadSinceCreation += bytes;
 	}
