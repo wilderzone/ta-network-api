@@ -1,7 +1,7 @@
+import { performance } from 'perf_hooks';
 import { generalEnumfields } from '../data';
 import { EnumTree } from '../interfaces';
 import { hexToString } from './Utils';
-const { performance } = require('perf_hooks');
 
 export class Buffer {
 	_buffer = new Uint8Array;

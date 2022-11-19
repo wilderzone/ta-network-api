@@ -111,7 +111,7 @@ const message = new GenericMessage([
 Request a list of the top 30 online game servers and output the results to a JSON file:
 ```typescript
 import { LoginServerConnection, ServerListMessage, EnumTree } from 'ta-network-api';
-const fs = require('fs');
+import fs from 'fs';
 
 let credentials = {
 	username: '<your-username>',
