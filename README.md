@@ -110,15 +110,19 @@ const message = new GenericMessage([
 
 Request a list of the top 30 online game servers and output the results to a JSON file:
 ```typescript
+// Import TA Network API classes so that we can connect to a login server, request a list of game servers, and process the returned data.
 import { LoginServerConnection, ServerListMessage, EnumTree } from 'ta-network-api';
+// Import Node's built-in "fs" module for interacting with the file system.
 import fs from 'fs';
 
+// Your account credentials for the login server.
 let credentials = {
 	username: '<your-username>',
 	passwordHash: '<your-password-hash>',
 	salt: new Uint8Array()
 };
 
+// Optional configuration for the login server connection.
 let options = {
 	authenticate: true,
 	decoder: {
@@ -126,8 +130,10 @@ let options = {
 	}
 };
 
+// Create a new connection instance.
 const connection = new LoginServerConnection('hirez', credentials, options);
 
+// Output to a JSON file whenever we receive some data from the server.
 connection.on('receive', (data: EnumTree) => {
 	// Get the current date and time.
 	const date = new Date();
@@ -147,7 +153,9 @@ connection.on('receive', (data: EnumTree) => {
 	});
 });
 
+// Initiate the connection with the server.
 connection.connect();
 
+// Queue the messages we want to send.
 connection.queue(new ServerListMessage());
 ```
