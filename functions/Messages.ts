@@ -1,5 +1,5 @@
 import { HashedCredentials } from '../interfaces';
-import { stringToHexInt, textToHexInt } from './Utils';
+import { stringToHex, textToHex } from './Utils';
 import { xorPasswordHash } from './Password';
 
 
@@ -7,7 +7,7 @@ function compileMessage (chunks: (string | number[] | Uint8Array)[]): Uint8Array
 	let result = [] as number[];
 	chunks.forEach((chunk) => {
 		if (typeof chunk === 'string') {
-			const processedChunk = stringToHexInt(chunk);
+			const processedChunk = stringToHex(chunk);
 			if (processedChunk) {
 				result.push(...processedChunk);
 			} else {
@@ -38,7 +38,7 @@ export class AuthenticationMessage {
 			'b9003a000b00560060000000',
 			xorPasswordHash(credentials.passwordHash, credentials.salt),
 			'94040c00',
-			textToHexInt(credentials.username),
+			textToHex(credentials.username),
 			'7106432800007206000000007306017706c3ee58437606d13f00007406de1000007506811b0000340400000000000000009e04610b04010000000000000000'
 		]);
 	}

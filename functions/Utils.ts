@@ -1,20 +1,44 @@
 import { Buffer } from './Buffer';
 
+/**
+ * Convert a Uint8Array of bytes into a byte-like string.
+ * @example
+ * hexToString(Uint8Array.from([ 11, 81, 203 ]));
+ * > "0b51cb"
+ * @param hex The array to convert.
+ * @returns The resulting byte-like string.
+ */
 export function hexToString (hex: Uint8Array): string {
 	return hex.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
 }
 
-export function stringToHexInt (string: string): number[] | null {
+/**
+ * Convert a byte-like string into an array of bytes.
+ * @example
+ * stringToHex("0b51cb");
+ * > [ 11, 81, 203 ]
+ * @param string The byte-like string to convert.
+ * @returns The resulting byte array.
+ */
+export function stringToHex (string: string): Uint8Array | null {
 	if (string.length < 2 || string.length % 2 !== 0) {
 		return null;
 	}
 	const splitString = string.match(/.{2}/g) as RegExpMatchArray;
-	return splitString.map((byte) => parseInt(byte, 16));
+	return Uint8Array.from(splitString.map((byte) => parseInt(byte, 16)));
 }
 
-export function textToHexInt (string: string): number[] {
-	const splitString = string.split('');
-	return splitString.map((char) => char.charCodeAt(0));
+/**
+ * Convert UTF-8 text into an array of bytes.
+ * @example
+ * textToHex("Tribes");
+ * > [ 54, 72, 69, 62, 65, 73 ]
+ * @param text The text to convert.
+ * @returns The resulting byte array.
+ */
+export function textToHex (text: string): Uint8Array {
+	const splitString = text.split('');
+	return Uint8Array.from(splitString.map((char) => char.charCodeAt(0)));
 }
 
 /**
