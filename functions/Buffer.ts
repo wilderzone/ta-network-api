@@ -134,10 +134,14 @@ export class Buffer {
 	parse (): EnumTree {
 		console.log('[Buffer] Parsing...');
 		let output = {} as EnumTree;
-		const startTime = performance.now();
+		const startTime = performance?.now();
 		const bytesProcessed = this._branch(output);
-		const endTime = performance.now();
-		console.log('[Buffer] Done parsing', bytesProcessed, 'bytes in', endTime - startTime, 'milliseconds.');
+		const endTime = performance?.now();
+		if (performance) {
+			console.log('[Buffer] Done parsing', bytesProcessed, 'bytes in', endTime - startTime, 'milliseconds.');
+		} else {
+			console.log('[Buffer] Done parsing', bytesProcessed, 'bytes.');
+		}
 		return { ...output } as EnumTree;
 	}
 
