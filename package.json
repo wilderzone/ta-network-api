@@ -4,7 +4,7 @@
   "description": "An open interface for fetching data from Tribes: Ascend servers.",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "npx ts-node tests/index.ts"
   },
   "repository": {
     "type": "git",
