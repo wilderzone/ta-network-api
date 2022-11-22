@@ -7,3 +7,6 @@ execSync('npx ts-node tests/hexToString.test.ts', {stdio: 'inherit'});
 
 console.log('Testing stringToHex...');
 execSync('npx ts-node tests/stringToHex.test.ts', {stdio: 'inherit'});
+
+console.log('Testing textToHex...');
+execSync('npx ts-node tests/textToHex.test.ts', {stdio: 'inherit'});
