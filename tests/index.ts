@@ -10,3 +10,6 @@ execSync('npx ts-node tests/stringToHex.test.ts', {stdio: 'inherit'});
 
 console.log('Testing textToHex...');
 execSync('npx ts-node tests/textToHex.test.ts', {stdio: 'inherit'});
+
+console.log('Testing invertEndianness...');
+execSync('npx ts-node tests/invertEndianness.test.ts', {stdio: 'inherit'});
