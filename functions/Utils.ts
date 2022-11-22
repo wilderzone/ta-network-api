@@ -32,7 +32,7 @@ export function stringToHex (string: string): Uint8Array | null {
  * Convert UTF-8 text into an array of bytes.
  * @example
  * textToHex("Tribes");
- * > [ 54, 72, 69, 62, 65, 73 ]
+ * > [ 84, 114, 105, 98, 101, 115 ]
  * @param text The text to convert.
  * @returns The resulting byte array.
  */
