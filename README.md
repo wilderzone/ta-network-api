@@ -1,5 +1,7 @@
 # <img src="./logo.svg" style="width: 3em;"> TA Network API
 
+![node tests](https://github.com/gigabyte5671/ta-network-api/actions/workflows/node-tests.yml/badge.svg?branch=main) [![npm version](https://badge.fury.io/js/ta-network-api.svg)](https://www.npmjs.com/package/ta-network-api)
+
 An open interface for fetching data from the Tribes: Ascend servers.
 
 Please see the [wiki](https://github.com/wilderzone/ta-network-api/wiki) for a detailed breakdown of TA's network protocol.
