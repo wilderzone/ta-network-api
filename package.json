@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "test"
+    "test": "npx ts-node tests/index.ts"
   },
   "repository": {
     "type": "git",
