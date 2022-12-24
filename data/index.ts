@@ -1,6 +1,6 @@
-export { generalEnumfields, serverListEnumfields, versionEnumFields } from './Enumfields';
-export { Items } from './Items';
-export { Maps } from './Maps';
-export { Regions } from './Regions';
-export { loginServers } from './Servers';
-export { WatchNowSections } from './WatchNow';
+export { generalEnumfields, serverListEnumfields, versionEnumFields } from './Enumfields.js';
+export { Items } from './Items.js';
+export { Maps } from './Maps.js';
+export { Regions } from './Regions.js';
+export { loginServers } from './Servers.js';
+export { WatchNowSections } from './WatchNow.js';

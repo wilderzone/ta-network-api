@@ -1,4 +1,4 @@
-import { LoginServer } from '../interfaces';
+import type { LoginServer } from '../interfaces/index.js';
 
 /**
  * All default login servers.

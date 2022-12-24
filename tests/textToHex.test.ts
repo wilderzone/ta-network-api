@@ -1,4 +1,4 @@
-import { textToHex } from '../functions/Utils';
+import { textToHex } from '../functions/Utils.js';
 
 const data = `!"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\`abcdefghijklmnopqrstuvwxyz{|}~ Tribes`;
 

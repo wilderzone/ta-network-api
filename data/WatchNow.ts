@@ -1,4 +1,4 @@
-import { WatchNowSection } from '../interfaces';
+import type { WatchNowSection } from '../interfaces/index.js';
 
 export const WatchNowSections = {
 	'1': {

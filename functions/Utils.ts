@@ -1,4 +1,4 @@
-import { Buffer } from './Buffer';
+import { Buffer } from './Buffer.js';
 
 /**
  * Convert a Uint8Array of bytes into a byte-like string.

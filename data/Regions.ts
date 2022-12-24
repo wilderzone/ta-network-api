@@ -1,4 +1,4 @@
-import { Region } from '../interfaces';
+import type { Region } from '../interfaces/index.js';
 
 export const Regions = {
 	'1': {

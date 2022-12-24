@@ -1,6 +1,6 @@
-import { generalEnumfields, Items, Maps, Regions, WatchNowSections } from '../data';
-import { EnumTree, Map } from '../interfaces';
-import { hexToString } from './Utils';
+import { generalEnumfields, Items, Maps, Regions, WatchNowSections } from '../data/index.js';
+import type { EnumTree, Map } from '../interfaces/index.js';
+import { hexToString } from './Utils.js';
 
 export interface DecoderOptions {
 	clean?: boolean

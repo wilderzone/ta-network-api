@@ -1,4 +1,4 @@
-import { Map } from '../interfaces';
+import type { Map } from '../interfaces/index.js';
 
 export const Maps = {
 	ctf_katabatic: {

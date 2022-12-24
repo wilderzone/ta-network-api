@@ -1,6 +1,6 @@
-export * from './interfaces';
-export { LoginServerConnection } from './functions/Main';
-export { Buffer } from './functions/Buffer';
-export { Decoder } from './functions/Decoder';
-export { GenericMessage, AuthenticationMessage, ServerListMessage, WatchNowMessage } from './functions/Messages';
-export { hexToString, stringToHex, textToHex, invertEndianness } from './functions/Utils';
+export * from './interfaces/index.js';
+export { LoginServerConnection } from './functions/Main.js';
+export { Buffer } from './functions/Buffer.js';
+export { Decoder } from './functions/Decoder.js';
+export { GenericMessage, AuthenticationMessage, ServerListMessage, WatchNowMessage } from './functions/Messages.js';
+export { hexToString, stringToHex, textToHex, invertEndianness } from './functions/Utils.js';

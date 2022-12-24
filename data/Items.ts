@@ -1,4 +1,4 @@
-import { Item } from '../interfaces';
+import type { Item } from '../interfaces/index.js';
 
 export const Items = {
 	// Light Impact Weapons.

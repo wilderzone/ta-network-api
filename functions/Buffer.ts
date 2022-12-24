@@ -1,7 +1,7 @@
 import { performance } from 'perf_hooks';
-import { generalEnumfields } from '../data';
-import { EnumTree } from '../interfaces';
-import { hexToString } from './Utils';
+import { generalEnumfields } from '../data/index.js';
+import type { EnumTree } from '../interfaces/index.js';
+import { hexToString } from './Utils.js';
 
 export class Buffer {
 	_buffer = new Uint8Array;

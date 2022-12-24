@@ -1,6 +1,6 @@
-import { HashedCredentials } from '../interfaces';
-import { stringToHex, textToHex } from './Utils';
-import { xorPasswordHash } from './Password';
+import type { HashedCredentials } from '../interfaces/index.js';
+import { stringToHex, textToHex } from './Utils.js';
+import { xorPasswordHash } from './Password.js';
 
 
 function compileMessage (chunks: (string | number[] | Uint8Array)[]): Uint8Array {

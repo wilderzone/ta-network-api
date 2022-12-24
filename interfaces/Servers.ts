@@ -1,4 +1,4 @@
-import { Player } from './Data'
+import { Player } from './Data.js'
 
 export interface LoginServer {
 	name: string,

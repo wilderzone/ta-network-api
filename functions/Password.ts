@@ -1,12 +1,12 @@
-import { hexToString } from './Utils';
+import { hexToString } from './Utils.js';
 
 /**
  * An iterator that aggregates elements from each of the iterables. If the iterables are of uneven length, missing values are filled-in with `fillValue`. Iteration continues until the longest iterable is exhausted.
- * 
+ *
  * From: https://docs.python.org/3/library/itertools.html#itertools.zip_longest
- * 
+ *
  * @param iterables An array of Uint8Arrays to zip.
- * @param fillValue Value to use in place of empty elements. 
+ * @param fillValue Value to use in place of empty elements.
  * @returns The aggregated (zipped) array.
  */
 function zipLongest(iterables: Uint8Array[], fillValue = 0): Uint8Array[] {
@@ -24,8 +24,8 @@ function zipLongest(iterables: Uint8Array[], fillValue = 0): Uint8Array[] {
 
 /**
  * Perform an XOR operation on a hashed password and a salt value.
- * @param passwordHash 
- * @param salt 
+ * @param passwordHash
+ * @param salt
  * @returns The XOR'ed value. Suitable for Login Server authentication.
  */
 export function xorPasswordHash (passwordHash: string, salt: Uint8Array): Uint8Array {
@@ -104,7 +104,7 @@ export function xorPasswordHash (passwordHash: string, salt: Uint8Array): Uint8A
 /**
  * A substitute for the game's built-in `DecryptPassword` function.
  * @param password An encrypted password string, as found in `TribesUser.ini`.
- * @returns 
+ * @returns
  */
 export function DecryptPassword (password: string) {
 	const stringArray = password.match(/.{3}/g);

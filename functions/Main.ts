@@ -1,10 +1,10 @@
 import * as net from 'net';
-import { loginServers } from '../data';
-import { LoginServer, HiRezAccount, HashedCredentials } from '../interfaces';
-import { GenericMessage, AuthenticationMessage } from './Messages';
-import { Buffer } from './Buffer';
-import { DecoderOptions, Decoder } from './Decoder';
-import { verifyPacketLength } from './Utils';
+import { loginServers } from '../data/index.js';
+import type { LoginServer, HiRezAccount, HashedCredentials } from '../interfaces/index.js';
+import { GenericMessage, AuthenticationMessage } from './Messages.js';
+import { Buffer } from './Buffer.js';
+import { DecoderOptions, Decoder } from './Decoder.js';
+import { verifyPacketLength } from './Utils.js';
 
 interface LoginServerConnectionCallbackMap {
 	connect: Function[],

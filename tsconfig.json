@@ -1,8 +1,8 @@
 {
 	"compilerOptions": {
-		"module": "ESNext",
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
 		"target": "ESNext",
-		"moduleResolution": "node",
 		"declaration": true,
 		"declarationMap": true,
 		"sourceMap": true,
