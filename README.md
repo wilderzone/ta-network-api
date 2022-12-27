@@ -11,7 +11,7 @@ Please see the [wiki](https://github.com/wilderzone/ta-network-api/wiki) for a d
 
 API includes functionality for:
 - [x] Fetching basic player data (clan tag, XP, Gold, etc).
-- [x] Fetching server status data:
+- [x] Fetching status data:
   - [x] Players online.
   - [x] Servers online.
 - [ ] _(Coming soon)_ Fetching player statistics (midairs, caps, accolades, etc).
@@ -45,7 +45,7 @@ let credentials = {
 let options = {
 	authenticate: true,		// Tells the connection to attempt to automatically authenticate.
 	decoder: {				// These options are passed through to the data Decoder.
-		clean: true			// Tells the Decoder to produce a clean output.
+		clean: true			// Tells the Decoder to produce a clean output (remove empty fields).
 	}
 };
 
