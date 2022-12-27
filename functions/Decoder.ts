@@ -104,6 +104,16 @@ function parseFieldValue (value: number[], type?: string): any {
 		return value[0] === 1;
 	}
 
+	// Occasionally, Boolean values are also represented by single string characters. We refer to these as "string-booleans".
+	// [ 6E ] = "n" = false, [ 79 ] = "y" = true.
+	if (type === 'StringBoolean') {
+		if (value.length !== 1 || (value[0] !== 0x6E && value[0] !== 0x79)) {
+			console.warn('[Decoder] Error decoding string-boolean (', value, '). Enumfield may be incorrectly typed.');
+			return value;
+		}
+		return value[0] === 0x79;
+	}
+
 	// Integers are represented by 4 bytes in reverse order.
 	// These bytes must be swapped before they can be read as a normal integer:
 	// [ 2A 38 59 01 ]  =>  [ 01 59 38 2A ]

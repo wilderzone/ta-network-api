@@ -1,6 +1,6 @@
 interface EnumField {
 	length: number | 'Sized' | 'EnumBlockArray'| 'ArrayOfEnumBlockArrays',
-	type?: 'Boolean' | 'Integer' | 'IP' | 'ItemID' | 'MapID' | 'ServerList' | 'String' | 'Version' | 'Region' | 'WatchNowSection',
+	type?: 'Boolean' | 'StringBoolean' | 'Integer' | 'IP' | 'ItemID' | 'MapID' | 'ServerList' | 'String' | 'Version' | 'Region' | 'WatchNowSection',
 	name?: string | undefined
 }
 
@@ -18,19 +18,19 @@ export const generalEnumfields = {
 	'06DE': {length: 'Sized', type: 'String', name: 'Clan Tag'},
 	'06E9': {length: 'Sized', name: undefined},
 	'0705': {length: 'Sized', name: 'Player Name of Kicker'},
-	'0013': {length: 'Sized', name: undefined},
+	'0013': {length: 'Sized', type: 'StringBoolean', name: undefined},
 	'0082': {length: 'Sized', name: undefined},
 	'00A2': {length: 'Sized', name: undefined},
 	// '00A3': {length: 'Sized', name: undefined}, // The length of this field may be incorrect, needs verification.
 	'00A3': {length: 6, name: undefined},
-	'00AA': {length: 'Sized', name: undefined},
+	'00AA': {length: 'Sized', type: 'StringBoolean', name: undefined},
 	'00AB': {length: 'Sized', name: undefined},
-	'01A6': {length: 'Sized', name: undefined},
+	'01A6': {length: 'Sized', type: 'StringBoolean', name: undefined},
 	'01C4': {length: 'Sized', name: undefined},
 	'020C': {length: 'Sized', name: undefined},
 	'021A': {length: 'Sized', type: 'String', name: 'Game Mode'},
 	'026F': {length: 'Sized', name: 'Purchase Name'},
-	'02AF': {length: 'Sized', name: undefined},
+	'02AF': {length: 'Sized', type: 'StringBoolean', name: undefined},
 	'02B1': {length: 'Sized', type: 'String', name: 'Internal Map Name'},
 	'02B6': {length: 'Sized', type: 'String', name: 'Map Name'},
 	'02E6': {length: 'Sized', type: 'String', name: 'Message Text'},
