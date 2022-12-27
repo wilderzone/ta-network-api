@@ -23,4 +23,4 @@ if (string !== expectedResult) {
 	throw new Error('Output value is incorrect.');
 }
 
-console.log(`Passed in ${endTime - startTime}ms.`);
+console.log(`Passed in ${(endTime - startTime).toFixed(3)}ms.`);
