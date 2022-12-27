@@ -1,6 +1,7 @@
 /.github
 /dumps
 /tests
+/dist/tests
 .editorconfig
 test.ts
 test.js
