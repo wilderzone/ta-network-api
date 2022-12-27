@@ -115,7 +115,7 @@ Request a list of the top 30 online game servers and output the results to a JSO
 // Import TA Network API classes so that we can connect to a login server, request a list of game servers, and process the returned data.
 import { LoginServerConnection, ServerListMessage, EnumTree } from 'ta-network-api';
 // Import Node's built-in "fs" module for interacting with the file system.
-import fs from 'fs';
+import * as fs from 'fs';
 
 // Your account credentials for the login server.
 let credentials = {
