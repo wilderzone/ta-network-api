@@ -36,6 +36,7 @@ export const generalEnumfields = {
 	'02E6': {length: 'Sized', type: 'String', name: 'Message Text'},
 	'02FE': {length: 'Sized', type: 'String', name: 'Sender Name/Clan Tag to Purchase'},
 	'0300': {length: 'Sized', type: 'String', name: 'Map + Gamemode, Server or Region Name'},
+	'01A4': {length: 'Sized', type: 'String', name: 'MOTD / Report Text'},
 	'0261': {length: 'Sized', name: 'Integer-Valued Menu Option'},
 	'0669': {length: 'Sized', name: 'Promotion Code'},
 	'0000': {length: 0, name: undefined},
@@ -291,7 +292,6 @@ export const generalEnumfields = {
 	'018C': {length: 'EnumBlockArray', name: '/votekick Command'},
 	'019A': {length: 'EnumBlockArray', name: '(something to do with match end)'},
 	'01A2': {length: 'EnumBlockArray', name: '(something to do with setting up a custom server)'},
-	'01A4': {length: 'EnumBlockArray', name: '(something to do with setting up a custom server)'},
 	'01A5': {length: 'EnumBlockArray', name: '(something to do with setting up a custom server)'},
 	'01AB': {length: 'EnumBlockArray', name: '(something to do with setting up a custom server)'},
 	'01B5': {length: 'EnumBlockArray', name: 'Watch-Now Menu Content'},
@@ -330,5 +330,5 @@ const duplicates = {
 	'006D': {length: 4, name: undefined},
 	'006F': {length: 1, name: undefined},
 	'01BC': {length: 'Sized', name: undefined},
-	'01A4': {length: 'Sized', type: 'String', name: 'MOTD / Report Text'},
+	'01A4': {length: 'EnumBlockArray', name: '(something to do with setting up a custom server)'},
 };
