@@ -1,4 +1,4 @@
-import { generalEnumfields, Items, Maps, Regions, WatchNowSections } from '../data/index.js';
+import { generalEnumfields, IngameMessageTypes, Items, Maps, Regions, WatchNowSections } from '../data/index.js';
 import type { EnumTree, Map } from '../interfaces/index.js';
 import { hexToString } from './Utils.js';
 
@@ -218,6 +218,20 @@ function parseFieldValue (value: number[], type?: string): any {
 		const id = parseInt(hexToString(new Uint8Array(value.reverse())), 16).toString(); // Decode ID as integer.
 		if (id in WatchNowSections) {
 			return WatchNowSections[id];
+		}
+		return parseInt(id);
+	}
+
+	// In-game Message types are represented by 4 byte integers.
+	// A map of message types is available in the `data` module.
+	if (type === 'IGMT') {
+		if (value.length !== 4) {
+			console.warn('[Decoder] Error decoding In-game Message Type (', value, '). Enumfield may be incorrectly typed.');
+			return value;
+		}
+		const id = parseInt(hexToString(new Uint8Array(value.reverse())), 16).toString(); // Decode ID as integer.
+		if (id in IngameMessageTypes) {
+			return IngameMessageTypes[id];
 		}
 		return parseInt(id);
 	}

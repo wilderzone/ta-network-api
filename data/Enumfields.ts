@@ -1,6 +1,6 @@
 interface EnumField {
 	length: number | 'Sized' | 'EnumBlockArray'| 'ArrayOfEnumBlockArrays',
-	type?: 'Boolean' | 'StringBoolean' | 'Integer' | 'IP' | 'ItemID' | 'MapID' | 'ServerList' | 'String' | 'Version' | 'Region' | 'WatchNowSection',
+	type?: 'Boolean' | 'StringBoolean' | 'Integer' | 'IP' | 'ItemID' | 'MapID' | 'ServerList' | 'String' | 'Version' | 'Region' | 'WatchNowSection' | 'IGMT',
 	name?: string | undefined
 }
 
@@ -67,7 +67,7 @@ export const generalEnumfields = {
 	'008D': {length: 4, name: undefined},
 	'0095': {length: 4, name: undefined},
 	'009D': {length: 4, name: undefined},
-	'009E': {length: 4, name: 'Message Type (2=public, 3=team, 6=private)'},
+	'009E': {length: 4, type: 'IGMT', name: 'Message Type'}, // In-game Message Type.
 	'00BA': {length: 4, name: undefined},
 	'00BF': {length: 4, name: undefined},
 	'00C3': {length: 4, name: undefined},
