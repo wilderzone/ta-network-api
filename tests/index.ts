@@ -1,5 +1,11 @@
 import { execSync } from 'child_process';
 
+// Buffer:
+
+console.log('Testing Buffer.parse...');
+execSync('node dist/tests/BufferParse.test.js', {stdio: 'inherit'});
+
+
 // Utility functions:
 
 console.log('Testing hexToString...');
