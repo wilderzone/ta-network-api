@@ -59,7 +59,6 @@ export function invertEndianness (array: Uint8Array): Uint8Array {
  */
 export function verifyPacketLength (packet: Uint8Array): boolean {
 	const length = parseInt(hexToString(new Uint8Array([packet[1], packet[0]])), 16);
-	console.log('[verifyPacketLength] length:', length, `(${length + 2})`);
 	if (packet.length === length + 2) {
 		return true;
 	}

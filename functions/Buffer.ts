@@ -3,14 +3,20 @@ import { generalEnumfields } from '../data/index.js';
 import type { EnumTree } from '../interfaces/index.js';
 import { hexToString } from './Utils.js';
 
+export interface BufferOptions {
+	debug?: boolean
+}
+
 export class Buffer {
 	_buffer = new Uint8Array;
+	_options = {} as BufferOptions;
 	_bytesReadSinceCreation = 0;
 	_lastByteRead = undefined as Uint8Array | undefined;
 	_currentByteRead = undefined as Uint8Array | undefined;
 
-	constructor (buffer = new Uint8Array) {
+	constructor (buffer = new Uint8Array, options?: BufferOptions) {
 		this._buffer = buffer;
+		this._options = options ?? {} as BufferOptions;
 	}
 
 	/**
@@ -132,15 +138,15 @@ export class Buffer {
 	 * @returns An Enum Tree.
 	 */
 	parse (): EnumTree {
-		console.log('[Buffer] Parsing...');
+		if (this._options.debug) console.log('[Buffer] Parsing...');
 		let output = {} as EnumTree;
 		const startTime = performance?.now();
 		const bytesProcessed = this._branch(output);
 		const endTime = performance?.now();
 		if (performance) {
-			console.log('[Buffer] Done parsing', bytesProcessed, 'bytes in', endTime - startTime, 'milliseconds.');
+			if (this._options.debug) console.log('[Buffer] Done parsing', bytesProcessed, 'bytes in', endTime - startTime, 'milliseconds.');
 		} else {
-			console.log('[Buffer] Done parsing', bytesProcessed, 'bytes.');
+			if (this._options.debug) console.log('[Buffer] Done parsing', bytesProcessed, 'bytes.');
 		}
 		return { ...output } as EnumTree;
 	}
@@ -176,8 +182,7 @@ export class Buffer {
 
 			// Prune the branch if the enumerator doesn't exist, since this likely indicates that we have lost track of our place in the buffer.
 			if (!(enumerator in generalEnumfields)) {
-				console.warn('[Buffer] Enumerator', enumerator, 'was not found at byte #', this.bytesReadSinceCreation, '.');
-				console.log(hexToString(this.peek(64)).toUpperCase());
+				console.warn('[Buffer] Enumerator', enumerator, 'was not found at byte #', this.bytesReadSinceCreation, '.\n', hexToString(this.peek(64)).toUpperCase());
 				/* this.invertEndianness(2);
 				enumerator = hexToString(this.read(2)).toUpperCase();
 				bytesProcessed += 2; */
@@ -191,7 +196,7 @@ export class Buffer {
 				this.invertEndianness(2);
 				const fieldLength = parseInt(hexToString(this.read(2)), 16);
 				bytesProcessed += 2;
-				console.log('[Buffer] ArrayOfEnumBlockArrays encountered was:', enumerator, '. With length:', fieldLength);
+				if (this._options.debug) console.log('[Buffer] ArrayOfEnumBlockArrays encountered was:', enumerator, '. With length:', fieldLength);
 				let arraysProcessed = 0;
 				while (arraysProcessed < fieldLength) { // TODO: This loop does not check for buffer errors.
 					this.invertEndianness(2);
@@ -210,7 +215,7 @@ export class Buffer {
 				this.invertEndianness(2);
 				const arrayLength = parseInt(hexToString(this.read(2)), 16);
 				bytesProcessed += 2;
-				console.log('[Buffer] EnumBlockArray encountered was:', enumerator, '. With length:', arrayLength);
+				if (this._options.debug) console.log('[Buffer] EnumBlockArray encountered was:', enumerator, '. With length:', arrayLength);
 				bytesProcessed += this._branch(parent[enumerator], arrayLength);
 			}
 

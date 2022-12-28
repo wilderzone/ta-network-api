@@ -3,7 +3,8 @@ import type { EnumTree, Map } from '../interfaces/index.js';
 import { hexToString } from './Utils.js';
 
 export interface DecoderOptions {
-	clean?: boolean
+	clean?: boolean,
+	debug?: boolean
 }
 
 export class Decoder {
@@ -14,7 +15,7 @@ export class Decoder {
 
 	constructor (tree: EnumTree, options?: DecoderOptions) {
 		this._tree = tree;
-		this._options = options ?? {};
+		this._options = options ?? {} as DecoderOptions;
 	}
 
 	/**
@@ -22,9 +23,9 @@ export class Decoder {
 	 * @returns A human-readable Enum Tree.
 	 */
 	decode () {
-		console.log('[Decoder] Decoding tree...');
+		if (this._options.debug) console.log('[Decoder] Decoding tree...');
 		this._enumfieldsParsed = recurse(this._output, this._tree, this._options);
-		console.log('[Decoder] Parsed', this._enumfieldsParsed, 'enumfields.');
+		if (this._options.debug) console.log('[Decoder] Parsed', this._enumfieldsParsed, 'enumfields.');
 		return this._output;
 	}
 

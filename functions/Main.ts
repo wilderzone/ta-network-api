@@ -2,7 +2,7 @@ import * as net from 'net';
 import { loginServers } from '../data/index.js';
 import type { LoginServer, HiRezAccount, HashedCredentials } from '../interfaces/index.js';
 import { GenericMessage, AuthenticationMessage } from './Messages.js';
-import { Buffer } from './Buffer.js';
+import { BufferOptions, Buffer } from './Buffer.js';
 import { DecoderOptions, Decoder } from './Decoder.js';
 import { verifyPacketLength } from './Utils.js';
 
@@ -19,6 +19,8 @@ interface LoginServerConnectionMessage {
 
 interface LoginServerConnectionOptions {
 	authenticate?: boolean,
+	buffer?: BufferOptions,
+	debug?: boolean,
 	decoder?: DecoderOptions
 }
 
@@ -34,7 +36,7 @@ export class LoginServerConnection {
 	};
 	_socket = {} as net.Socket;
 	_isReceivingStream = false;
-	_streamBuffer = new Buffer();
+	_streamBuffer = new Buffer(new Uint8Array, this._options.buffer);
 	_timeToIdle = 3000;
 	_idleTimers = [] as NodeJS.Timeout[];
 	_messageQueue = [] as LoginServerConnectionMessage[];
@@ -75,7 +77,7 @@ export class LoginServerConnection {
 	 * Establish a live connection to the Login Server.
 	 */
 	async connect () {
-		console.log('[LSC] Connecting to login server on', this._serverInstance.ip, '...');
+		if (this._options.debug) console.log('[LSC] Connecting to login server on', this._serverInstance.ip, '...');
 
 		this._socket = net.connect(
 			this._serverInstance.port,
@@ -88,7 +90,7 @@ export class LoginServerConnection {
 
 		// Set up event listeners.
 		this._socket.on('connect', () => {
-			console.log('[LSC] Connected.');
+			if (this._options.debug) console.log('[LSC] Connected.');
 			this._isConnected = true;
 			this._idleTimers.forEach((timer) => { clearTimeout(timer); });
 			this._idleTimers.push(setTimeout(() => { this._idle(); }, this._timeToIdle));
@@ -102,7 +104,7 @@ export class LoginServerConnection {
 		});
 
 		this._socket.on('data', (data) => {
-			console.log('[LSC] Data:', data);
+			if (this._options.debug) console.log('[LSC] Data:', data);
 			const array = Uint8Array.from(data);
 
 			this._idleTimers.forEach((timer) => { clearTimeout(timer); });
@@ -110,7 +112,7 @@ export class LoginServerConnection {
 
 			// Process an existing packet stream.
 			if (this._isReceivingStream) {
-				console.log('[LSC] Received stream packet.')
+				if (this._options.debug) console.log('[LSC] Received stream packet.')
 				// Append all received packets to the same Buffer.
 				this._streamBuffer.append(array);
 				// TODO: Figure out a definitive way to detect when a stream has ended.
@@ -119,7 +121,7 @@ export class LoginServerConnection {
 			// Detect the start of a packet stream.
 			else if (array[0] === 0 && array[1] === 0) { // data[00 00 ...] Indicates the start of a packet stream.
 				this._isReceivingStream = true;
-				console.log('[LSC] Packet stream started.');
+				if (this._options.debug) console.log('[LSC] Packet stream started.');
 				this._streamBuffer.clear();
 				this._streamBuffer.append(array);
 				this._streamBuffer.advance(2);
@@ -131,14 +133,14 @@ export class LoginServerConnection {
 					console.warn('Length of received data is invalid. Packet may be malformed.');
 					return;
 				}
-				const buffer = new Buffer(array);
+				const buffer = new Buffer(array, this._options.buffer);
 				buffer.advance(2);
 				const enumTree = buffer.parse();
-				console.log('[LSC] Parsed:', enumTree);
+				if (this._options.debug) console.log('[LSC] Parsed:', enumTree);
 
 				const decoder = new Decoder(enumTree, this._options.decoder ?? {});
 				const decodedData = decoder.decode();
-				console.log('[LSC] Decoded:', decodedData);
+				if (this._options.debug) console.log('[LSC] Decoded:', decodedData);
 
 				if (!this._options.authenticate || (this._authProgress.initial && this._authProgress.confirmation)) {
 					this._callbacks.receive.forEach((callback) => { callback(decodedData); });
@@ -152,18 +154,18 @@ export class LoginServerConnection {
 						const ackMessage = new GenericMessage(['12003a0001009e04610b04010000000000000000']);
 						this._socket.write(ackMessage.buffer, 'hex', () => {
 							this._authProgress.initial = true;
-							console.log('[AUTH] Acknowledgement message sent.');
+							if (this._options.debug) console.log('[AUTH] Acknowledgement message sent.');
 						});
 					}
 
 					if ('Auth Info Confirmation' in decodedData && this._credentials) {
 						this._credentials.salt = new Uint8Array(decodedData['Auth Info Confirmation']['Salt']);
 						const authMessage = new AuthenticationMessage({...this._credentials})
-						console.log('[AUTH] Sending credentials...');
-						console.log(authMessage);
+						if (this._options.debug) console.log('[AUTH] Sending credentials...');
+						if (this._options.debug) console.log(authMessage);
 						this._socket.write(authMessage.buffer, 'hex', () => {
 							this._authProgress.confirmation = true;
-							console.log('[AUTH] Credentials sent.');
+							if (this._options.debug) console.log('[AUTH] Credentials sent.');
 						});
 					}
 				}
@@ -173,7 +175,7 @@ export class LoginServerConnection {
 		// Start connection sequence.
 		const initialMessage = new GenericMessage(['1000bc0102009e04610b040189040c000000']);
 		this._socket.write(initialMessage.buffer, 'hex', () => {
-			console.log('[LSC] Connection request sent.');
+			if (this._options.debug) console.log('[LSC] Connection request sent.');
 		});
 	}
 
@@ -194,7 +196,7 @@ export class LoginServerConnection {
 	 */
 	async send (message: LoginServerConnectionMessage) {
 		if (!this._isConnected) {
-			throw new Error('Please connect to a login server first.');
+			throw new Error('Please connect to a login server before sending a message.');
 		}
 		// Add the requested message to the queue.
 		this._messageQueue.push(message);
@@ -216,7 +218,7 @@ export class LoginServerConnection {
 		if (message) {
 			this._messageId++;
 			this._socket.write(message.buffer, 'hex', () => {
-				console.log(`[LSC] Sent message ${this._messageId}.`);
+				if (this._options.debug) console.log(`[LSC] Sent message ${this._messageId}.`);
 			});
 		}
 	}
@@ -224,15 +226,15 @@ export class LoginServerConnection {
 	_flushStreamBuffer () {
 		// Flush the stream buffer.
 		if (this._streamBuffer.length > 0) {
-			console.log('[LSC] Flushing stream buffer...');
+			if (this._options.debug) console.log('[LSC] Flushing stream buffer...');
 			const enumTree = this._streamBuffer.parse();
-			console.log('[LSC] Parsed:', enumTree);
+			if (this._options.debug) console.log('[LSC] Parsed:', enumTree);
 
 			const decoder = new Decoder(enumTree, this._options.decoder ?? {});
 			const decodedData = decoder.decode();
-			console.log('[LSC] Decoded:', decodedData);
+			if (this._options.debug) console.log('[LSC] Decoded:', decodedData);
 
-			console.log('[LSC] End of stream data.');
+			if (this._options.debug) console.log('[LSC] End of stream data.');
 
 			this._callbacks.receive.forEach((callback) => { callback(decodedData); });
 		}
