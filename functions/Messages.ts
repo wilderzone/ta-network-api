@@ -52,6 +52,22 @@ export class ServerListMessage {
 	}
 }
 
+export class ServerInfoMessage {
+	buffer = {} as Uint8Array;
+
+	constructor (serverId: number) {
+		const idBytes = serverId.toString(16).padStart(8, '0');
+		this.buffer = compileMessage([
+			'1800c6010200c702',
+			idBytes.substring(6, 8),
+			idBytes.substring(4, 6),
+			idBytes.substring(2, 4),
+			idBytes.substring(0, 2),
+			'2802020000003d00000029000000'
+		]);
+	}
+}
+
 export class WatchNowMessage {
 	buffer = {} as Uint8Array;
 
