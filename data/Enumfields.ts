@@ -140,7 +140,7 @@ export const generalEnumfields = {
 	'037F': {length: 4, name: undefined},
 	'0380': {length: 4, name: undefined},
 	'0385': {length: 4, name: undefined},
-	'0398': {length: 4, name: undefined},
+	'0398': {length: 4, type: 'Integer', name: 'Class ID'}, // Light: 1683 or 101330, Medium: 1693 or 101342, Heavy: 1692 or 101341
 	'03A4': {length: 4, name: undefined},
 	'03B4': {length: 4, name: undefined},
 	'03CE': {length: 4, name: undefined},
