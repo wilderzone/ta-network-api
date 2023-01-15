@@ -137,7 +137,7 @@ export class Buffer {
 	 * Recursively parse the stored buffer into an Enum Tree.
 	 * @returns An Enum Tree.
 	 */
-	parse (): EnumTree {
+	async parse (): Promise<EnumTree> {
 		if (this.#options.debug) console.log('[Buffer] Parsing...');
 		let output = {} as EnumTree;
 		const startTime = performance?.now();
@@ -148,7 +148,7 @@ export class Buffer {
 		} else {
 			if (this.#options.debug) console.log('[Buffer] Done parsing', bytesProcessed, 'bytes.');
 		}
-		return { ...output } as EnumTree;
+		return output as EnumTree;
 	}
 
 	/**
