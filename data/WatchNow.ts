@@ -1,19 +1,9 @@
 import type { WatchNowSection } from '../interfaces/index.js';
 
 export const WatchNowSections = {
-	'1': {
-		name: 'HiRez News'
-	},
-	'2': {
-		name: 'Twitch'
-	},
-	'3': {
-		name: 'Training'
-	},
-	'4': {
-		name: 'Community'
-	},
-	'5': {
-		name: 'Ticker'
-	}
+	'1': 'HiRez News',
+	'2': 'Twitch',
+	'3': 'Training',
+	'4': 'Community',
+	'5': 'Ticker'
 } as { [key: string]: WatchNowSection };
