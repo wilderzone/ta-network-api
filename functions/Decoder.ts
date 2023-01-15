@@ -1,5 +1,5 @@
-import { generalEnumfields, IngameMessageTypes, Items, Maps, Regions, WatchNowSections } from '../data/index.js';
-import type { EnumTree, Map } from '../interfaces/index.js';
+import { generalEnumfields, IngameMessageTypes, Items, Maps, Regions, Teams, WatchNowSections } from '../data/index.js';
+import type { EnumTree, Map, Team } from '../interfaces/index.js';
 import { hexToString } from './Utils.js';
 
 export interface DecoderOptions {
@@ -205,6 +205,15 @@ export class Decoder {
 			return output ?? id;
 		}
 
+		// Team IDs are represented by 4 byte integers.
+		// A map of team IDs to team data is available in the `data` module.
+		if (type === 'TeamID') {
+			if (value.length !== 4) {
+				if (this.#options.debug) console.warn('[Decoder] Error decoding Map ID (', value, '). Enumfield may be incorrectly typed.');
+				return value;
+			}
+			const id = parseInt(hexToString(new Uint8Array(value.reverse())), 16); // Decode ID as integer.
+			return Teams[id] ?? id;
 		}
 
 		// Region IDs are represented by 4 byte integers.

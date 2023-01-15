@@ -5,4 +5,5 @@ export type { Item } from './Items.js';
 export type { Map } from './Maps.js';
 export type { Region } from './Regions.js';
 export type { LoginServer, GameServer } from './Servers.js';
+export type { Team } from './Teams.js';
 export type { WatchNowSection } from './WatchNow.js';

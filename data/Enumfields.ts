@@ -154,7 +154,7 @@ export const generalEnumfields = {
 	'042E': {length: 4, name: undefined},
 	'042F': {length: 4, name: undefined},
 	'0448': {length: 4, type: 'Region', name: 'Region'},
-	'0452': {length: 4, name: 'Team ID'},
+	'0452': {length: 4, type: 'TeamID', name: 'Team ID'},
 	'0457': {length: 4, name: undefined},
 	'0458': {length: 4, name: undefined},
 	'0472': {length: 4, name: undefined},
