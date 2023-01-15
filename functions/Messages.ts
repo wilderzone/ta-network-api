@@ -1,5 +1,5 @@
 import type { HashedCredentials } from '../interfaces/index.js';
-import { stringToHex, textToHex } from './Utils.js';
+import { stringToHex, textToHex, invertEndianness } from './Utils.js';
 import { xorPasswordHash } from './Password.js';
 
 
@@ -74,5 +74,28 @@ export class WatchNowMessage {
 
 	constructor () {
 		this.buffer = compileMessage(['0c00b50100002d00000027000000']);
+	}
+}
+
+export class DirectMessageMessage {
+	buffer: Uint8Array;
+
+	constructor (recipient: string, content: string) {
+		const message = compileMessage([
+			'700004009e00',
+			'06000000', // Message type.
+			'e602',
+			invertEndianness(stringToHex(content.length.toString(16).padStart(4, '0'))), // Message content length.
+			textToHex(content), // Message content.
+			'4a03',
+			invertEndianness(stringToHex(recipient.length.toString(16).padStart(4, '0'))), // Recipient name length.
+			textToHex(recipient), // Recipient name.
+			'740500',
+			'2400000088010000'
+		]);
+		this.buffer = compileMessage([
+			invertEndianness(stringToHex(message.length.toString(16).padStart(4, '0'))), // Packet length.
+			message
+		]);
 	}
 }
