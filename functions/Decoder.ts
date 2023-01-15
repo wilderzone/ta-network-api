@@ -8,14 +8,14 @@ export interface DecoderOptions {
 }
 
 export class Decoder {
-	_tree = {} as EnumTree;
-	_enumfieldsParsed = 0;
-	_output = {} as { [key: string]: any };
-	_options = {} as DecoderOptions;
+	#tree = {} as EnumTree;
+	#enumfieldsParsed = 0;
+	#output = {} as { [key: string]: any };
+	#options = {} as DecoderOptions;
 
 	constructor (tree: EnumTree, options?: DecoderOptions) {
-		this._tree = tree;
-		this._options = options ?? {} as DecoderOptions;
+		this.#tree = tree;
+		this.#options = options ?? {} as DecoderOptions;
 	}
 
 	/**
@@ -23,10 +23,10 @@ export class Decoder {
 	 * @returns A human-readable Enum Tree.
 	 */
 	decode () {
-		if (this._options.debug) console.log('[Decoder] Decoding tree...');
 		this._enumfieldsParsed = recurse(this._output, this._tree, this._options);
-		if (this._options.debug) console.log('[Decoder] Parsed', this._enumfieldsParsed, 'enumfields.');
-		return this._output;
+		if (this.#options.debug) console.log('[Decoder] Decoding tree...');
+		if (this.#options.debug) console.log('[Decoder] Parsed', this.#enumfieldsParsed, 'enumfields.');
+		return this.#output;
 	}
 
 	/**
@@ -35,8 +35,8 @@ export class Decoder {
 	 * @param type The type of enumfield to attempt to decode as.
 	 * @returns The decoded value. (Or the original value if decoding was not possible).
 	 */
-	static decodeFieldValue (value: Uint8Array, type: string) {
-		return parseFieldValue([...value], type);
+	decodeFieldValue (value: Uint8Array, type: string) {
+		return this.#parseFieldValue([...value], type);
 	}
 }
 

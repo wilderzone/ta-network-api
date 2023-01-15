@@ -8,48 +8,48 @@ export interface BufferOptions {
 }
 
 export class Buffer {
-	_buffer = new Uint8Array;
-	_options = {} as BufferOptions;
-	_bytesReadSinceCreation = 0;
-	_lastByteRead = undefined as Uint8Array | undefined;
-	_currentByteRead = undefined as Uint8Array | undefined;
+	#buffer = new Uint8Array;
+	#options = {} as BufferOptions;
+	#bytesReadSinceCreation = 0;
+	#lastByteRead = undefined as Uint8Array | undefined;
+	#currentByteRead = undefined as Uint8Array | undefined;
 
 	constructor (buffer = new Uint8Array, options?: BufferOptions) {
-		this._buffer = buffer;
-		this._options = options ?? {} as BufferOptions;
+		this.#buffer = buffer;
+		this.#options = options ?? {} as BufferOptions;
 	}
 
 	/**
 	 * The length of the stored buffer.
 	 */
 	get length (): number {
-		return this._buffer.length;
+		return this.#buffer.length;
 	}
 
 	/**
 	 * Boolean indicating whether the length of the stored buffer is even (`true`) or odd (`false`).
 	 */
 	get lengthIsEven (): boolean {
-		return this._buffer.length % 2 === 0;
+		return this.#buffer.length % 2 === 0;
 	}
 
 	/**
 	 * The number of bytes read since the creation of the buffer. (Does not include peeked bytes).
 	 */
 	get bytesReadSinceCreation (): number {
-		return this._bytesReadSinceCreation;
+		return this.#bytesReadSinceCreation;
 	}
 
 	/**
 	 * The last byte that was read by the buffer.
 	 */
 	get lastByteRead (): Uint8Array | undefined {
-		return this._lastByteRead;
+		return this.#lastByteRead;
 	}
 
-	_updateLastReadByte (currentByte: Uint8Array) {
-		this._lastByteRead = this._currentByteRead;
-		this._currentByteRead = currentByte;
+	#updateLastReadByte (currentByte: Uint8Array) {
+		this.#lastByteRead = this.#currentByteRead;
+		this.#currentByteRead = currentByte;
 	}
 
 	/**
@@ -58,7 +58,7 @@ export class Buffer {
 	 * @returns A new Uint8Array containing the peeked bytes.
 	 */
 	peek (bytes: number): Uint8Array {
-		let peekedBytes = this._buffer.subarray(0, bytes);
+		let peekedBytes = this.#buffer.subarray(0, bytes);
 		return peekedBytes;
 	}
 
@@ -68,10 +68,10 @@ export class Buffer {
 	 * @returns A new Uint8Array containing the read bytes.
 	 */
 	read (bytes: number): Uint8Array {
-		let readBytes = this._buffer.subarray(0, bytes);
-		this._buffer = this._buffer.subarray(bytes);
-		this._bytesReadSinceCreation += bytes;
-		this._updateLastReadByte(readBytes.subarray(readBytes.length - 2, readBytes.length));
+		let readBytes = this.#buffer.subarray(0, bytes);
+		this.#buffer = this.#buffer.subarray(bytes);
+		this.#bytesReadSinceCreation += bytes;
+		this.#updateLastReadByte(readBytes.subarray(readBytes.length - 2, readBytes.length));
 		return readBytes;
 	}
 
@@ -80,9 +80,9 @@ export class Buffer {
 	 * @param bytes The number of bytes to advance the buffer by.
 	 */
 	advance (bytes: number) {
-		this._updateLastReadByte(this._buffer.subarray(bytes - 2, bytes));
-		this._buffer = this._buffer.subarray(bytes);
-		this._bytesReadSinceCreation += bytes;
+		this.#updateLastReadByte(this.#buffer.subarray(bytes - 2, bytes));
+		this.#buffer = this.#buffer.subarray(bytes);
+		this.#bytesReadSinceCreation += bytes;
 	}
 
 	/**
@@ -90,7 +90,7 @@ export class Buffer {
 	 * @param buffer The new buffer to be appended.
 	 */
 	append (buffer: Uint8Array) {
-		this._buffer = new Uint8Array([...this._buffer, ...buffer]);
+		this.#buffer = new Uint8Array([...this.#buffer, ...buffer]);
 	}
 
 	/**
@@ -98,15 +98,15 @@ export class Buffer {
 	 * @returns The cloned buffer.
 	 */
 	clone (): Uint8Array {
-		return Uint8Array.from(this._buffer);
+		return Uint8Array.from(this.#buffer);
 	}
 
 	/**
 	 * Clears the contents of the stored buffer.
 	 */
 	clear () {
-		this._buffer = new Uint8Array;
-		this._bytesReadSinceCreation = 0;
+		this.#buffer = new Uint8Array;
+		this.#bytesReadSinceCreation = 0;
 	}
 
 	/**
@@ -125,12 +125,12 @@ export class Buffer {
 		}
 		// Invert the endianness of the buffer.
 		for (let i = 0; i < (bytes ?? this.length); i += 2) {
-			const x = this._buffer[i];
-			const y = this._buffer[i + 1];
-			this._buffer[i] = y;
-			this._buffer[i + 1] = x;
+			const x = this.#buffer[i];
+			const y = this.#buffer[i + 1];
+			this.#buffer[i] = y;
+			this.#buffer[i + 1] = x;
 		}
-		return this._buffer;
+		return this.#buffer;
 	}
 
 	/**
@@ -138,15 +138,15 @@ export class Buffer {
 	 * @returns An Enum Tree.
 	 */
 	parse (): EnumTree {
-		if (this._options.debug) console.log('[Buffer] Parsing...');
+		if (this.#options.debug) console.log('[Buffer] Parsing...');
 		let output = {} as EnumTree;
 		const startTime = performance?.now();
-		const bytesProcessed = this._branch(output);
+		const bytesProcessed = this.#branch(output);
 		const endTime = performance?.now();
 		if (performance) {
-			if (this._options.debug) console.log('[Buffer] Done parsing', bytesProcessed, 'bytes in', endTime - startTime, 'milliseconds.');
+			if (this.#options.debug) console.log('[Buffer] Done parsing', bytesProcessed, 'bytes in', endTime - startTime, 'milliseconds.');
 		} else {
-			if (this._options.debug) console.log('[Buffer] Done parsing', bytesProcessed, 'bytes.');
+			if (this.#options.debug) console.log('[Buffer] Done parsing', bytesProcessed, 'bytes.');
 		}
 		return { ...output } as EnumTree;
 	}
@@ -157,7 +157,7 @@ export class Buffer {
 	 * @param length The length of the branch (number of enumerators to process, optional).
 	 * @returns The number of bytes processed by the branch.
 	 */
-	_branch (parent: EnumTree, length = 1): number {
+	#branch (parent: EnumTree, length = 1): number {
 		// Initialise the branch.
 		let bytesProcessed = 0;
 		let fieldsProcessed = 0;
@@ -182,7 +182,7 @@ export class Buffer {
 
 			// Prune the branch if the enumerator doesn't exist, since this likely indicates that we have lost track of our place in the buffer.
 			if (!(enumerator in generalEnumfields)) {
-				console.warn('[Buffer] Enumerator', enumerator, 'was not found at byte #', this.bytesReadSinceCreation, '.\n', hexToString(this.peek(64)).toUpperCase());
+				if (this.#options.debug) console.warn('[Buffer] Enumerator', enumerator, 'was not found at byte #', this.bytesReadSinceCreation, '.\n', hexToString(this.peek(64)).toUpperCase());
 				/* this.invertEndianness(2);
 				enumerator = hexToString(this.read(2)).toUpperCase();
 				bytesProcessed += 2; */
@@ -196,14 +196,14 @@ export class Buffer {
 				this.invertEndianness(2);
 				const fieldLength = parseInt(hexToString(this.read(2)), 16);
 				bytesProcessed += 2;
-				if (this._options.debug) console.log('[Buffer] ArrayOfEnumBlockArrays encountered was:', enumerator, '. With length:', fieldLength);
+				if (this.#options.debug) console.log('[Buffer] ArrayOfEnumBlockArrays encountered was:', enumerator, '. With length:', fieldLength);
 				let arraysProcessed = 0;
 				while (arraysProcessed < fieldLength) { // TODO: This loop does not check for buffer errors.
 					this.invertEndianness(2);
 					const arrayLength = parseInt(hexToString(this.read(2)), 16);
 					bytesProcessed += 2;
 					parent[enumerator][arraysProcessed] = {} as EnumTree;
-					bytesProcessed += this._branch(parent[enumerator][arraysProcessed], arrayLength);
+					bytesProcessed += this.#branch(parent[enumerator][arraysProcessed], arrayLength);
 					arraysProcessed++;
 				}
 			}
@@ -215,8 +215,8 @@ export class Buffer {
 				this.invertEndianness(2);
 				const arrayLength = parseInt(hexToString(this.read(2)), 16);
 				bytesProcessed += 2;
-				if (this._options.debug) console.log('[Buffer] EnumBlockArray encountered was:', enumerator, '. With length:', arrayLength);
-				bytesProcessed += this._branch(parent[enumerator], arrayLength);
+				if (this.#options.debug) console.log('[Buffer] EnumBlockArray encountered was:', enumerator, '. With length:', arrayLength);
+				bytesProcessed += this.#branch(parent[enumerator], arrayLength);
 			}
 
 			// Process as a Sized field.
