@@ -1,6 +1,6 @@
 interface EnumField {
 	length: number | 'Sized' | 'EnumBlockArray'| 'ArrayOfEnumBlockArrays',
-	type?: 'Boolean' | 'StringBoolean' | 'Integer' | 'IP' | 'ItemID' | 'MapID' | 'ServerList' | 'String' | 'Version' | 'Region' | 'WatchNowSection' | 'IGMT',
+	type?: 'Boolean' | 'StringBoolean' | 'IntegerBoolean' | 'Integer' | 'IP' | 'ItemID' | 'MapID' | 'TeamID' | 'ServerList' | 'String' | 'Version' | 'Region' | 'WatchNowSection' | 'IGMT',
 	name?: string | undefined
 }
 
@@ -231,7 +231,7 @@ export const generalEnumfields = {
 	'069F': {length: 4, name: undefined},
 	'06B7': {length: 4, type: 'Integer', name: undefined},
 	'06B9': {length: 4, type: 'WatchNowSection', name: 'Watch-Now Section'},
-	'06BA': {length: 4, type: 'Integer', name: '1 = featured, otherwise not featured'},
+	'06BA': {length: 4, type: 'IntegerBoolean', name: 'Featured'},
 	'06BD': {length: 4, name: undefined},
 	'06BF': {length: 4, type: 'Integer', name: 'Maximum Rank (alt)'},
 	'06C0': {length: 4, name: undefined},
