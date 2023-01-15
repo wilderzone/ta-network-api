@@ -9,7 +9,7 @@ const expectedResult = `{"01C6":{"02C7":[139,125,0,0],"0228":[2,0,0,0],"00E9":[{
 const buffer = new Buffer(Uint8Array.from(data));
 
 const startTime = performance.now();
-const output = buffer.parse();
+const output = await buffer.parse();
 const endTime = performance.now();
 
 const remainder = buffer.clone();
