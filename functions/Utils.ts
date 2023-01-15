@@ -20,11 +20,15 @@ export function hexToString (hex: Uint8Array): string {
  * @param string The byte-like string to convert.
  * @returns The resulting byte array.
  */
-export function stringToHex (string: string): Uint8Array | null {
-	if (string.length < 2 || string.length % 2 !== 0) {
-		return null;
+export function stringToHex (string: string): Uint8Array {
+	let normalisedString = string;
+	if (string.length <= 0) {
+		normalisedString = '00';
 	}
-	const splitString = string.match(/.{2}/g) as RegExpMatchArray;
+	if (string.length < 2 || string.length % 2 !== 0) {
+		normalisedString = string.padStart(string.length + 1, '0');
+	}
+	const splitString = normalisedString.match(/.{2}/g) as RegExpMatchArray;
 	return Uint8Array.from(splitString.map((byte) => parseInt(byte, 16)));
 }
 
