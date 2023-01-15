@@ -78,7 +78,7 @@ Events include:
 
 ### Messages
 
-The API comes with some handy presets for sending data to the logon server:
+The API comes with some handy presets for sending data to the login server:
 - AuthMessage
   ```typescript
   let credentials = {
