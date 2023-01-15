@@ -314,19 +314,14 @@ export const generalEnumfields = {
 	'0681': {length: 'ArrayOfEnumBlockArrays', name: undefined},
 	'068B': {length: 'ArrayOfEnumBlockArrays', name: undefined},
 	'06BB': {length: 'ArrayOfEnumBlockArrays', name: undefined},
-	'06EF': {length: 'ArrayOfEnumBlockArrays', name: undefined}
-} as { [key: string]: EnumField };
+	'06EF': {length: 'ArrayOfEnumBlockArrays', name: undefined},
 
-export const serverListEnumfields = {
-	'0035': {length: 4, name: 'Blood Eagle Score'},
-	'0197': {length: 4, name: 'Diamond Sword Score'}
+	// Duplicates remapped:
+	'D035': {length: 4, type: 'Integer', name: 'Blood Eagle Score'},
+	'D197': {length: 4, type: 'Integer', name: 'Diamond Sword Score'}
 } as { [key: string]: EnumField };
-
-export const versionEnumFields = {} as { [key: string]: EnumField };
 
 const duplicates = {
-	'0197': {length: 4, name: 'Diamond Sword Score'},
-	'0035': {length: 4, name: 'Blood Eagle Score'},
 	'006D': {length: 4, name: undefined},
 	'006F': {length: 1, name: undefined},
 	'01BC': {length: 'Sized', name: undefined},

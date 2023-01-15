@@ -37,6 +37,8 @@ export class GameServerInfo {
 		this.passwordRequired = subData['069C'];
 		this.map = subData['02B2'];
 		this.timeRemaining = subData['02F4'];
+		this.scores.bloodEagle = subData['D035']; // FIXME: Uses duplicate-remapped enum.
+		this.scores.diamondSword = subData['D197']; // FIXME: Uses duplicate-remapped enum.
 		this.numberOfPlayers = subData['0343'];
 		this.maxNumberOfPlayers = subData['02D6'];
 		this.officialRules = subData['0703'];

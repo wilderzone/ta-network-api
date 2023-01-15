@@ -157,7 +157,7 @@ export class Buffer {
 	 * @param length The length of the branch (number of enumerators to process, optional).
 	 * @returns The number of bytes processed by the branch.
 	 */
-	#branch (parent: EnumTree, length = 1): number {
+	#branch (parent: EnumTree, length = 1, parentEnum?: string): number {
 		// Initialise the branch.
 		let bytesProcessed = 0;
 		let fieldsProcessed = 0;
@@ -173,6 +173,17 @@ export class Buffer {
 				this.invertEndianness(2);
 				enumerator = hexToString(this.read(2)).toUpperCase();
 				bytesProcessed += 2;
+			}
+
+			// FIXME: This is super hacky...
+			// Use remapped values to handle the duplicate enums.
+			if (parentEnum === '00E9') {
+				if (enumerator === '0035') {
+					enumerator = 'D035';
+				}
+				if (enumerator === '0197') {
+					enumerator = 'D197';
+				}
 			}
 
 			// Prune the branch if we have reached the end of the buffer.
@@ -203,7 +214,7 @@ export class Buffer {
 					const arrayLength = parseInt(hexToString(this.read(2)), 16);
 					bytesProcessed += 2;
 					parent[enumerator][arraysProcessed] = {} as EnumTree;
-					bytesProcessed += this.#branch(parent[enumerator][arraysProcessed], arrayLength);
+					bytesProcessed += this.#branch(parent[enumerator][arraysProcessed], arrayLength, enumerator);
 					arraysProcessed++;
 				}
 			}
@@ -216,7 +227,7 @@ export class Buffer {
 				const arrayLength = parseInt(hexToString(this.read(2)), 16);
 				bytesProcessed += 2;
 				if (this.#options.debug) console.log('[Buffer] EnumBlockArray encountered was:', enumerator, '. With length:', arrayLength);
-				bytesProcessed += this.#branch(parent[enumerator], arrayLength);
+				bytesProcessed += this.#branch(parent[enumerator], arrayLength, enumerator);
 			}
 
 			// Process as a Sized field.
