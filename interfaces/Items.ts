@@ -5,3 +5,9 @@ export interface Item {
 	type: string,
 	category?: string
 }
+
+export interface UnlockableItem extends Item {
+	id: number,
+	purchaseIndex: number,
+	unlocked: boolean
+}
