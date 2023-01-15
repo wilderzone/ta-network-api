@@ -58,7 +58,8 @@ export class ServerInfoMessage {
 	constructor (serverId: number) {
 		const idBytes = serverId.toString(16).padStart(8, '0');
 		this.buffer = compileMessage([
-			'1800c6010200c702',
+			'1800', // Packet length.
+			'c6010200c702',
 			idBytes.substring(6, 8),
 			idBytes.substring(4, 6),
 			idBytes.substring(2, 4),
