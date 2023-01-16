@@ -1,6 +1,6 @@
 {
   "name": "ta-network-api",
-  "version": "1.4.2",
+  "version": "2.0.0-alpha.0",
   "description": "An open interface for fetching data from Tribes: Ascend servers.",
   "type": "module",
   "main": "dist/index.js",
