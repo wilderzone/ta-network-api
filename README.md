@@ -179,3 +179,36 @@ const servers = await connection.fetch('GameServerList');
 
 console.log('Wow, look at all these servers!', servers);
 ```
+
+
+Fetch a list of all players currently in-game:
+```typescript
+// Import TA Network API.
+import { LoginServerConnection } from 'ta-network-api';
+
+// Your account credentials for the login server.
+let credentials = {
+	username: '<your-username>',
+	passwordHash: '<your-password-hash>',
+	salt: new Uint8Array()
+};
+
+// Optional configuration for the login server connection.
+let options = {
+	authenticate: true,
+	decoder: {
+		clean: true
+	}
+};
+
+// Create a new connection instance.
+const connection = new LoginServerConnection('hirez', credentials, options);
+
+// Initiate the connection with the server.
+await connection.connect();
+
+// Fetch the list of in-game players.
+const players = await connection.fetch('OnlinePlayerList');
+
+console.log('Wow, look at all these players!', players);
+```
