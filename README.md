@@ -44,78 +44,114 @@ let credentials = {
 // Optional options:
 let options = {
 	authenticate: true,		// Tells the connection to attempt to automatically authenticate.
+	debug: false,			// Tells the connection not to produce debugging output in the terminal.
+
+	buffer: {				// These options are passed through to the data Buffer.
+		debug: false
+	}
+
 	decoder: {				// These options are passed through to the data Decoder.
-		clean: true			// Tells the Decoder to produce a clean output (remove empty fields).
+		clean: true,		// Tells the Decoder to produce a clean output (remove empty enumfields, may improve performance).
+		debug: false
 	}
 };
 
 const connection = new LoginServerConnection('hirez', credentials, options);
 ```
 
-Initiate the connection with the login server with:
+Initiate the connection with:
 ```typescript
-connection.connect();
+await connection.connect();
 ```
 
-The API will connect to the specified login server using your credentials, proucing a log of the resulting conversation in the terminal.
+The API will connect to the specified login server using your credentials.
 
 
-### Event Listeners
+### Fetching Data
 
-You can use the `on(event, callback)` method to register an event listener with the login server connection. (Multiple callbacks can be attached to a single event).
+This is done by calling the connection's `fetch` method, and passing in the name of the dataset's endpoint. Currently available endpoints include:
+- `AccountData`: Data about the currently authenticated TA account.
+- `OnlinePlayerNumber`: The number of players who are currently in a match.
+- `OnlinePlayerList`: A list of all players who are currently in a match.
+- `GameServerList`: A list of the top 30 online game servers.
+- `GameServerInfo`: Information about a specific game server (requires one argument).
+- `WatchNowList`: A list of recommended TA videos and live streams.
 
+The API uses an asynchronous syntax. This allows you to simply `await` any data that you want to retrieve:
 ```typescript
-connection.on('receive', (data: EnumTree) => {
-	// Do something awesome.
-});
+const result = await connection.fetch('OnlinePlayerList');
 ```
 
-Events include:
-- `connect`: Fired after a stable connection with the server has been established.
-- `disconnect`: Fired after the connection with the server has closed.
-- `receive`: Fired whenever the connection receives some data from the server. The data received (in the form of an EnumTree) is passed to any callbacks registered to this listener.
+Some endpoints require extra information in order to fetch the correct data. TypeScript intellisense should tell you what data is required for each endpoint.
+You can add any extra data as additional arguments to the `fetch` method:
+```typescript
+const serverId = 00000;
+const result = await connection.fetch('GameServerInfo', serverId);
+```
 
 
-### Messages
+### Sending Data
 
-The API comes with some handy presets for sending data to the login server:
-- AuthMessage
+`Messages` can be used to send data to the connected login server. To use this feature, import the `Messages` object into your project:
+```typescript
+import { Messages } from 'ta-network-api';
+```
+
+The API comes with a few handy message presets:
+- AuthenticationMessage
   ```typescript
   let credentials = {
   	username: '<your-username>',
   	passwordHash: '<your-password-hash>',
   	salt: new Uint8Array(<your-session-salt>)
   };
-  const message = new AuthMessage(credentials);
+
+  const message = new Messages.AuthenticationMessage(credentials);
   ```
 - ServerListMessage
   ```typescript
-  const message = new ServerListMessage();
+  const message = new Messages.ServerListMessage();
+  ```
+- ServerInfoMessage
+  ```typescript
+  const serverId = 00000;
+  const message = new Messages.ServerInfoMessage(serverId);
+  ```
+- DirectMessageMessage
+  ```typescript
+  const recipient = 'player-name';
+  const content = 'Hello!';
+  const message = new Messages.DirectMessageMessage(recipient, content);
   ```
 - WatchNowMessage
   ```typescript
-  const message = new WatchNowMessage();
+  const message = new Messages.WatchNowMessage();
   ```
 
 Or you can also use the `GenericMessage` class to send raw data:
 ```typescript
 // This class accepts an array of number arrays, Uint8Arrays, byte-like strings, or any combination of the three.
-const message = new GenericMessage([
-	[1, 23, 8, 74],			// number[]
-	new Uint8Array([1, 23, 8, 74]),	// Uint8Array
-	'0117084a'			// Byte-like string
+const message = new Messages.GenericMessage([
+	[1, 23, 8, 74],						// number[]
+	new Uint8Array([1, 23, 8, 74]),		// Uint8Array
+	'0117084a'							// Byte-like string
 ]);
+```
+
+To send the message, call the connection's `send` method, passing in the message instance and a callback function.
+```typescript
+void connection.send(message, (data: any) => {
+	// Do something awesome.
+});
 ```
 
 
 ### Examples
 
-Request a list of the top 30 online game servers and output the results to a JSON file:
+Fetch a list of the top 30 online game servers:
 ```typescript
-// Import TA Network API classes so that we can connect to a login server, request a list of game servers, and process the returned data.
-import { LoginServerConnection, ServerListMessage, EnumTree } from 'ta-network-api';
-// Import Node's built-in "fs" module for interacting with the file system.
-import * as fs from 'fs';
+// Import TA Network API.
+import { LoginServerConnection } from 'ta-network-api';
 
 // Your account credentials for the login server.
 let credentials = {
@@ -135,29 +171,11 @@ let options = {
 // Create a new connection instance.
 const connection = new LoginServerConnection('hirez', credentials, options);
 
-// Output to a JSON file whenever we receive some data from the server.
-connection.on('receive', (data: EnumTree) => {
-	// Get the current date and time.
-	const date = new Date();
-	const time = new Date(date.getTime() - (date.getTimezoneOffset() * 60 * 1000)).toISOString().split(':').join('-').split('.').join('-').split('Z')[0];
-
-	// Name the output file.
-	const path = 'results/';
-	const fileName = `output-${time}.json`;
-
-	// Save the output file.
-	fs.writeFile(path + fileName, JSON.stringify(data, null, 4), 'utf8', function (err: any) {
-		if (err) {
-			console.log("An error occured while writing JSON Object to File.");
-			return console.log(err);
-		}
-		console.log("JSON file has been saved.");
-	});
-});
-
 // Initiate the connection with the server.
-connection.connect();
+await connection.connect();
 
-// Queue the messages we want to send.
-connection.queue(new ServerListMessage());
+// Fetch the list of online game servers.
+const servers = await connection.fetch('GameServerList');
+
+console.log('Wow, look at all these servers!', servers);
 ```
