@@ -41,6 +41,7 @@ export class LoginServerConnection {
 		},
 		isAuthenticated: false,
 		isConnected: false,
+		isListening: false,
 		isReceivingStream: false,
 		streamBuffer: {} as Buffer,
 		accountData: undefined as AccountData | undefined,
@@ -120,6 +121,11 @@ export class LoginServerConnection {
 				});
 
 				this.#socket.on('data', async (data) => {
+					// Don't process data when we're not expecting any.
+					if (!this.#state.isListening) {
+						return;
+					}
+
 					if (this.#options.debug) console.log('[LSC] Received data:', data);
 					const array = Uint8Array.from(data);
 
@@ -148,6 +154,7 @@ export class LoginServerConnection {
 						const decoded = await this.#processPacket(array) ?? {};
 						this.#state.globalResolver(decoded);
 						// Prevent the global resolver from being called multiple times.
+						this.#state.isListening = false;
 						this.#state.globalResolver = () => {};
 					}
 				});
@@ -228,6 +235,7 @@ export class LoginServerConnection {
 		this.#state.globalResolver = (decodedData: EnumTree): void => {
 			message.resolver(decodedData);
 		};
+		this.#state.isListening = true;
 		this.#socket.write(message.message.buffer, 'hex', (error) => {
 			if (error) {
 				if (this.#options.debug) console.log(`[LSC] Failed to send message #${this.#messageId}.`, error.message);
@@ -248,6 +256,7 @@ export class LoginServerConnection {
 			const decodedData = decoder.decode();
 			this.#state.globalResolver(decodedData);
 			// Prevent the global resolver from being called multiple times.
+			this.#state.isListening = false;
 			this.#state.globalResolver = () => {};
 			if (this.#options.debug) console.log('[LSC] Decoded:', decodedData);
 			if (this.#options.debug) console.log('[LSC] End of stream data.');
@@ -293,6 +302,7 @@ export class LoginServerConnection {
 							this.#state.accountData = new AccountData(decodedData);
 							return resolve(this.#state.accountData as FetchType<T>);
 						};
+						this.#state.isListening = true;
 					} else {
 						return resolve(this.#state.accountData as FetchType<T>);
 					}
