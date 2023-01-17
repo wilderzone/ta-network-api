@@ -213,3 +213,7 @@ const players = await connection.fetch('OnlinePlayerList');
 
 console.log('Wow, look at all these players!', players);
 ```
+
+### Contribute
+If you'd like to contribute to this project, please [submit an issue](https://github.com/wilderzone/ta-network-api/issues) or [create a pull request](https://github.com/wilderzone/ta-network-api/pulls).
+All contributions are super welcome! :tada:
