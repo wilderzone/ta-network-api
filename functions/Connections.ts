@@ -40,6 +40,7 @@ export class LoginServerConnection {
 		isAuthenticated: false,
 		isConnected: false,
 		isListening: false,
+		isIdle: true,
 		isReceivingStream: false,
 		streamBuffer: {} as Buffer,
 		accountData: undefined as AccountData | undefined,
@@ -76,9 +77,12 @@ export class LoginServerConnection {
 		this.#state.authProgress.confirmation = false;
 		this.#state.isAuthenticated = false;
 		this.#state.isConnected = false;
+		this.#state.isListening = false;
+		this.#state.isIdle = true;
 		this.#state.isReceivingStream = false;
 		this.#state.streamBuffer.clear();
 		this.#state.accountData = undefined;
+		this.#state.globalResolver = () => {};
 	}
 
 	/**
@@ -93,6 +97,7 @@ export class LoginServerConnection {
 			}
 
 			try {
+				this.#state.isIdle = false;
 				this.#socket = net.connect(this.#serverInstance.port, this.#serverInstance.ip);
 				this.#socket.setKeepAlive(true, this.#timeToIdle);
 				this.#socket.setTimeout(this.#timeToTimeout);
@@ -100,13 +105,14 @@ export class LoginServerConnection {
 				this.#socket.on('connect', async () => {
 					if (this.#options.debug) console.log('[LSC] Connected.');
 					this.#resetState();
-					this.#state.isConnected = true;
-					this.#idleTimers.forEach((timer) => { clearTimeout(timer); });
-					this.#idleTimers.push(setTimeout(() => { this.#idle(); }, this.#timeToIdle));
 
 					if (this.#options.authenticate) {
 						this.#state.isAuthenticated = await this.#authenticate();
 					}
+
+					this.#state.isConnected = true;
+					this.#idleTimers.forEach((timer) => { clearTimeout(timer); });
+					this.#idleTimers.push(setTimeout(() => { this.#idle(); }, this.#timeToIdle));
 
 					return resolve();
 				});
@@ -173,6 +179,8 @@ export class LoginServerConnection {
 		return new Promise((resolve, reject) => {
 			if (this.#options.debug) console.log('[LSC] Authenticating...');
 
+			this.#state.isIdle = false;
+
 			// Start the authentication sequence.
 			const initialMessage = new Messages.GenericMessage(['1000bc0102009e04610b040189040c000000']);
 			this.#socket.write(initialMessage.buffer, 'hex', () => {
@@ -220,6 +228,10 @@ export class LoginServerConnection {
 			message,
 			resolver: callback
 		});
+
+		if (this.#state.isIdle) {
+			this.#sendNextMessageInQueue();
+		}
 	}
 
 	async #sendNextMessageInQueue (): Promise<void | Error> {
@@ -237,6 +249,7 @@ export class LoginServerConnection {
 			message.resolver(decodedData);
 		};
 		this.#state.isListening = true;
+		this.#state.isIdle = false;
 		this.#socket.write(message.message.buffer, 'hex', (error) => {
 			if (error) {
 				if (this.#options.debug) console.log(`[LSC] Failed to send message #${this.#messageId}.`, error.message);
@@ -268,6 +281,7 @@ export class LoginServerConnection {
 		this.#idleTimers.forEach((timer) => { clearTimeout(timer); });
 		this.#state.isReceivingStream = false;
 		await this.#flushStreamBuffer();
+		this.#state.isIdle = true;
 		this.#sendNextMessageInQueue();
 	}
 
