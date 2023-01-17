@@ -43,7 +43,7 @@ export class LoginServerConnection {
 		isReceivingStream: false,
 		streamBuffer: {} as Buffer,
 		accountData: undefined as AccountData | undefined,
-		globalResolver: (decodedData: { [key: string]: any }): void => {}
+		globalResolver: (decodedData: EnumTree): void => {}
 	}
 
 
