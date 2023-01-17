@@ -10,15 +10,12 @@ import { verifyPacketLength } from './Utils.js';
 
 interface LoginServerConnectionOptions {
 	authenticate?: boolean,
-	cacheTTL?: number,
 	debug?: boolean,
 	processMalformedPackets?: boolean,
 
 	buffer?: BufferOptions,
 	decoder?: DecoderOptions
 }
-
-type CacheItem <T extends FetchableDataset> = { data: FetchType<T>, lastFetched: number | undefined };
 
 export class LoginServerConnection {
 	#credentials: HashedCredentials;
@@ -45,14 +42,6 @@ export class LoginServerConnection {
 		isReceivingStream: false,
 		streamBuffer: {} as Buffer,
 		accountData: undefined as AccountData | undefined,
-		cache: {
-			'AccountData': { data: {}, lastFetched: undefined } as CacheItem<'AccountData'>,
-			'GameServerInfo': { data: {}, lastFetched: undefined } as CacheItem<'GameServerInfo'>,
-			'GameServerList': { data: [], lastFetched: undefined } as CacheItem<'GameServerList'>,
-			'OnlinePlayerList': { data: [], lastFetched: undefined } as CacheItem<'OnlinePlayerList'>,
-			'OnlinePlayerNumber': { data: 0, lastFetched: undefined } as CacheItem<'OnlinePlayerNumber'>,
-			'WatchNowList': { data: [], lastFetched: undefined } as CacheItem<'WatchNowList'>
-		},
 		globalResolver: (decodedData: { [key: string]: any }): void => {}
 	}
 
@@ -66,7 +55,6 @@ export class LoginServerConnection {
 		}
 		this.#credentials = credentials;
 		this.#options = options ?? {} as LoginServerConnectionOptions;
-		this.#options.cacheTTL = this.#options.cacheTTL ?? 5000;
 		this.#state.streamBuffer = new Buffer(new Uint8Array(), this.#options.buffer);
 	}
 
@@ -289,10 +277,6 @@ export class LoginServerConnection {
 					return reject('Connection failed.');
 				}
 			}
-
-			// Check the cache first.
-			// const currentTime = Date.now();
-			// if (this.#state.cache[dataset].lastFetched > currentTime - this.#options.cacheTTL)
 
 			// Fetch the requested data from the connected server.
 			switch (dataset) {
