@@ -12,6 +12,7 @@ interface LoginServerConnectionOptions {
 	authenticate?: boolean,
 	debug?: boolean,
 	processMalformedPackets?: boolean,
+	timeout?: number,
 
 	buffer?: BufferOptions,
 	decoder?: DecoderOptions
@@ -55,6 +56,9 @@ export class LoginServerConnection {
 		}
 		this.#credentials = credentials;
 		this.#options = options ?? {} as LoginServerConnectionOptions;
+		if (this.#options.timeout) {
+			this.#timeToTimeout = Math.max(Number(this.#options.timeout), this.#timeToIdle + 1000); // Set the minimum timeout time to 1 second longer than the idle time.
+		}
 		this.#state.streamBuffer = new Buffer(new Uint8Array(), this.#options.buffer);
 	}
 
