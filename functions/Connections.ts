@@ -88,6 +88,10 @@ export class LoginServerConnection {
 		return new Promise((resolve, reject) => {
 			if (this.#options.debug) console.log('[LSC] Connecting to login server on', this.#serverInstance.ip, '...');
 
+			if (this.#state.isConnected) {
+				return reject('A connection is already established.');
+			}
+
 			try {
 				this.#socket = net.connect(this.#serverInstance.port, this.#serverInstance.ip);
 				this.#socket.setKeepAlive(true, this.#timeToIdle);
@@ -222,6 +226,10 @@ export class LoginServerConnection {
 		const message = this.#messageQueue.shift();
 		if (!message) {
 			return new Error('Message queue is empty.');
+		}
+
+		if (!this.#state.isConnected) {
+			return new Error('Please connect to a Login Server before sending a message.');
 		}
 
 		this.#messageId++;
