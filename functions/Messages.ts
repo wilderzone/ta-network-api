@@ -34,12 +34,20 @@ export class AuthenticationMessage {
 	buffer = {} as Uint8Array;
 
 	constructor (credentials: HashedCredentials) {
-		this.buffer = compileMessage([
-			'b9003a000b00560060000000',
-			xorPasswordHash(credentials.passwordHash, credentials.salt),
-			'94040c00',
+		const passwordHash = xorPasswordHash(credentials.passwordHash, credentials.salt);
+		const message = compileMessage([
+			'3a000b005600',
+			invertEndianness(stringToHex(passwordHash.length.toString(16).padStart(4, '0'))), // Password hash length.
+			'0000',
+			passwordHash,
+			'9404',
+			invertEndianness(stringToHex(credentials.username.length.toString(16).padStart(4, '0'))), // Username length.
 			textToHex(credentials.username),
 			'7106432800007206000000007306017706c3ee58437606d13f00007406de1000007506811b0000340400000000000000009e04610b04010000000000000000'
+		]);
+		this.buffer = compileMessage([
+			invertEndianness(stringToHex(message.length.toString(16).padStart(4, '0'))), // Packet length.
+			message
 		]);
 	}
 }
