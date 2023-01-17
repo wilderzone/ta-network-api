@@ -1,6 +1,6 @@
 import * as net from 'net';
 import { loginServers } from '../data/index.js';
-import type { LoginServer, HiRezAccount, HashedCredentials, EnumTree } from '../interfaces/index.js';
+import type { LoginServer, HashedCredentials, EnumTree } from '../interfaces/index.js';
 import type { FetchableDataset, FetchType } from '../datasets/index.js';
 import { AccountData, Player, GameServerInfo, WatchNowItem } from '../datasets/index.js';
 import { BufferOptions, Buffer } from './Buffer.js';
