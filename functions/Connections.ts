@@ -24,7 +24,7 @@ export class LoginServerConnection {
 	#options: LoginServerConnectionOptions;
 	#timeToIdle = 3000;
 	#idleTimers = [] as NodeJS.Timeout[];
-	#timeToTimeout = 10000;
+	#timeToTimeout = 15000;
 	#socket = {} as net.Socket;
 	#messageQueue = [] as {
 		message: Messages.GenericMessage,
