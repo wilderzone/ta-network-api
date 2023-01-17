@@ -110,6 +110,7 @@ export class LoginServerConnection {
 				this.#socket.on('timeout', () => {
 					console.warn('Socket connection timed-out.');
 					this.disconnect();
+					return resolve();
 				});
 
 				this.#socket.on('data', async (data) => {
