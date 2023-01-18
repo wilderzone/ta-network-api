@@ -149,7 +149,7 @@ void connection.send(message, (data: any) => {
 
 ### Examples
 
-Fetch a list of the top 30 online game servers:
+Fetch a list of all online game servers:
 ```typescript
 // Import TA Network API.
 import { LoginServerConnection } from 'ta-network-api';
