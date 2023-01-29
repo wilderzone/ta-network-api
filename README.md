@@ -6,9 +6,6 @@ An open interface for fetching data from the Tribes: Ascend servers.
 
 Please see the [wiki](https://github.com/wilderzone/ta-network-api/wiki) for a detailed breakdown of TA's network protocol.
 
-###
-
-
 API includes functionality for:
 - [x] Fetching basic player data (clan tag, XP, Gold, etc).
 - [x] Fetching status data:
@@ -18,6 +15,8 @@ API includes functionality for:
 
 
 ### Installation
+
+> NOTE: Version 1 is about to be deprecated. Please migrate to the Version 2 Alpha with `npm install ta-network-api@next`.
 
 Install TA Network API into your project with:
 ```
