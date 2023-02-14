@@ -46,11 +46,11 @@ let options = {
 	debug: false,			// Tells the connection not to produce debugging output in the terminal.
 	timeout: 15000,			// Allow the connection to idle for 15 seconds before timing out.
 
-	buffer: {				// These options are passed through to the data Buffer.
+	buffer: {			// These options are passed through to the data Buffer.
 		debug: false
 	}
 
-	decoder: {				// These options are passed through to the data Decoder.
+	decoder: {			// These options are passed through to the data Decoder.
 		clean: true,		// Tells the Decoder to produce a clean output (remove empty enumfields, may improve performance).
 		debug: false
 	}
