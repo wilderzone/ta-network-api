@@ -20,7 +20,7 @@ API includes functionality for:
 
 Install TA Network API into your project with:
 ```
-npm install ta-network-api
+npm install ta-network-api@next
 ```
 
 
