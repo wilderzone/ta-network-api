@@ -44,7 +44,7 @@ let credentials = {
 let options = {
 	authenticate: true,		// Tells the connection to attempt to automatically authenticate.
 	debug: false,			// Tells the connection not to produce debugging output in the terminal.
-	timeout: 15000,			// Allow the connection to idle for 15 seconds before timing out.
+	timeout: 15000,			// Allow the connection to idle for 15 seconds before timing out. (Set this to `0` to disable the timeout).
 
 	buffer: {			// These options are passed through to the data Buffer.
 		debug: false

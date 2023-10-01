@@ -26,6 +26,7 @@ export class LoginServerConnection {
 	#timeToIdle = 3000;
 	#idleTimers = [] as NodeJS.Timeout[];
 	#timeToTimeout = 15000;
+	#doesTimeout = true;
 	#socket = {} as net.Socket;
 	#messageQueue = [] as {
 		message: Messages.GenericMessage,
@@ -57,8 +58,12 @@ export class LoginServerConnection {
 		}
 		this.#credentials = credentials;
 		this.#options = options ?? {} as LoginServerConnectionOptions;
-		if (this.#options.timeout) {
-			this.#timeToTimeout = Math.max(Number(this.#options.timeout), this.#timeToIdle + 1000); // Set the minimum timeout time to 1 second longer than the idle time.
+		if (typeof this.#options.timeout === 'number') {
+			// Set the minimum timeout time to 1 second longer than the idle time.
+			this.#timeToTimeout = Math.max(Number(this.#options.timeout), this.#timeToIdle + 1000);
+			if (this.#options.timeout <= 0) {
+				this.#doesTimeout = false;
+			}
 		}
 		this.#state.streamBuffer = new Buffer(new Uint8Array(), this.#options.buffer);
 	}
@@ -100,7 +105,7 @@ export class LoginServerConnection {
 				this.#state.isIdle = false;
 				this.#socket = net.connect(this.#serverInstance.port, this.#serverInstance.ip);
 				this.#socket.setKeepAlive(true, this.#timeToIdle);
-				this.#socket.setTimeout(this.#timeToTimeout);
+				this.#socket.setTimeout(this.#doesTimeout ? this.#timeToTimeout : 0);
 
 				this.#socket.on('connect', async () => {
 					if (this.#options.debug) console.log('[LSC] Connected.');
@@ -118,9 +123,13 @@ export class LoginServerConnection {
 				});
 
 				this.#socket.on('timeout', () => {
-					console.warn('Socket connection timed-out.');
-					this.disconnect();
-					return resolve();
+					if (this.#doesTimeout) {
+						console.warn('Socket connection timed-out.');
+						this.disconnect();
+						return resolve();
+					} else {
+						console.warn('Socket timed-out, but the connection will try to remain open.');
+					}
 				});
 
 				this.#socket.on('data', async (data) => {
