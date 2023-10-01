@@ -16,15 +16,15 @@ const remainder = buffer.clone();
 // </Test>
 
 if (!output) {
-	throw new Error('Output is null.');
+	throw new Error('\x1b[31mOutput is null.\x1b[0m');
 }
 
 if (remainder.length > 0) {
-	throw new Error(`Not all bytes were processed. ${remainder.length} bytes remain.`);
+	throw new Error(`\x1b[31mNot all bytes were processed. ${remainder.length} bytes remain.\x1b[0m`);
 }
 
 if (JSON.stringify(output) !== expectedResult) {
-	throw new Error('Output value is incorrect.');
+	throw new Error('\x1b[31mOutput value is incorrect.\x1b[0m');
 }
 
-console.log(`Passed in ${(endTime - startTime).toFixed(3)}ms.`);
+console.log(`\x1b[32mPassed in ${(endTime - startTime).toFixed(3)}ms.\x1b[0m`);

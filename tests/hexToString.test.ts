@@ -12,15 +12,15 @@ const endTime = performance.now();
 // </Test>
 
 if (!string) {
-	throw new Error('Output is null.');
+	throw new Error('\x1b[31mOutput is null.\x1b[0m');
 }
 
 if (string.length !== expectedResult.length) {
-	throw new Error(`Output has incorrect length. Expected ${expectedResult.length}, got ${string.length}.`);
+	throw new Error(`\x1b[31mOutput has incorrect length. Expected ${expectedResult.length}, got ${string.length}.\x1b[0m`);
 }
 
 if (string !== expectedResult) {
-	throw new Error('Output value is incorrect.');
+	throw new Error('\x1b[31mOutput value is incorrect.\x1b[0m');
 }
 
-console.log(`Passed in ${(endTime - startTime).toFixed(3)}ms.`);
+console.log(`\x1b[32mPassed in ${(endTime - startTime).toFixed(3)}ms.\x1b[0m`);

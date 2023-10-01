@@ -12,15 +12,15 @@ const endTime = performance.now();
 // </Test>
 
 if (!array) {
-	throw new Error('Output is null.');
+	throw new Error('\x1b[31mOutput is null.\x1b[0m');
 }
 
 if (array.length !== data.length / 2) {
-	throw new Error(`Output has incorrect length. Expected ${data.length / 2}, got ${array.length}.`);
+	throw new Error(`\x1b[31mOutput has incorrect length. Expected ${data.length / 2}, got ${array.length}.\x1b[0m`);
 }
 
 if (JSON.stringify([...array]) !== expectedResult) {
-	throw new Error('Output value is incorrect.');
+	throw new Error('\x1b[31mOutput value is incorrect.\x1b[0m');
 }
 
-console.log(`Passed in ${(endTime - startTime).toFixed(3)}ms.`);
+console.log(`\x1b[32mPassed in ${(endTime - startTime).toFixed(3)}ms.\x1b[0m`);
