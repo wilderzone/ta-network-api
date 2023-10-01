@@ -1,43 +1,43 @@
 {
-  "name": "ta-network-api",
-  "version": "2.0.0-alpha.2",
-  "description": "An open interface for fetching data from Tribes: Ascend servers.",
-  "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "test": "node dist/tests/index.js",
-    "build": "tsc"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wilderzone/ta-network-api.git"
-  },
-  "keywords": [
-    "tribes",
-    "ascend",
-    "TA",
-    "game",
-    "login-server",
-	"tamods",
-	"network",
-	"API",
-    "typescript",
-    "ts",
-    "node"
-  ],
-  "author": {
-    "name": "Giga",
-    "url": "https://wilderzone.live/"
-  },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/wilderzone/ta-network-api/issues"
-  },
-  "homepage": "https://github.com/wilderzone/ta-network-api#readme",
-  "devDependencies": {
-    "@types/node": "^18.7.21",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.8.4"
-  }
+	"name": "ta-network-api",
+	"version": "2.0.0-alpha.2",
+	"description": "An open interface for fetching data from Tribes: Ascend servers.",
+	"type": "module",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"scripts": {
+		"test": "node dist/tests/index.js",
+		"build": "tsc"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/wilderzone/ta-network-api.git"
+	},
+	"keywords": [
+		"tribes",
+		"ascend",
+		"TA",
+		"game",
+		"login-server",
+		"tamods",
+		"network",
+		"API",
+		"typescript",
+		"ts",
+		"node"
+	],
+	"author": {
+		"name": "Giga",
+		"url": "https://wilderzone.live/"
+	},
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/wilderzone/ta-network-api/issues"
+	},
+	"homepage": "https://github.com/wilderzone/ta-network-api#readme",
+	"devDependencies": {
+		"@types/node": "^18.7.21",
+		"ts-node": "^10.9.1",
+		"typescript": "^4.8.4"
+	}
 }
