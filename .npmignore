@@ -3,5 +3,5 @@
 /tests
 /dist/tests
 .editorconfig
-test.ts
-test.js
+*.dev.ts
+*.dev.js

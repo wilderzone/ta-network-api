@@ -3,12 +3,8 @@
 */node_modules
 /dist
 
-*/__pycache__
-
-test.ts
-test.js
-test.py
-*.pyc
+*.dev.ts
+*.dev.js
 
 /references
 /dumps
