@@ -35,25 +35,25 @@ Create a new connection instance with:
 ```typescript
 // Your login credentials:
 let credentials = {
-	username: '<your-username>',
-	passwordHash: '<your-password-hash>',
-	salt: new Uint8Array()
+    username: '<your-username>',
+    passwordHash: '<your-password-hash>',
+    salt: new Uint8Array()
 };
 
 // Optional options:
 let options = {
-	authenticate: true,		// Tells the connection to attempt to automatically authenticate.
-	debug: false,			// Tells the connection not to produce debugging output in the terminal.
-	timeout: 15000,			// Allow the connection to idle for 15 seconds before timing out. (Set this to `0` to disable the timeout).
+    authenticate: true,  // Tells the connection to attempt to automatically authenticate.
+    debug: false,        // Tells the connection not to produce debugging output in the terminal.
+    timeout: 15000,      // Allow the connection to idle for 15 seconds before timing out. (Set this to `0` to disable the timeout).
 
-	buffer: {			// These options are passed through to the data Buffer.
-		debug: false
-	}
+    buffer: {            // These options are passed through to the data Buffer.
+        debug: false
+    }
 
-	decoder: {			// These options are passed through to the data Decoder.
-		clean: true,		// Tells the Decoder to produce a clean output (remove empty enumfields, may improve performance).
-		debug: false
-	}
+    decoder: {           // These options are passed through to the data Decoder.
+        clean: true,     // Tells the Decoder to produce a clean output (remove empty enumfields, may improve performance).
+        debug: false
+    }
 };
 
 const connection = new LoginServerConnection('hirez', credentials, options);
@@ -101,9 +101,9 @@ The API comes with a few handy message presets:
 - AuthenticationMessage
   ```typescript
   let credentials = {
-  	username: '<your-username>',
-  	passwordHash: '<your-password-hash>',
-  	salt: new Uint8Array(<your-session-salt>)
+      username: '<your-username>',
+      passwordHash: '<your-password-hash>',
+      salt: new Uint8Array(<your-session-salt>)
   };
 
   const message = new Messages.AuthenticationMessage(credentials);
@@ -132,16 +132,16 @@ Or you can also use the `GenericMessage` class to send raw data:
 ```typescript
 // This class accepts an array of number arrays, Uint8Arrays, byte-like strings, or any combination of the three.
 const message = new Messages.GenericMessage([
-	[1, 23, 8, 74],				// number[]
-	new Uint8Array([1, 23, 8, 74]),		// Uint8Array
-	'0117084a'				// Byte-like string
+    [1, 23, 8, 74],				// number[]
+    new Uint8Array([1, 23, 8, 74]),		// Uint8Array
+    '0117084a'				// Byte-like string
 ]);
 ```
 
 To send the message, call the connection's `send` method, passing in the message instance and a callback function.
 ```typescript
 void connection.send(message, (data: any) => {
-	// Do something awesome.
+    // Do something awesome.
 });
 ```
 
@@ -155,17 +155,17 @@ import { LoginServerConnection } from 'ta-network-api';
 
 // Your account credentials for the login server.
 let credentials = {
-	username: '<your-username>',
-	passwordHash: '<your-password-hash>',
-	salt: new Uint8Array()
+    username: '<your-username>',
+    passwordHash: '<your-password-hash>',
+    salt: new Uint8Array()
 };
 
 // Optional configuration for the login server connection.
 let options = {
-	authenticate: true,
-	decoder: {
-		clean: true
-	}
+    authenticate: true,
+    decoder: {
+        clean: true
+    }
 };
 
 // Create a new connection instance.
@@ -188,17 +188,17 @@ import { LoginServerConnection } from 'ta-network-api';
 
 // Your account credentials for the login server.
 let credentials = {
-	username: '<your-username>',
-	passwordHash: '<your-password-hash>',
-	salt: new Uint8Array()
+    username: '<your-username>',
+    passwordHash: '<your-password-hash>',
+    salt: new Uint8Array()
 };
 
 // Optional configuration for the login server connection.
 let options = {
-	authenticate: true,
-	decoder: {
-		clean: true
-	}
+    authenticate: true,
+    decoder: {
+        clean: true
+    }
 };
 
 // Create a new connection instance.
