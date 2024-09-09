@@ -16,7 +16,8 @@ API includes functionality for:
 
 ### Installation
 
-> NOTE: Version 1 is about to be deprecated. Please migrate to the Version 2 Alpha with `npm install ta-network-api@next`.
+> [!IMPORTANT]
+> Version 1 is about to be deprecated. Please migrate to the Version 2 Alpha with `npm install ta-network-api@next`.
 
 Install TA Network API into your project with:
 ```
